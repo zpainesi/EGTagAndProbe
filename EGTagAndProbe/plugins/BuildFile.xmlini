@@ -1,0 +1,62 @@
+<!-- <use name="SimDataFormats/GeneratorProducts"/>
+<use name="FWCore/Framework"/>
+<use name="FWCore/PluginManager"/>
+<use name="DataFormats/RecoCandidate"/>
+<use name="DataFormats/PatCandidates"/>
+<use name="RecoLocalCalo/EcalRecAlgos"/>
+<use name="CommonTools/Utils"/>
+<use name="CommonTools/CandAlgos"/>
+<use name="CommonTools/CandUtils"/>
+<use name="TauTagAndProbe/TauTagAndProbe"/>
+<use name="FWCore/ParameterSet"/>
+<use name="CommonTools/UtilAlgos"/>
+<use name="DataFormats/TrackReco"/>
+//
+<use name="DataFormats/EcalDigi"/>
+<use name="Geometry/EcalMapping"/>
+<use name="Geometry/CaloTopology"/>
+<use name="Geometry/CaloGeometry"/>
+<use name="DataFormats/GeometryVector"/>
+<use name="FWCore/Utilities"/>
+<use name="CondFormats/AlignmentRecord"/>
+<use name="boost"/>
+<flags EDM_PLUGIN="1"/>
+<export>
+   <lib name="1"/>
+   <use name="FWCore/Framework"/>
+   <use name="FWCore/PluginManager"/>
+   <use name="FWCore/ParameterSet"/>
+   <use name="CommonTools/UtilAlgos"/>
+   <use name="DataFormats/EcalDigi"/>
+   <use name="Geometry/EcalMapping"/>
+</export>
+//
+
+<library   file="*.cc" name="TauTagAndProbe">
+  <Flags CPPDEFINES="CMSSW_VERSION=$(shell echo ${CMSSW_VERSION}|sed -e s/CMSSW_// -e s/_//g -e s/patch\.//)"/>
+  <flags   EDM_PLUGIN="1"/>
+</library>
+
+  
+ -->
+
+<use name="FWCore/Framework"/>
+<use name="FWCore/PluginManager"/>
+<use name="FWCore/ParameterSet"/>
+<use name="FWCore/MessageLogger"/>
+<use name="FWCore/Utilities"/>
+<use name="DataFormats/PatCandidates"/>
+<use name="CommonTools/Utils"/>
+<use name="CommonTools/UtilAlgos"/>
+<use name="FWCore/ServiceRegistry"/>
+<use name="HLTrigger/HLTcore"/>
+
+<flags EDM_PLUGIN="1"/>
+
+<!-- <library name="TauTagAndProbePlugins" file="*.cc">
+    <use   name="FWCore/Framework"/>
+    <use   name="FWCore/MessageLogger"/>
+    <use   name="FWCore/ParameterSet"/>
+    <use   name="FWCore/Utilities"/>
+    <flags EDM_PLUGIN="1"/>
+</library> -->

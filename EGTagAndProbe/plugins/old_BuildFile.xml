@@ -1,0 +1,27 @@
+<use name="FWCore/Framework"/>
+<use name="FWCore/PluginManager"/>
+<use name="FWCore/ParameterSet"/>
+<use name="DataFormats/RecoCandidate"/>
+<use name="DataFormats/PatCandidates"/>
+<use name="RecoLocalCalo/EcalRecAlgos"/>
+<use name="DataFormats/TrackReco"/>
+<use name="CommonTools/UtilAlgos"/>
+<use name="DataFormats/EcalDigi"/>
+<use name="Geometry/CaloTopology"/>
+<use name="Geometry/CaloGeometry"/>
+<use name="DataFormats/GeometryVector"/>
+<use name="FWCore/Utilities"/>
+<use name="CondFormats/AlignmentRecord"/>
+<use name="HLTrigger/HLTcore"/>
+<use name="boost"/>
+
+<export>
+   <lib name="1"/>
+   <use name="FWCore/Framework"/>
+   <use name="FWCore/PluginManager"/>
+   <use name="FWCore/ParameterSet"/>
+   <use name="CommonTools/UtilAlgos"/>
+   <use name="DataFormats/EcalDigi"/>
+   <use name="Geometry/EcalMapping"/>
+</export>
+
