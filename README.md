@@ -13,14 +13,31 @@ scram b -j4
 ```
 
 ### Producing TagAndProbe ntuples with unpacked L1EG (no re-emulation)
-Set flag isMC and isMINIAOD according to sample in test/test.py
-HLT path used specified in python/MCAnalysis_cff.py (MC) or python/tagAndProbe_cff.py (data)
-Launch test.py
+1. cd to relevant directory
+```
+${CMSSW_BASE}/src/EGTagAndProbe/EGTagAndProbe
+```
+2. Set flag isMC and isMINIAOD according to sample in test/test.py
+3. HLT path used specified in python/MCAnalysis_cff.py (MC) or python/tagAndProbe_cff.py (data)
+4. Launch test/test.py
 
 ### Producing TagAndProbe ntuples with emulated L1EG
-Set flag isMC and isMINIAOD according to sample in test/reEmulL1.py
-HLT path used specified in python/MCAnalysis_cff.py (MC) or python/tagAndProbe_cff.py (data)
-Launch reEmulL1.py
+Follow the instructions from the following twiki to set-up the L1 Emulator:
+
+
+https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideL1TStage2Instructions#Environment_Setup_with_Integrati
+
+
+1. Compile and cd to relevant directory:
+```
+cd CMSSW_X_Y_Z/src
+scram b -j4
+${CMSSW_BASE}/src/EGTagAndProbe/EGTagAndProbe
+```
+
+2. Set flag isMC and isMINIAOD according to sample in test/reEmulL1.py
+3. HLT path used specified in python/MCAnalysis_cff.py (MC) or python/tagAndProbe_cff.py (data)
+4. Launch test/reEmulL1.py
 
 
 ### Submit job on the Grid
