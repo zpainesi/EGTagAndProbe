@@ -33,7 +33,7 @@ cmssw_setup:
     - git config --global user.email "${GIT_USER_EMAIL}"
     - git config --global user.github "${GIT_USER_GITHUB}"
     - mkdir -p EGTagAndProbe
-    - cp -r "${CI_PROJECT_DIR}/EGTagAndProbe" "${CMSSW_BASE}/src/EGTagAndProbe/"
+    - cp -r "${CI_PROJECT_DIR}/EGTagAndProbe" "${CMSSW_BASE}/src/EGTagAndProbe/."
     - scram b
     - mkdir -p ${HOME}/.globus
     - printf "${GRID_USERCERT}" | base64 -d > ${HOME}/.globus/usercert.pem
