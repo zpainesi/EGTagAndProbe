@@ -452,17 +452,12 @@ void Ntuplizer::beginJob()
         this -> _tree -> Branch("isProbeLoose", &_isProbeLoose, "isProbeLoose/I");
         this -> _tree -> Branch("isProbeTight", &_isProbeTight, "isProbeTight/I");
         this -> _tree -> Branch("isProbeMedium", &_isProbeMedium, "isProbeMedium/I");
-
         this -> _tree -> Branch("UnpackedDR", &_Unpacked_dR, "UnpackedDR/F");
         this -> _tree -> Branch("EmulatedDR", &_Emulated_dR, "EmulatedDR/F");
-
         this -> _tree -> Branch("seedTowerEt", &_seedTowerEt, "seedTowerEt/I");
-   
         this -> _tree -> Branch("TowerHoE", &_TowerHoE,"TowerHoE/I");
-
         this -> _tree -> Branch("iem", &_iem,"iem/I");
         this -> _tree -> Branch("ihad", &_ihad,"ihad/I");
-
         this -> _tree -> Branch("shape", &_shape, "shape/I");
         ///////////////////////////////////////////////////////////////////////////////////////////  
          
@@ -696,9 +691,7 @@ void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& eSetup)
 
 
 					const float dR_probe = deltaR (*eleProbe, obj);
-                                 //       if (eleProbe->superCluster()->eta()>=-1.92324 && (eleProbe->superCluster()->eta()<=-1.92322)){
-                                   //     cout<<"dR_probe: "<<dR_probe<<endl;
-                                     //   }
+                                 
 					if ( dR_probe < 0.3)
 					{
 						this -> _isProbeHLTmatched = true;
@@ -768,8 +761,7 @@ void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& eSetup)
 			{
 				const float dR = deltaR(*eleProbe, *bx0EGIt);
                                 _Unpacked_dR = dR;
-                              //  cout<<"dR for the Unpacked: "<<dR<<endl;
-                              //  cout<<"dR: "<<dR<<endl;
+                             
 				const l1t::EGamma& l1tEG = *bx0EGIt;
 
 				//cout<<"FW EG, pT = "<<l1tEG.pt()<<", eta = "<<l1tEG.eta()<<", phi = "<<l1tEG.phi()<<endl;
@@ -779,7 +771,6 @@ void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& eSetup)
 
 					minDR = dR; //Uncomment for new match algo
 					this -> _l1tPt = l1tEG.pt();
-                                      //  cout<< "_l1tPt"<< _l1tPt<<endl;
 					this -> _l1tEta = l1tEG.eta();
 					this -> _l1tPhi = l1tEG.phi();
 					this -> _l1tIso = l1tEG.hwIso();
@@ -810,12 +801,7 @@ void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& eSetup)
 					const float dR = deltaR(*eleProbe, *bx0EmuEGIt);
                                         _Emulated_dR = dR;
 					const l1t::EGamma& l1tEmuEG = *bx0EmuEGIt;
-                         //               cout<<endl;
-                           //             cout<<"dR for the Emulated: "<<dR<<endl;
-			//		cout<<"Emul EG, pT = "<<l1tEmuEG.pt()<<", eta = "<<l1tEmuEG.eta()<<", phi = "<<l1tEmuEG.phi()<<endl;
-                                        
-                                        //cout<<"dR for the Emulated: "<<dR<<endl;                                           
-                                       
+                  
                                           
 					if (dR < minDR) //Uncomment for new match algo
 					{
@@ -830,16 +816,11 @@ void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& eSetup)
 						this -> _l1tEmuTowerIPhi = l1tEmuEG.towerIPhi();
 						this -> _l1tEmuRawEt     = l1tEmuEG.rawEt();
 						this -> _l1tEmuIsoEt     = l1tEmuEG.isoEt();
-                                                
-//                                                this -> _seedTowerEt     = l1tEmuEG.seedTowerEt(); 
- 
-//                                                this -> _TowerHoE        = l1tEmuEG.towerHoE();  
-   
-//                                                this -> _iem             = l1tEmuEG.seedTowerEm();
-
+                                                //this -> _seedTowerEt     = l1tEmuEG.seedTowerEt(); 
+ 						this -> _TowerHoE        = l1tEmuEG.towerHoE();  
+						//this -> _iem             = l1tEmuEG.seedTowerEm();
                                                 //this -> _ihad            = l1tEmuEG.seedTowerHad();
-
-//                                                this -> _shape           = l1tEmuEG.shape();
+                                                this -> _shape           = l1tEmuEG.shape();
 					}
 				}
                       
@@ -884,8 +865,6 @@ void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& eSetup)
 }
 
 
-
-
 bool Ntuplizer::hasFilters(const pat::TriggerObjectStandAlone&  obj , const std::vector<std::string>& filtersToLookFor) {
 
 	const std::vector<std::string>& eventLabels = obj.filterLabels();
@@ -908,11 +887,6 @@ bool Ntuplizer::hasFilters(const pat::TriggerObjectStandAlone&  obj , const std:
 
 	return true;
 }
-
-
-
-
-
 
 
 bool Ntuplizer::matchToTruth(const edm::Ptr<reco::GsfElectron> ele, 
@@ -946,9 +920,6 @@ bool Ntuplizer::matchToTruth(const edm::Ptr<reco::GsfElectron> ele,
 	return true;
 
 }
-
-
-
 
 
 #include <FWCore/Framework/interface/MakerMacros.h>

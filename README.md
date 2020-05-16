@@ -9,7 +9,7 @@ cmsrel CMSSW_X_Y_Z
 cd CMSSW_X_Y_Z/src
 cmsenv
 git clone https://gitlab.cern.ch/ckoraka/EGTagAndProbe.git
-scram b -j4
+scram b -j 4
 ```
 
 ### Producing TagAndProbe ntuples with unpacked L1EG (no re-emulation)
@@ -20,6 +20,13 @@ ${CMSSW_BASE}/src/EGTagAndProbe/EGTagAndProbe
 2. Set flag isMC and isMINIAOD according to sample in test/test.py
 3. HLT path used specified in python/MCAnalysis_cff.py (MC) or python/tagAndProbe_cff.py (data)
 4. Launch test/test.py
+
+
+```
+cd test
+cmsRun test.py
+```
+
 
 ### Producing TagAndProbe ntuples with emulated L1EG
 Follow the instructions from the following twiki to set-up the L1 Emulator:
@@ -38,6 +45,13 @@ ${CMSSW_BASE}/src/EGTagAndProbe/EGTagAndProbe
 2. Set flag isMC and isMINIAOD according to sample in test/reEmulL1.py
 3. HLT path used specified in python/MCAnalysis_cff.py (MC) or python/tagAndProbe_cff.py (data)
 4. Launch test/reEmulL1.py
+
+
+```
+cd test
+cmsRun reEmulL1.py
+```
+
 
 
 ### Submit job on the Grid

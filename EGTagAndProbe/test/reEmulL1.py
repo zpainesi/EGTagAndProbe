@@ -3,7 +3,7 @@ import FWCore.PythonUtilities.LumiList as LumiList
 import FWCore.ParameterSet.Config as cms
 from Configuration.StandardSequences.Eras import eras
 
-isMC = True
+isMC = False
 isMINIAOD = True
 
 process = cms.Process("TagAndProbe",eras.Run2_2016)
@@ -15,7 +15,8 @@ process.load('Configuration.StandardSequences.Services_cff')
 process.load('SimGeneral.HepPDTESSource.pythiapdt_cfi')
 process.load('FWCore.MessageService.MessageLogger_cfi')
 process.load('Configuration.EventContent.EventContent_cff')
-process.load('Configuration.Geometry.GeometryExtended2016Reco_cff')
+process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
+#process.load('Configuration.Geometry.GeometryExtended2016Reco_cff')
 process.load('Configuration.StandardSequences.MagneticField_AutoFromDBCurrent_cff')
 
 
@@ -92,14 +93,33 @@ egmGsfElectronIDSequence = cms.Sequence(egmGsfElectronIDTask)
 
 if not isMC: # will use 80X
     from Configuration.AlCa.autoCond import autoCond
-    process.GlobalTag.globaltag = '80X_dataRun2_Prompt_v8'
-    process.load('TauTagAndProbe.TauTagAndProbe.tagAndProbe_cff')
+    process.GlobalTag.globaltag = '110X_dataRun2_v12'
+    process.load('EGTagAndProbe.EGTagAndProbe.tagAndProbe_cff')
     process.source = cms.Source("PoolSource",
         fileNames = cms.untracked.vstring(
-            '/store/data/Run2016B/SingleMuon/MINIAOD/PromptReco-v2/000/274/199/00000/7005DB70-4C28-E611-8628-02163E0144DD.root'
+            '/store/data/Run2018D/EGamma/MINIAOD/22Jan2019-v2/110000/10A4CCCC-3FB2-7F4B-841C-926A03DFBC61.root'
         ),
 
-        secondaryFileNames = cms.untracked.vstring(listSecondaryFiles)
+        secondaryFileNames = cms.untracked.vstring(
+	'/store/data/Run2018D/EGamma/RAW/v1/000/321/233/00000/7A7B417B-969F-E811-9CC0-FA163EC80159.root',
+	'/store/data/Run2018D/EGamma/RAW/v1/000/321/233/00000/9012D37D-969F-E811-913B-FA163EAF7E70.root',
+	'/store/data/Run2018D/EGamma/RAW/v1/000/321/414/00000/004596BD-BBA2-E811-A445-FA163EB5B1F7.root',
+	'/store/data/Run2018D/EGamma/RAW/v1/000/321/414/00000/C603AEE4-BBA2-E811-AE3E-FA163EFF1C10.root',
+	'/store/data/Run2018D/EGamma/RAW/v1/000/321/887/00000/4210A02C-83AA-E811-A2FC-FA163E6CD89F.root',
+	'/store/data/Run2018D/EGamma/RAW/v1/000/321/887/00000/18A5473E-82AA-E811-816D-02163E014BB9.root',
+	'/store/data/Run2018D/EGamma/RAW/v1/000/321/887/00000/102E6C7D-7FAA-E811-892E-FA163ED1C998.root',
+	'/store/data/Run2018D/EGamma/RAW/v1/000/321/414/00000/F21A0D70-BBA2-E811-A608-FA163EAEFBE1.root',
+	'/store/data/Run2018D/EGamma/RAW/v1/000/321/414/00000/E675C0A9-BBA2-E811-810D-FA163E5ACC8E.root',
+	'/store/data/Run2018D/EGamma/RAW/v1/000/321/233/00000/A8C98583-969F-E811-B653-FA163E8E54FF.root',
+	'/store/data/Run2018D/EGamma/RAW/v1/000/321/887/00000/50D37695-81AA-E811-8B09-FA163E3116C8.root',
+	'/store/data/Run2018D/EGamma/RAW/v1/000/321/887/00000/5E4E4A7C-7FAA-E811-B494-FA163E8A6FB6.root',
+	'/store/data/Run2018D/EGamma/RAW/v1/000/321/887/00000/F404327D-81AA-E811-B1EF-FA163E818EF8.root',
+	'/store/data/Run2018D/EGamma/RAW/v1/000/321/887/00000/F847F781-7FAA-E811-BF05-FA163EC968BB.root',
+	'/store/data/Run2018D/EGamma/RAW/v1/000/325/057/00000/66BBB3F2-EB2F-7746-A8FE-3C865C2E652E.root',
+	'/store/data/Run2018D/EGamma/RAW/v1/000/325/057/00000/4A0AB096-D0D7-524C-A5C1-69A429C5F609.root',
+	'/store/data/Run2018D/EGamma/RAW/v1/000/321/233/00000/1C47877C-969F-E811-830E-FA163E346E5B.root',
+	'/store/data/Run2018D/EGamma/RAW/v1/000/321/887/00000/4618ECCB-81AA-E811-8EAF-FA163E22EC2E.root'
+	)
     )
 
 else:
@@ -161,10 +181,10 @@ else:
     process = L1TTurnOffUnpackStage2GtGmtAndCalo(process)
 
 
-process.load("L1Trigger.L1TCalorimeter.caloStage2Params_2016_v2_2_cfi")
+#process.load("L1Trigger.L1TCalorimeter.caloStage2Params_2016_v2_2_cfi")
 #process.load("L1Trigger.L1TCalorimeter.caloStage2Params_2016_v3_3_1_2018_EcalSF_cfi")
 #process.load("L1Trigger.L1TCalorimeter.caloStage2Params_2016_v3_3_1_2018_EcalSF_EGcalib_cfi")
-#process.load("L1Trigger.L1TCalorimeter.caloStage2Params_2016_v2_2_cfi")
+process.load("L1Trigger.L1TCalorimeter.caloParams_2018_v1_2_cfi")
 
 
 #### handling of cms line options for tier3 submission
@@ -178,7 +198,7 @@ if options.inputFiles:
     process.source.fileNames = cms.untracked.vstring(options.inputFiles)
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(-1)
+    input = cms.untracked.int32(100)
 )
 
 if options.maxEvents >= -1:
