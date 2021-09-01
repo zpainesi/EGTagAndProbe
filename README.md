@@ -90,3 +90,7 @@ previous step). Uses class *TurnOnPlot_DATA.py* defined in for plotting purposes
 
 
 In directory **fitter/Resolution** macros used to plot the resolution using the t&p ntuples as inputs can be found.
+
+
+In directory **fitter/Rates** instructions and macros used to calculate the L1 e/g rate can be found.
+
