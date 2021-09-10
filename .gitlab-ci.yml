@@ -1,0 +1,46 @@
+cmssw_setup:
+  tags:
+    - cvmfs
+  image:
+    name: gitlab-registry.cern.ch/clange/cmssw-docker/cc7-cms:latest
+    entrypoint: [""]
+
+  variables:
+    # This is also set on LXPLUS
+    CMS_PATH: /cvmfs/cms.cern.ch
+    CMSSW_RELEASE: CMSSW_11_0_0_patch1
+    GIT_USER_NAME: 'Anonymous Nonamious'
+    GIT_USER_EMAIL: anonymous@cern.ch
+    GIT_USER_GITHUB: cmsbot
+
+  artifacts:
+    untracked: true
+    expire_in: 20 minutes
+    paths:
+     - ${CMSSW_RELEASE}
+
+  script:
+    - shopt -s expand_aliases
+    # access CVMFS
+    - set +u && source ${CMS_PATH}/cmsset_default.sh; set -u
+    - cmsrel CMSSW_11_0_0_patch1
+    - cd CMSSW_11_0_0_patch1/src
+    - cmsenv
+    # If within CERN, we can speed up interaction with CMSSW:
+    # - export CMSSW_MIRROR=https://:@git.cern.ch/kerberos/CMSSW.git
+    # - export CMSSW_GIT_REFERENCE=/cvmfs/cms.cern.ch/cmssw.git.daily
+    - git config --global user.name "${GIT_USER_NAME}"
+    - git config --global user.email "${GIT_USER_EMAIL}"
+    - git config --global user.github "${GIT_USER_GITHUB}"
+    - mkdir -p EGTagAndProbe
+    - cp -r "${CI_PROJECT_DIR}/EGTagAndProbe" "${CMSSW_BASE}/src/EGTagAndProbe/."
+    - scram b
+    - mkdir -p ${HOME}/.globus
+    - printf "${GRID_USERCERT}" | base64 -d > ${HOME}/.globus/usercert.pem
+    - printf "${GRID_USERKEY}" | base64 -d > ${HOME}/.globus/userkey.pem
+    - chmod 400 ${HOME}/.globus/userkey.pem
+    - printf "${GRID_PASSWORD}" | base64 -d | voms-proxy-init --voms cms --pwstdin
+    - voms-proxy-info --all
+    - cd ${CMSSW_BASE}/src/EGTagAndProbe/EGTagAndProbe
+    - cmsRun test/test.py
+    - ls -l NTuple.root
