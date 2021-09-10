@@ -6,7 +6,7 @@ NoFit: true
 
 #SingleEG30
 Turnon.1.Name: SingleEG30
-Turnon.1.File: /eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/ckoraka/NtuplesForCMSWeek/EGamma_Run2018_ABCD.root
+Turnon.1.File: /eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/ckoraka/NTuplesFor2018PerformancePlots/data_2018/reducedTrees/EGamma_Run2018ABCD_reduced.root
 #Turnon.1.File: /eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/ckoraka/NTuplesFor2018PerformancePlots/data_2018/reducedTrees/EGamma_Run2018ABCD_reduced.root
 Turnon.1.Tree: TagAndProbe
 Turnon.1.XVar: eleProbeSclEt
@@ -23,7 +23,7 @@ Turnon.1.CB.Sigma: 3.3 0.01 100
 
 #SingleEG40
 Turnon.2.Name: SingleEG40
-Turnon.2.File: /eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/ckoraka/NtuplesForCMSWeek/EGamma_Run2018_ABCD.root
+Turnon.2.File: /eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/ckoraka/NTuplesFor2018PerformancePlots/data_2018/reducedTrees/EGamma_Run2018ABCD_reduced.root
 #Turnon.2.File: /eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/ckoraka/NTuplesFor2018PerformancePlots/data_2018/reducedTrees/EGamma_Run2018ABCD_reduced.root
 Turnon.2.Tree: TagAndProbe
 Turnon.2.XVar: eleProbeSclEt

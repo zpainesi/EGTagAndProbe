@@ -26,17 +26,19 @@ class TurnOnPlot:
     def __init__(self, **args):
         self.name  = ""
         self.turnons = []
-        self.plotDir = "plots/"
+        self.plotDir = "plots"
         #self.xRange = (10, 120)
         self.xRange = (0, 100)
         #self.xTitle = "p_{T}^{offl} [GeV]"
         self.xTitle = "E_{T}^{e offl} [GeV]" 
         #self.xTitle = "Number of Vertices"
-	#self.legendPosition = (0.6,0.2,0.9,0.4)
+	    #self.legendPosition = (0.6,0.2,0.9,0.4)
         self.legendPosition = (0.4,0.2,0.9,0.6)
+        self.descPosition = (0.6,0.58)
         self.setPlotStyle()
         #self.triggerName = args.get("TriggerName", "Turn-On")
         self.triggerName = args.get("TriggerName", "")
+        self.desc = args.get("desc",["L1 Efficiency"])
 
     def addTurnOn(self, turnon):
         self.turnons.append(turnon)
@@ -79,27 +81,13 @@ class TurnOnPlot:
         extraTextBox.SetTextFont(extraTextFont)
         extraTextBox.SetTextColor(ROOT.kBlack)
         extraTextBox.SetTextAlign(13)
-        selbox1       = ROOT.TLatex  (0.6, 0.58        , "L1 EG")
-        #selbox2       = ROOT.TLatex  (0.6, 0.58 - 0.04 , "Tight Isolation")
-        #selbox2       = ROOT.TLatex  (0.6, 0.58 - 0.04 , "Loose Isolation")
-        selbox2       = ROOT.TLatex  (0.6, 0.58 - 0.04 , "#||{#eta^{offl}}<2.5 & E_{T}^{offl}>40 GeV") 
-        #selbox3       = ROOT.TLatex  (0.6, 0.58 - 0.08 , "#||{#eta^{offl}}<2.5")
-        #selbox3       = ROOT.TLatex  (0.6, 0.58 - 0.08 , "#splitline{#eta Restriction}{#||{#eta^{offl}}<2.1}")
-        selbox3       = ROOT.TLatex  (0.6, 0.58 - 0.04 , "E_{T}^{offl}>40 GeV")
-        selbox1.SetNDC()
-        selbox2.SetNDC()
-        selbox3.SetNDC()
-        selbox1.SetTextSize(0.035)
-        selbox1.SetTextFont(12)
-        selbox1.SetTextAlign(13)
-        selbox2.SetTextSize(0.035)
-        selbox2.SetTextFont(12)
-        selbox2.SetTextAlign(13)
-        selbox3.SetTextSize(0.035)
-        selbox3.SetTextFont(12)
-        selbox3.SetTextAlign(13)
-
-
+        selbox=[]
+        for n in range(len(self.desc)):
+            selbox.append(ROOT.TLatex  (self.descPosition[0], self.descPosition[1] -n*0.04, self.desc[n]))
+            selbox[-1].SetNDC()
+            selbox[-1].SetTextSize(0.035)
+            selbox[-1].SetTextFont(12)
+            selbox[-1].SetTextAlign(13)
 
         triggerNameBox = ROOT.TLatex(0.15, 0.95, self.triggerName)
         triggerNameBox.SetNDC()
@@ -156,10 +144,9 @@ class TurnOnPlot:
         CMSbox.Draw()
         extraTextBox.Draw()
         lumibox.Draw()
-	selbox1.Draw()
-        selbox2.Draw()
-        #selbox3.Draw()
-        #print ("DEBUG: " + self.plotDir+"/"+self.name+".eps")
+        for selb in selbox:
+            selb.Draw()
+        
         canvas.Print(self.plotDir+"/"+self.name+".pdf", "pdf")
         canvas.Print(self.plotDir+"/"+self.name+".png", "png")
         canvas.Print(self.plotDir+"/"+self.name+".gif", "png")

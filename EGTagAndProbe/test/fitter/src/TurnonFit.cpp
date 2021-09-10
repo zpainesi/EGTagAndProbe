@@ -141,7 +141,7 @@ void TurnonFit::fit()
 	RooRealVar rv12("eleProbeEta","eleProbeEta",0.);
 	RooRealVar rv13("hasL1_looseiso_22","hasL1_looseiso_22",0.);
 	RooRealVar rv14("hasL1_32","hasL1_32",0.);
-	//RooRealVar rv15("hasL1_tightiso_32","hasL1_tightiso_32",0.);
+	RooRealVar rv15("hasL1_tightiso_32","hasL1_tightiso_32",0.);
 	RooRealVar rv16("hasL1_tightiso_34","hasL1_tightiso_34",0.);
 	RooRealVar rv17("hasL1_tightiso_22","hasL1_tightiso_22",0.);
 	RooRealVar rv18("hasL1_looseiso_24","hasL1_looseiso_24",0.);
@@ -151,6 +151,7 @@ void TurnonFit::fit()
 	RooRealVar rv22("RunNumber","RunNumber",0.);
 	RooRealVar rv23("hasL1_34","hasL1_34",0.);
 	RooRealVar rv24("hasL1_tightiso_26","hasL1_tightiso_26",0.);
+	RooRealVar rv25("hasL1_40","hasL1_40",0.);
 
 	
 	argSet.add(rv1);
@@ -161,22 +162,23 @@ void TurnonFit::fit()
 	argSet.add(rv6);
 	argSet.add(rv7);
 	argSet.add(rv8);
-	//argSet.add(rv9);
-	//argSet.add(rv10);
-	//argSet.add(rv11);
+	argSet.add(rv9);
+	argSet.add(rv10);
+	argSet.add(rv11);
 	argSet.add(rv12);
-	//argSet.add(rv13);
+	argSet.add(rv13);
 	argSet.add(rv14);
-	//argSet.add(rv15);
-	//argSet.add(rv16);
-	//argSet.add(rv17);
-	//argSet.add(rv18);
-	//argSet.add(rv19);
-	//argSet.add(rv20);
+	argSet.add(rv15);
+	argSet.add(rv16);
+	argSet.add(rv17);
+	argSet.add(rv18);
+	argSet.add(rv19);
+	argSet.add(rv20);
 	//argSet.add(rv21);
 	//argSet.add(rv22); 
-	//argSet.add(rv23);
+	argSet.add(rv23);
 	//argSet.add(rv24);
+	argSet.add(rv25);
 
 	argSet.Print();
 
@@ -321,11 +323,11 @@ void TurnonFit::printParameters()
 	cout<<"  Selection: "<<m_selection<<"\n";
 	cout<<"  WeightVar: "<<m_weightVar<<"\n";
 	cout<<"  CB	   :\n";
-	cout<<"	Max  : "<<m_max.getVal()  <<" ["<<m_max.getMin()  <<", "<<m_max.getMax()<<"]\n";
-	cout<<"	Alpha: "<<m_alpha.getVal()<<" ["<<m_alpha.getMin()<<", "<<m_alpha.getMax()<<"]\n";
-	cout<<"	n	: "<<m_n.getVal()	<<" ["<<m_n.getMin()	<<", "<<m_n.getMax()<<"]\n";
-	cout<<"	mean : "<<m_mean.getVal() <<" ["<<m_mean.getMin() <<", "<<m_mean.getMax()<<"]\n";
-	cout<<"	sigma: "<<m_sigma.getVal()<<" ["<<m_sigma.getMin()<<", "<<m_sigma.getMax()<<"]\n";
+	cout<<"  Max  : "<<m_max.getVal()  <<" ["<<m_max.getMin()  <<", "<<m_max.getMax()<<"]\n";
+	cout<<"  Alpha: "<<m_alpha.getVal()<<" ["<<m_alpha.getMin()<<", "<<m_alpha.getMax()<<"]\n";
+	cout<<"  n	: "<<m_n.getVal()	<<" ["<<m_n.getMin()	<<", "<<m_n.getMax()<<"]\n";
+	cout<<"  mean : "<<m_mean.getVal() <<" ["<<m_mean.getMin() <<", "<<m_mean.getMax()<<"]\n";
+	cout<<"  sigma: "<<m_sigma.getVal()<<" ["<<m_sigma.getMin()<<", "<<m_sigma.getMax()<<"]\n";
 	cout<<"\n\n";
 }
 

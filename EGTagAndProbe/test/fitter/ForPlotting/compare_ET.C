@@ -36,6 +36,7 @@
 
 using namespace std;
 using namespace RooFit;
+
 TCanvas* CreateCanvas(TString CanvasName = "myPlot", bool LogY = false, bool Grid = true)
 {
   TCanvas* c = new TCanvas(CanvasName.Data(),CanvasName.Data(),800,800);
@@ -118,7 +119,7 @@ void compare_ET()
         int     eleTagCharge;
         int     allEl_Size;
         int     isProbeLoose;
-	int     Nvtx;
+    	int     Nvtx;
         std::vector<float> *allEl_Pt;
         std::vector<float> *allEl_Eta;
         std::vector<float> *allEl_Phi;
