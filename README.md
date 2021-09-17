@@ -1,5 +1,7 @@
 Forked from charis's original [repo@GitLab ](https://gitlab.cern.ch/ckoraka/EGTagAndProbe/)
 
+checkout [`triggerEfficDev`](https://github.com/ats2008/EGTagAndProbe/tree/triggerEfficDev) branch for updatd codes and docs
+
 # EGTagAndProbe
 Set of tools to evaluate L1EG trigger performance on T&amp;P
 
