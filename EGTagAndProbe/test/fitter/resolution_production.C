@@ -1,48 +1,22 @@
-#include "TH1D.h"
-#include "TH2D.h"
-#include "TH2F.h"
-#include "TTree.h"
-#include "TFile.h"
-#include "TDirectory.h"
-#include "TPaveText.h"
-#include "TLegend.h"
-#include "TCanvas.h"
-#include "TMath.h"
-#include "TStyle.h"
-#include "TChain.h"
-#include <iostream>
-#include <fstream>
-#include "TSystem.h"
-#include "TROOT.h"
-#include <TColor.h>
-#include <TF1.h>
-#include <TH1F.h>
-#include <TFile.h>
-#include "TH1.h"
-#include "TAxis.h"
-#include "TCanvas.h"
-#include "TAxis.h"
 #include "Resolution.h"
-//#include "/afs/cern.ch/work/c/ckoraka/codes/setTDRStyle_teliko.C"
 
 using namespace std;
 
-
-
-void produceResolution(string infile,string ofileName,string prefix="",Long64_t maxEvents=100000);
+void produceResolution(string infile,string ofileName,string prefix="",bool doEmulation=false,Long64_t maxEvents=100000);
 
 void resolution_production(string infile="",string ofileName="",string prefix="",Long64_t maxEvents=100000)
 {
 
     //produceResolution(infile,ofileName,prefix,maxEvents);
-    produceResolution("/grid_mnt/t3storage3/athachay/l1egamma/triggerPerformance/CMSSW_10_6_25/src/EGTagAndProbe/EGTagAndProbe/test/fitter/Run3MC_TagAndProbeNtuple.root",
-                    "turnon.root",
-                    "run3MC_",
-                   1000);
+  produceResolution("/grid_mnt/t3storage3/athachay/l1egamma/triggerPerformance/CMSSW_10_6_25/src/EGTagAndProbe/EGTagAndProbe/test/fitter/TAndP_ReEmulatedRun3MC_caloParams_2018_v1_2.root",
+                    "resolution.root",
+                    "run3MCReEmulated_",
+                    true,
+                   -10);
 }
 
 
-void produceResolution(string infile,string ofileName,string prefix="",Long64_t maxEvents=100000)
+void produceResolution(string infile,string ofileName,string prefix="",bool doEmulation=false,Long64_t maxEvents=100000)
 {
 
 
@@ -117,11 +91,20 @@ void produceResolution(string infile,string ofileName,string prefix="",Long64_t 
     //t1->SetBranchAddress("hltPt",&hltPt);
     //t1->SetBranchAddress("hltEta",&hltEta);
     //t1->SetBranchAddress("hltPhi",&hltPhi);
-    t1->SetBranchAddress("l1tPt",&l1tPt);
-    t1->SetBranchAddress("l1tEta",&l1tEta);
-    t1->SetBranchAddress("l1tPhi",&l1tPhi);
+    if( doEmulation)
+    {
+        t1->SetBranchAddress("l1tEmuPt",&l1tPt);
+        t1->SetBranchAddress("l1tEmuEta",&l1tEta);
+        t1->SetBranchAddress("l1tEmuPhi",&l1tPhi);
+    }
+    else
+    {
+        t1->SetBranchAddress("l1tPt",&l1tPt);
+        t1->SetBranchAddress("l1tEta",&l1tEta);
+        t1->SetBranchAddress("l1tPhi",&l1tPhi);
+    }
     t1->SetBranchAddress("isProbeLoose",&isProbeLoose);
-
+    
     int nentries = t1->GetEntries();
 
     std::cout<<" Total number events available for processing : "<<nentries<<"\n";
