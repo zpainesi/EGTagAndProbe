@@ -8,11 +8,29 @@ void resolution_production(string infile="",string ofileName="",string prefix=""
 {
 
     //produceResolution(infile,ofileName,prefix,maxEvents);
-  produceResolution("/grid_mnt/t3storage3/athachay/l1egamma/triggerPerformance/CMSSW_10_6_25/src/EGTagAndProbe/EGTagAndProbe/test/fitter/TAndP_ReEmulatedRun3MC_caloParams_2018_v1_2.root",
+
+
+ int doFull=1;
+//produceResolution(
+//    "/grid_mnt/t3storage3/athachay/l1egamma/triggerPerformance/CMSSW_10_6_25/src/EGTagAndProbe/EGTagAndProbe/test/fitter/EGamma_Run2018ABCD_reduced.root",
+//                    "resolution.root",
+//                    "data2018_",
+//                    false,
+//                   doFull*20000);
+//
+//produceResolution(
+//    "/grid_mnt/t3storage3/athachay/l1egamma/triggerPerformance/CMSSW_10_6_25/src/EGTagAndProbe/EGTagAndProbe/test/fitter/DYToLL_M-50_TuneCP5_14TeV-pythia8.root",
+//                    "resolution.root",
+//                    "run3MC_",
+//                    false,
+//                   doFull*20000);
+
+produceResolution("/grid_mnt/t3storage3/athachay/l1egamma/data/run3MC/NTuple_crab_4841files_fromSweta.root",
+ //   "/grid_mnt/t3storage3/athachay/l1egamma/triggerPerformance/CMSSW_10_6_25/src/EGTagAndProbe/EGTagAndProbe/test/fitter/TAndP_ReEmulatedRun3MC_caloParams_2018_v1_2_V2.root",
                     "resolution.root",
-                    "run3MCReEmulated_",
+                    "run3MCReEmulatedV2_",
                     true,
-                   -10);
+                   doFull*2000);
 }
 
 
@@ -51,9 +69,9 @@ void produceResolution(string infile,string ofileName,string prefix="",bool doEm
 
     const Int_t PtBINS = 14; 
 	Double_t PtEdges[PtBINS + 1] = {5., 10., 14., 18., 20., 23., 26., 30., 40., 50., 60., 70., 80., 90., 100.};
-    const Int_t dPtBINS = 400; 
+    const Int_t dPtBINS = 4000; 
 	Double_t dPtEdges[dPtBINS + 1];
-    for(int i=0;i<=dPtBINS;i++) dPtEdges[i] = -0.005 + 0.01*i ;
+    for(int i=0;i<=dPtBINS;i++) dPtEdges[i] = -0.0005 + 0.001*i ;
 	
     const Int_t EtaBINS = 23; 
 	Double_t EtaEdges[EtaBINS + 1] = {0.,0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.305, 1.479, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4};
@@ -72,7 +90,7 @@ void produceResolution(string infile,string ofileName,string prefix="",bool doEm
     resolutionMap["EtaVsdEta"] = new resolutionMeasurement("EtaVsdEta",EtaBINS,EtaEdges,dEtaBINS,dEtaEdges);
     resolutionMap["PhiVsdPhi"] = new resolutionMeasurement("PhiVsdPhi",PhiBINS,PhiEdges,dPhiBINS,dPhiEdges);
     resolutionMap["EtVsdEt"  ] = new resolutionMeasurement("EtVsdEt",PtBINS,PtEdges,dPtBINS,dPtEdges);
-    resolutionMap["EtaVsdEt"  ] = new resolutionMeasurement("EtaVsdEt",EtaBINS,EtaEdges,dPtBINS,dPtEdges);
+    resolutionMap["EtaVsdEt" ] = new resolutionMeasurement("EtaVsdEt",EtaBINS,EtaEdges,dPtBINS,dPtEdges);
 
     //res_vs_et_barrel->GetYaxis()->SetTitle("FWHM / (E_{T}^{e#gamma, L1}/E_{T}^{e#gamma, offline})_{at maximum}");
 	//res_vs_et_barrel->GetXaxis()->SetTitle("E_{T}^{e#gamma, offline} [GeV]");
@@ -118,7 +136,7 @@ void produceResolution(string infile,string ofileName,string prefix="",bool doEm
         
         t1->GetEntry(jentry);
 		
-        if(jentry%10000==0) cout<<"Processing Entry "<<jentry<<endl;
+        if(jentry%10000==0) cout<<"Processing Entry "<<jentry<<" / "<<nentries<<"  [ "<<100.0*jentry/nentries<<"  % ]  "<<endl;
 
 		//if(!(eleProbeSclEt>60. && eleProbeSclEt<70.)) continue;
 		if(isProbeLoose==1){
@@ -162,23 +180,6 @@ void produceResolution(string infile,string ofileName,string prefix="",bool doEm
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/*	

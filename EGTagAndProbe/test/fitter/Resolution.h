@@ -43,7 +43,7 @@ class resolutionMeasurement
         {   
            
             freeMem();
- //           std::cout<<" Allocation for "<<name<<"\n";
+            //std::cout<<" Allocation for "<<name<<"\n";
             res_barrel_2d       = new TH2D((name+"2dResBarrel").c_str(),"2d res barrel",BINS,Edges,dXBINS,dXEdges);
             res_endcap_2d       = new TH2D((name+"2dResECap").c_str(),"2d res endcap",BINS,Edges,dXBINS,dXEdges);
             res_inclusive_2d    = new TH2D((name+"2dResInclusive").c_str(),"2d res inclusive",BINS,Edges,dXBINS,dXEdges);
@@ -59,7 +59,7 @@ class resolutionMeasurement
         {
              res_inclusive_2d->Fill(x,y);
              var_inclusive->Fill(y);
-
+           //   std::cout<<"filling for "<<name<<"\n";
             if( abs(eta) > BARREL_BEG and abs(eta) < BARREL_END ) {
             
                 res_barrel_2d->Fill(x,y);
@@ -73,6 +73,7 @@ class resolutionMeasurement
         }
         void Write()
         {
+            std::cout<<"Writing : "<<res_endcap_2d->GetName();
             res_barrel_2d    ->Write(); 
             res_endcap_2d    ->Write();
             res_inclusive_2d ->Write();
@@ -132,9 +133,12 @@ class resolutionMeasurement
         		    bin2 = projectionY_inclusive->FindLastBinAbove(projectionY_inclusive->GetMaximum()/2);
         		    fwhm = projectionY_inclusive->GetBinCenter(bin2) - projectionY_inclusive->GetBinCenter(bin1);
         		    max  = projectionY_inclusive->GetXaxis()->GetBinCenter(projectionY_inclusive->GetMaximumBin());
-        
         		    res_inclusive->SetBinContent(i,fwhm / max);	
         	        res_inclusive->SetBinError(i,fwhm / (sqrt(projectionY_inclusive->Integral())));
+                    
+                    //std::cout<<"inclusive i = "<<i<<" , b1 : "<<bin1<<" , b2 : "<<bin2<<" fwhm : "<<fwhm\
+                             <<" , maxBin " <<projectionY_inclusive->GetMaximumBin()<<" max : "\
+                             <<max<<" val : "<<fwhm / max<<" +/- "<<fwhm / (sqrt(projectionY_inclusive->Integral()))<<" \n";  
         		    
                     //res_inclusive->SetBinContent(i,rms / mean);
         	        //res_inclusive->SetBinError(i,rms / (sqrt(projectionY_inclusive->Integral())));
@@ -154,6 +158,10 @@ class resolutionMeasurement
         
         		    res_barrel->SetBinContent(i,fwhm / max);		
         	        res_barrel->SetBinError(i,fwhm / (sqrt(projectionY_barrel->Integral())));
+                    //std::cout<<"barrel i = "<<i<<" , b1 : "<<bin1<<" , b2 : "<<bin2<<" fwhm : "<<fwhm\
+                             <<" , maxBin " <<projectionY_inclusive->GetMaximumBin()<<" max : "\
+                             <<max<<" val : "<<fwhm / max<<" +/- "<<fwhm / (sqrt(projectionY_inclusive->Integral()))<<" \n";  
+        		    
         	        //res_barrel->SetBinContent(i,rms / mean);
         	        //res_barrel->SetBinError(i,rms / (sqrt(projectionY_barrel->Integral())));
         
@@ -175,6 +183,10 @@ class resolutionMeasurement
                     //res_endcap->SetBinContent(i,rms / mean);
         	        //res_endcap->SetBinError(i,rms / (sqrt(projectionY_endcap->Integral())));
         
+                //    std::cout<<"ecap i = "<<i<<" , b1 : "<<bin1<<" , b2 : "<<bin2<<" fwhm : "<<fwhm\
+                             <<" , maxBin " <<projectionY_inclusive->GetMaximumBin()<<" max : "\
+                             <<max<<" val : "<<fwhm / max<<" +/- "<<fwhm / (sqrt(projectionY_inclusive->Integral()))<<" \n";  
+        		    
         	} 
         }
 

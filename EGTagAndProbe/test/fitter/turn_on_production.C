@@ -17,21 +17,32 @@
 #include "TROOT.h"
 #include <vector>
 #include "Efficiency.h"
+
+#include <chrono>
+
+
 //#include "secondary_peak.h"
 //#include "/afs/cern.ch/work/c/ckoraka/codes/setTDRStyle_teliko.C"
 
-void produceTurnOns(string infile,string ofileName,string prefix="",Long64_t maxEvents=100000);
+void produceTurnOns(string infile,string ofileName,string prefix="", bool doEmulationBranches=false,Long64_t maxEvents=100000);
 void turn_on_production(string infile="",string ofileName="",string prefix="",Long64_t maxEvents=100000)
 {
 
+    int doFull=-1;
  //   produceTurnOns(infile,ofileName,prefix,maxEvents);
-    produceTurnOns("/grid_mnt/t3storage3/athachay/l1egamma/triggerPerformance/CMSSW_10_6_25/src/EGTagAndProbe/EGTagAndProbe/test/fitter/Run3MC_TagAndProbeNtuple.root",
+    produceTurnOns("/grid_mnt/t3storage3/athachay/l1egamma/data/run3MC/NTuple_crab_4841files_fromSweta.root",
                     "turnon.root",
-                    "run3MC_",
-                   1000);
+                    "run3MCDebug_",
+                    false,
+                   -1*doFull*1e6);
+ //   produceTurnOns("/grid_mnt/t3storage3/athachay/l1egamma/triggerPerformance/CMSSW_10_6_25/src/EGTagAndProbe/EGTagAndProbe/test/fitter/EGamma_Run2018ABCD_reduced.root",
+ //                   "turnon.root",
+ //                   "data2018_",
+ //                   false,
+ //                  -1*doFull*1000);
 }
 
-void produceTurnOns(string infile,string ofileName,string prefix="",Long64_t maxEvents=100000)
+void produceTurnOns(string infile,string ofileName,string prefix="",bool doEmulationBranches=false,Long64_t maxEvents=100000)
 {
 
 	//////		For plotting 		////////////////////////////////////////////////////
@@ -71,11 +82,20 @@ void produceTurnOns(string infile,string ofileName,string prefix="",Long64_t max
     t1->SetBranchAddress("eleProbePhi"  ,&eleProbePhi			);
     t1->SetBranchAddress("eleTagEta"    ,&eleTagEta		    	);
     t1->SetBranchAddress("eleTagPhi"    ,&eleTagPhi			    );
-    t1->SetBranchAddress("l1tEta"       ,&l1tEta			    );
-    t1->SetBranchAddress("l1tPhi"       ,&l1tPhi			    );
     t1->SetBranchAddress("Nvtx"         ,&Nvtx			        );
     t1->SetBranchAddress("isProbeLoose" ,&isProbeLoose			);
     t1->SetBranchAddress("eleProbeSclEt",&eleProbeSclEt			);
+    
+    if( doEmulationBranches)
+    {
+        t1->SetBranchAddress("l1tEmuEta",&l1tEta);
+        t1->SetBranchAddress("l1tEmuPhi",&l1tPhi);
+    }
+    else
+    {
+        t1->SetBranchAddress("l1tEta",&l1tEta);
+        t1->SetBranchAddress("l1tPhi",&l1tPhi);
+    }
 
 
     int   hasL1_24, hasL1_looseiso_24, hasL1_tightiso_24 ;
@@ -149,14 +169,20 @@ void produceTurnOns(string infile,string ofileName,string prefix="",Long64_t max
 	Long64_t nentries = t1->GetEntries();
     std::cout<<" Available total "<<nentries<<" \n";
     if (maxEvents >0 ) nentries = nentries > maxEvents ? maxEvents : nentries;
-    
-
     std::cout<<" Processing total "<<nentries<<" \n";
-	for (Long64_t jentry=0; jentry<nentries; jentry++){
+	
+    auto t_start = std::chrono::high_resolution_clock::now();
+    auto t_end = std::chrono::high_resolution_clock::now();
+    
+    for (Long64_t jentry=0; jentry<nentries; jentry++){
 
        if(jentry%10000 ==0 )
        {
-            std::cout<<"Processing jentry : "<<jentry<<"\n";
+         t_end = std::chrono::high_resolution_clock::now();
+         cout<<"Processing Entry "<<jentry<<" / "<<nentries<<"  [ "<<100.0*jentry/nentries<<"  % ]  "
+             << " Elapsed time : "<< std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0
+             <<"  Estimated time left : "<< std::chrono::duration<double, std::milli>(t_end-t_start).count()*( nentries - jentry)/jentry * 0.001
+             <<endl;
        }
 	
 		t1->GetEntry(jentry);  		
@@ -201,11 +227,11 @@ void produceTurnOns(string infile,string ofileName,string prefix="",Long64_t max
                
                 
 
-               if( isProbeLoose==1 && fabs(eleProbeEta) < 2.5 && eleProbeSclEt > 50.0  && sqrt(pow(eleProbeEta-eleTagEta,2)+pow(eleProbePhi-eleTagPhi,2))>0.6 ) 
+               if( isProbeLoose==1 && eleProbeSclEt > 50.0  && sqrt(pow(eleProbeEta-eleTagEta,2)+pow(eleProbePhi-eleTagPhi,2))>0.6 ) 
                {
                     triggers["L1_32vsPUoffline50GeV"]->fill(hasL1_32,Nvtx);
                }
-               if( isProbeLoose==1 && fabs(eleProbeEta) < 2.5 && eleProbeSclEt > 40.0  && sqrt(pow(eleProbeEta-eleTagEta,2)+pow(eleProbePhi-eleTagPhi,2))>0.6 ) 
+               if( isProbeLoose==1 && eleProbeSclEt > 40.0  && sqrt(pow(eleProbeEta-eleTagEta,2)+pow(eleProbePhi-eleTagPhi,2))>0.6 ) 
                {
                     triggers["L1_32vsPUoffline40GeV"]->fill(hasL1_30,Nvtx);
                }
