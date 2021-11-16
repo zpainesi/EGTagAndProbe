@@ -208,7 +208,8 @@ void Ntuplizer_noTagAndProbe::beginRun(edm::Run const& iRun, edm::EventSetup con
     Bool_t changedConfig = false;
 
     if(!this -> _hltConfig.init(iRun, iSetup, this -> _processName.process(), changedConfig)){
-        edm::LogError("HLTMatchingFilter") << "Initialization of HLTConfigProvider failed!!";
+        std::cout<<"edm::LogError(\"HLTMatchingFilter\") << \"Initialization of HLTConfigProvider failed!!\"";
+        //edm::LogError("HLTMatchingFilter") << "Initialization of HLTConfigProvider failed!!";
         return;
     }
 

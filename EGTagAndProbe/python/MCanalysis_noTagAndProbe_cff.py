@@ -1,6 +1,6 @@
 import FWCore.ParameterSet.Config as cms
 
-print "Running on MC w/o T&P"
+print("Running on MC w/o T&P")
 
 
 #Not used

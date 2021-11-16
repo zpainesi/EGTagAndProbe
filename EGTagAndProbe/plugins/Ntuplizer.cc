@@ -27,6 +27,7 @@
 #include "DataFormats/VertexReco/interface/Vertex.h"
 #include "DataFormats/Common/interface/ValueMap.h"
 #include "DataFormats/Common/interface/TriggerResults.h"
+#include "FWCore/MessageLogger/interface/MessageLogger.h"
 
 #include "tParameterSet.h"
 
@@ -283,7 +284,8 @@ void Ntuplizer::beginRun(edm::Run const& iRun, edm::EventSetup const& iSetup)
 	Bool_t changedConfig = false;
 
 	if(!this -> _hltConfig.init(iRun, iSetup, this -> _processName.process(), changedConfig)){
-		edm::LogError("HLTMatchingFilter") << "Initialization of HLTConfigProvider failed!!";
+    std::cout<<"LogError hck : "<<"Initialization of HLTConfigProvider failed!!  \n";
+	//	edm::LogError("HLTMatchingFilter") << "Initialization of HLTConfigProvider failed!!";
 		return;
 	}
 

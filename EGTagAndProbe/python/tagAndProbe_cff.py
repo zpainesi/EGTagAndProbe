@@ -1,6 +1,6 @@
 import FWCore.ParameterSet.Config as cms
 
-print "Running on data"
+print("Running on data")
 
 # filter HLT paths for T&P
 import HLTrigger.HLTfilters.hltHighLevel_cfi as hlt
