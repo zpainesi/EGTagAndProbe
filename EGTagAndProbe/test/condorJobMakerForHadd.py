@@ -1,5 +1,6 @@
 #!/usr/bin/env python3 
 import os
+import sys
 
 NJOBS=1000
 NEVENTS_PER_JOB = -1
@@ -7,9 +8,13 @@ ZERO_OFFSET=0
 FILES_PER_JOB=50
 PU_NEVENTS=-1
 
-destination='/grid_mnt/t3storage3/athachay/l1egamma/triggerPerformance/CMSSW_11_2_2_patch1/src/hadd/mergedFiles/'
+destination='/grid_mnt/t3storage3/athachay/l1egamma/triggerPerformance/CMSSW_12_0_2/src/EGTagAndProbe/EGTagAndProbe/test/mergedFiles/'
 
 FileSource ="haddFileList.txt"
+prefix=''
+if len(sys.argv) > 1:
+    prefix=sys.argv[1]
+
 
 pwd=os.environ['PWD']
 proxy_path=os.environ['X509_USER_PROXY']
@@ -32,7 +37,7 @@ output = $Fp(filename)cdr.stdout\n\
 error = $Fp(filename)cdr.stderr\n\
 log = $Fp(filename)cdr.log\n\
 "
-condorScript=open('jobSubmit.sub','w')
+condorScript=open('jobSubmit'+prefix+'Jobs.sub','w')
 condorScript.write(condorScriptString)
 
 runScriptTxt="\
@@ -48,12 +53,21 @@ export X509_USER_PROXY="+proxy_path+"\n\
 cd "+pwd+"/@@DIRNAME \n\
 eval `scramv1 runtime -sh`\n\
 cd $condorTmpDir \n\
+mv @@RUNSCRIPTNAME @@RUNSCRIPTNAME.busy\n\
 hadd mergedFile@@IDX.root @@HADDFiles \n\
-mv mergedFile@@IDX.root "+destination+'MergedNtuple@@IDX.root'+"\n\
+if [ $? -eq 0 ]; then \n\
+    echo OK\n\
+    mv mergedFile@@IDX.root "+destination+prefix+'MergedNtuple@@IDX.root'+"\n\
+    mv @@RUNSCRIPTNAME.busy @@RUNSCRIPTNAME.sucess\n\
+else\n\
+    mv @@RUNSCRIPTNAME.busy @@RUNSCRIPTNAME\n\
+    echo FAIL\n\
+fi\n\
 "
 
-if not os.path.exists('Jobs'):
-    os.system('mkdir Jobs')
+head = prefix+'Jobs'
+if not os.path.exists(head):
+    os.system('mkdir -p '+prefix+ "Jobs")
 
 print("Making ",NJOBS," Jobs ")
 
@@ -64,7 +78,7 @@ for ii in range(NJOBS):
         FILES_PER_JOB=len(sourceFileList)
     if FILES_PER_JOB==0:
         break
-    dirName= 'Jobs/Job_'+str(i)
+    dirName= head+'/Job_'+str(i)
     madeJobs+=1
     print("Job ",i," Made with ",FILES_PER_JOB," files" )
     if os.path.exists(dirName):
@@ -72,7 +86,7 @@ for ii in range(NJOBS):
     else:
         os.system('mkdir '+dirName)
     
-    runScriptName=dirName+'/run'+str(i)+'.sh'
+    runScriptName=dirName+'/'+prefix+'run'+str(i)+'.sh'
     runScript=open(runScriptName,'w')
     
     haddCmd=""
@@ -83,7 +97,8 @@ for ii in range(NJOBS):
     tmp=runScriptTxt.replace("@@DIRNAME",dirName)
     tmp=tmp.replace("@@IDX",str(i))
     tmp=tmp.replace('@@HADDFiles',haddCmd)
-    
+    scr = pwd + '/'+ runScriptName
+    tmp=tmp.replace("@@RUNSCRIPTNAME",scr)
     runScript.write(tmp)
     
     runScript.close()
