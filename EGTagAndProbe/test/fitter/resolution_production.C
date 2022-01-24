@@ -4,15 +4,32 @@ using namespace std;
 
 void produceResolution(string infile,string ofileName,string prefix="",bool doEmulation=false,Long64_t maxEvents=100000);
 
-void resolution_production(string infile="",string ofileName="",string prefix="",Long64_t maxEvents=100000)
+void resolution_production(int mode=0)
 {
 
     //produceResolution(infile,ofileName,prefix,maxEvents);
-  produceResolution("/grid_mnt/t3storage3/athachay/l1egamma/triggerPerformance/CMSSW_10_6_25/src/EGTagAndProbe/EGTagAndProbe/test/fitter/TAndP_ReEmulatedRun3MC_caloParams_2018_v1_2.root",
+  if(mode==0)
+  produceResolution("/grid_mnt/t3storage3/athachay/l1egamma/data/run3MC/TandPFromMiniAOD_120X_mcRun3_2021_realistic_v5-v2.root",
                     "resolution.root",
-                    "run3MCReEmulated_",
+                    "run3MC_12_0_2_",
+                    false,
+                   -1e5);
+
+  if(mode==1)
+  produceResolution("/grid_mnt/t3storage3/athachay/l1egamma/data/2018/dataEGamma_120X_Run2018A-PromptReco-v3_TP.root",
+                    "resolution.root",
+                    "data2018_default_",
+                    false,
+                   -1e5);
+
+  if(mode==3)
+  produceResolution("/grid_mnt/t3storage3/athachay/l1egamma/data/run3MC/DYtoLL_TandP_12_0_2_Reacliberated608Files.root",
+                    "resolution.root",
+                    "run3MC_12_0_2_Recalib_",
                     true,
-                   -10);
+                   -10000);
+
+
 }
 
 
@@ -55,6 +72,10 @@ void produceResolution(string infile,string ofileName,string prefix="",bool doEm
 	Double_t dPtEdges[dPtBINS + 1];
     for(int i=0;i<=dPtBINS;i++) dPtEdges[i] = -0.005 + 0.01*i ;
 	
+    const Int_t dPtHighResBINS = 4000; 
+	Double_t dPtHighResEdges[dPtHighResBINS + 1];
+    for(int i=0;i<=dPtHighResBINS;i++) dPtHighResEdges[i] = ( 0.0 - 2.0/dPtHighResBINS ) + (4.0/dPtHighResBINS)*i ;
+	
     const Int_t EtaBINS = 23; 
 	Double_t EtaEdges[EtaBINS + 1] = {0.,0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.305, 1.479, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4};
     const Int_t dEtaBINS = 200; 
@@ -73,6 +94,8 @@ void produceResolution(string infile,string ofileName,string prefix="",bool doEm
     resolutionMap["PhiVsdPhi"] = new resolutionMeasurement("PhiVsdPhi",PhiBINS,PhiEdges,dPhiBINS,dPhiEdges);
     resolutionMap["EtVsdEt"  ] = new resolutionMeasurement("EtVsdEt",PtBINS,PtEdges,dPtBINS,dPtEdges);
     resolutionMap["EtaVsdEt"  ] = new resolutionMeasurement("EtaVsdEt",EtaBINS,EtaEdges,dPtBINS,dPtEdges);
+    resolutionMap["EtVsdEt_highReso"  ] = new resolutionMeasurement("EtVsdEt_highReso",PtBINS,PtEdges,dPtHighResBINS,dPtHighResEdges);
+    resolutionMap["EtaVsdEt_highReso"  ] = new resolutionMeasurement("EtaVsdEt_highReso",EtaBINS,EtaEdges,dPtHighResBINS,dPtHighResEdges);
 
     //res_vs_et_barrel->GetYaxis()->SetTitle("FWHM / (E_{T}^{e#gamma, L1}/E_{T}^{e#gamma, offline})_{at maximum}");
 	//res_vs_et_barrel->GetXaxis()->SetTitle("E_{T}^{e#gamma, offline} [GeV]");
@@ -80,7 +103,7 @@ void produceResolution(string infile,string ofileName,string prefix="",bool doEm
 	//res_vs_eta_inclusive->GetYaxis()->SetTitle("FWHM / (E_{T}^{e#gamma, L1}/E_{T}^{e#gamma, offline})_{at maximum}");
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+    
     //t1->SetBranchAddress("eleProbePt",&eleProbePt);
     t1->SetBranchAddress("eleProbeEta",&eleProbeEta);
     t1->SetBranchAddress("eleProbePhi",&eleProbePhi);
@@ -113,20 +136,31 @@ void produceResolution(string infile,string ofileName,string prefix="",bool doEm
 	int bar=0;
     int end=0;
 	int incl=0;
+    
+    auto t_start = std::chrono::high_resolution_clock::now();
+    auto t_end = std::chrono::high_resolution_clock::now();
 
     for (int jentry=0; jentry<nentries; jentry++){
         
         t1->GetEntry(jentry);
 		
-        if(jentry%10000==0) cout<<"Processing Entry "<<jentry<<endl;
-
+        if(jentry%10000==0)
+        {
+             t_end = std::chrono::high_resolution_clock::now();
+             cout<<"Processing Entry "<<jentry<<" / "<<nentries<<"  [ "<<100.0*jentry/nentries<<"  % ]  "
+             << " Elapsed time : "<< std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0
+             <<"  Estimated time left : "<< std::chrono::duration<double, std::milli>(t_end-t_start).count()*( nentries - jentry)/jentry * 0.001
+             <<endl;
+        }
 		//if(!(eleProbeSclEt>60. && eleProbeSclEt<70.)) continue;
 		if(isProbeLoose==1){
 
             resolutionMap["EtaVsdEta"] ->Fill(eleProbeEta,abs(eleProbeEta),l1tEta -  eleProbeEta);
+            resolutionMap["PhiVsdPhi"] ->Fill(eleProbeEta,eleProbePhi,l1tPhi-eleProbePhi);
             resolutionMap["EtaVsdEt"]  ->Fill(eleProbeEta,abs(eleProbeEta),l1tPt/eleProbeSclEt);
             resolutionMap["EtVsdEt"]   ->Fill(eleProbeEta,eleProbeSclEt,l1tPt/eleProbeSclEt);
-            resolutionMap["PhiVsdPhi"] ->Fill(eleProbeEta,eleProbePhi,l1tPhi-eleProbePhi);
+            resolutionMap["EtaVsdEt_highReso"]  ->Fill(eleProbeEta,abs(eleProbeEta),l1tPt/eleProbeSclEt);
+            resolutionMap["EtVsdEt_highReso"]   ->Fill(eleProbeEta,eleProbeSclEt,l1tPt/eleProbeSclEt);
 			
 
 		}

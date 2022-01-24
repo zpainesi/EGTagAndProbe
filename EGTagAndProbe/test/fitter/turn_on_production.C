@@ -20,18 +20,35 @@
 //#include "secondary_peak.h"
 //#include "/afs/cern.ch/work/c/ckoraka/codes/setTDRStyle_teliko.C"
 
-void produceTurnOns(string infile,string ofileName,string prefix="",Long64_t maxEvents=100000);
-void turn_on_production(string infile="",string ofileName="",string prefix="",Long64_t maxEvents=100000)
+void produceTurnOns(string infile,string ofileName,string prefix="",bool doEmulationBranches=false,Long64_t maxEvents=1000);
+void turn_on_production(int mode=0)
 {
-
+    int doFull = 1;
  //   produceTurnOns(infile,ofileName,prefix,maxEvents);
-    produceTurnOns("/grid_mnt/t3storage3/athachay/l1egamma/triggerPerformance/CMSSW_10_6_25/src/EGTagAndProbe/EGTagAndProbe/test/fitter/Run3MC_TagAndProbeNtuple.root",
+    if(mode==0)
+    produceTurnOns("/grid_mnt/t3storage3/athachay/l1egamma/data/run3MC/TandPFromMiniAOD_120X_mcRun3_2021_realistic_v5-v2.root",
                     "turnon.root",
-                    "run3MC_",
-                   1000);
+                    "run3MC_12_0_2_",
+                    false,
+                   -1*doFull*1e5
+                   );
+    if(mode==1)
+    produceTurnOns("/grid_mnt/t3storage3/athachay/l1egamma/data/2018/dataEGamma_120X_Run2018A-PromptReco-v3_TP.root",
+                    "turnon.root",
+                    "data2018_default_",
+                    false,
+                   -1*doFull*1e6
+                   );
+    if(mode==3)
+    produceTurnOns("/grid_mnt/t3storage3/athachay/l1egamma/data/run3MC/DYtoLL_TandP_12_0_2_Reacliberated608Files.root",
+                    "turnon.root",
+                    "run3MC_12_0_2_Recalib_",
+                    true,
+                   -1*doFull*1e5
+                   );
 }
 
-void produceTurnOns(string infile,string ofileName,string prefix="",Long64_t maxEvents=100000)
+void produceTurnOns(string infile,string ofileName,string prefix="",bool doEmulationBranches=false,Long64_t maxEvents=1000)
 {
 
 	//////		For plotting 		////////////////////////////////////////////////////
@@ -57,8 +74,6 @@ void produceTurnOns(string infile,string ofileName,string prefix="",Long64_t max
     float eleProbePhi	;
     float eleTagEta		;
     float eleTagPhi		;
-    float l1tEta		;
-    float l1tPhi		;
     Int_t Nvtx			;
     Int_t isProbeLoose	;
     float eleProbeSclEt	;
@@ -71,65 +86,72 @@ void produceTurnOns(string infile,string ofileName,string prefix="",Long64_t max
     t1->SetBranchAddress("eleProbePhi"  ,&eleProbePhi			);
     t1->SetBranchAddress("eleTagEta"    ,&eleTagEta		    	);
     t1->SetBranchAddress("eleTagPhi"    ,&eleTagPhi			    );
-    t1->SetBranchAddress("l1tEta"       ,&l1tEta			    );
-    t1->SetBranchAddress("l1tPhi"       ,&l1tPhi			    );
     t1->SetBranchAddress("Nvtx"         ,&Nvtx			        );
     t1->SetBranchAddress("isProbeLoose" ,&isProbeLoose			);
     t1->SetBranchAddress("eleProbeSclEt",&eleProbeSclEt			);
-
+    
+    TString emulationSelection="";
+    TString emulationSelection2="_";
+    if( doEmulationBranches)
+    {
+        emulationSelection="Emu";
+        emulationSelection2="";
+    }
+    
 
     int   hasL1_24, hasL1_looseiso_24, hasL1_tightiso_24 ;
-    t1->SetBranchAddress("hasL1_24"     ,&hasL1_24			    );
-    t1->SetBranchAddress("hasL1_tightiso_24",&hasL1_tightiso_24 );
-    t1->SetBranchAddress("hasL1_looseiso_24",&hasL1_tightiso_24 );
+    //hasL1Emu_98
+    t1->SetBranchAddress("hasL1"+emulationSelection+"_24"     ,&hasL1_24			    );
+    t1->SetBranchAddress("hasL1"+emulationSelection+"_tightiso"+emulationSelection2+"24",&hasL1_tightiso_24 );
+    t1->SetBranchAddress("hasL1"+emulationSelection+"_looseiso"+emulationSelection2+"24",&hasL1_tightiso_24 );
     triggers["L1_24"] = new efficiencyMeasurement("L1_24",XBINS,xEdges);
     triggers["L1_looseiso_24"] = new efficiencyMeasurement("L1_looseiso_24",XBINS,xEdges);
     triggers["L1_tightiso_24"] = new efficiencyMeasurement("L1_tightiso_24",XBINS,xEdges);
     
     int   hasL1_26, hasL1_looseiso_26, hasL1_tightiso_26 ;
-    t1->SetBranchAddress("hasL1_26"     ,&hasL1_26			    );
-    t1->SetBranchAddress("hasL1_tightiso_26",&hasL1_tightiso_26 );
-    t1->SetBranchAddress("hasL1_looseiso_26",&hasL1_tightiso_26 );
+    t1->SetBranchAddress("hasL1"+emulationSelection+"_26"     ,&hasL1_26			    );
+    t1->SetBranchAddress("hasL1"+emulationSelection+"_tightiso"+emulationSelection2+"26",&hasL1_tightiso_26 );
+    t1->SetBranchAddress("hasL1"+emulationSelection+"_looseiso"+emulationSelection2+"26",&hasL1_tightiso_26 );
     triggers["L1_26"] = new efficiencyMeasurement("L1_26",XBINS,xEdges);
     triggers["L1_looseiso_26"] = new efficiencyMeasurement("L1_looseiso_26",XBINS,xEdges);
     triggers["L1_tightiso_26"] = new efficiencyMeasurement("L1_tightiso_26",XBINS,xEdges);
     
     int   hasL1_28, hasL1_looseiso_28, hasL1_tightiso_28 ;
-    t1->SetBranchAddress("hasL1_28"     ,&hasL1_28			    );
-    t1->SetBranchAddress("hasL1_tightiso_28",&hasL1_tightiso_28 );
-    t1->SetBranchAddress("hasL1_looseiso_28",&hasL1_tightiso_28 );
+    t1->SetBranchAddress("hasL1"+emulationSelection+"_28"     ,&hasL1_28			    );
+    t1->SetBranchAddress("hasL1"+emulationSelection+"_tightiso"+emulationSelection2+"28",&hasL1_tightiso_28 );
+    t1->SetBranchAddress("hasL1"+emulationSelection+"_looseiso"+emulationSelection2+"28",&hasL1_tightiso_28 );
     triggers["L1_28"] = new efficiencyMeasurement("L1_28",XBINS,xEdges);
     triggers["L1_looseiso_28"] = new efficiencyMeasurement("L1_looseiso_28",XBINS,xEdges);
     triggers["L1_tightiso_28"] = new efficiencyMeasurement("L1_tightiso_28",XBINS,xEdges);
     
     int   hasL1_30, hasL1_looseiso_30, hasL1_tightiso_30 ;
-    t1->SetBranchAddress("hasL1_30"     ,&hasL1_30			    );
-    t1->SetBranchAddress("hasL1_tightiso_30",&hasL1_tightiso_30 );
-    t1->SetBranchAddress("hasL1_looseiso_30",&hasL1_tightiso_30 );
+    t1->SetBranchAddress("hasL1"+emulationSelection+"_30"     ,&hasL1_30			    );
+    t1->SetBranchAddress("hasL1"+emulationSelection+"_tightiso"+emulationSelection2+"30",&hasL1_tightiso_30 );
+    t1->SetBranchAddress("hasL1"+emulationSelection+"_looseiso"+emulationSelection2+"30",&hasL1_tightiso_30 );
     triggers["L1_30"] = new efficiencyMeasurement("L1_30",XBINS,xEdges);
     triggers["L1_looseiso_30"] = new efficiencyMeasurement("L1_looseiso_30",XBINS,xEdges);
     triggers["L1_tightiso_30"] = new efficiencyMeasurement("L1_tightiso_30",XBINS,xEdges);
     
     int   hasL1_32, hasL1_looseiso_32, hasL1_tightiso_32 ;
-    t1->SetBranchAddress("hasL1_32"     ,&hasL1_32			    );
-    t1->SetBranchAddress("hasL1_tightiso_32",&hasL1_tightiso_32 );
-    t1->SetBranchAddress("hasL1_looseiso_32",&hasL1_tightiso_32 );
+    t1->SetBranchAddress("hasL1"+emulationSelection+"_32"     ,&hasL1_32			    );
+    t1->SetBranchAddress("hasL1"+emulationSelection+"_tightiso"+emulationSelection2+"32",&hasL1_tightiso_32 );
+    t1->SetBranchAddress("hasL1"+emulationSelection+"_looseiso"+emulationSelection2+"32",&hasL1_tightiso_32 );
     triggers["L1_32"] = new efficiencyMeasurement("L1_32",XBINS,xEdges);
     triggers["L1_looseiso_32"] = new efficiencyMeasurement("L1_looseiso_32",XBINS,xEdges);
     triggers["L1_tightiso_32"] = new efficiencyMeasurement("L1_tightiso_32",XBINS,xEdges);
     
     int   hasL1_34, hasL1_looseiso_34, hasL1_tightiso_34 ;
-    t1->SetBranchAddress("hasL1_34"     ,&hasL1_34			    );
-    t1->SetBranchAddress("hasL1_tightiso_34",&hasL1_tightiso_34 );
-    t1->SetBranchAddress("hasL1_looseiso_34",&hasL1_tightiso_34 );
+    t1->SetBranchAddress("hasL1"+emulationSelection+"_34"     ,&hasL1_34			    );
+    t1->SetBranchAddress("hasL1"+emulationSelection+"_tightiso"+emulationSelection2+"34",&hasL1_tightiso_34 );
+    t1->SetBranchAddress("hasL1"+emulationSelection+"_looseiso"+emulationSelection2+"34",&hasL1_tightiso_34 );
     triggers["L1_34"] = new efficiencyMeasurement("L1_34",XBINS,xEdges);
     triggers["L1_looseiso_34"] = new efficiencyMeasurement("L1_looseiso_34",XBINS,xEdges);
     triggers["L1_tightiso_34"] = new efficiencyMeasurement("L1_tightiso_34",XBINS,xEdges);
  
     int   hasL1_40, hasL1_looseiso_40, hasL1_tightiso_40 ;
-    t1->SetBranchAddress("hasL1_40"     ,&hasL1_40			    );
-    t1->SetBranchAddress("hasL1_tightiso_40",&hasL1_tightiso_40 );
-    t1->SetBranchAddress("hasL1_looseiso_40",&hasL1_tightiso_40 );
+    t1->SetBranchAddress("hasL1"+emulationSelection+"_40"     ,&hasL1_40			    );
+    t1->SetBranchAddress("hasL1"+emulationSelection+"_tightiso"+emulationSelection2+"40",&hasL1_tightiso_40 );
+    t1->SetBranchAddress("hasL1"+emulationSelection+"_looseiso"+emulationSelection2+"40",&hasL1_tightiso_40 );
     triggers["L1_40"] = new efficiencyMeasurement("L1_40",XBINS,xEdges);
     triggers["L1_looseiso_40"] = new efficiencyMeasurement("L1_looseiso_40",XBINS,xEdges);
     triggers["L1_tightiso_40"] = new efficiencyMeasurement("L1_tightiso_40",XBINS,xEdges);
@@ -152,11 +174,19 @@ void produceTurnOns(string infile,string ofileName,string prefix="",Long64_t max
     
 
     std::cout<<" Processing total "<<nentries<<" \n";
-	for (Long64_t jentry=0; jentry<nentries; jentry++){
+    
+    auto t_start = std::chrono::high_resolution_clock::now();
+    auto t_end = std::chrono::high_resolution_clock::now();
+	
+    for (Long64_t jentry=0; jentry<nentries; jentry++){
 
        if(jentry%10000 ==0 )
        {
-            std::cout<<"Processing jentry : "<<jentry<<"\n";
+            t_end = std::chrono::high_resolution_clock::now();
+             cout<<"Processing Entry "<<jentry<<" / "<<nentries<<"  [ "<<100.0*jentry/nentries<<"  % ]  "
+             << " Elapsed time : "<< std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0
+             <<"  Estimated time left : "<< std::chrono::duration<double, std::milli>(t_end-t_start).count()*( nentries - jentry)/jentry * 0.001
+             <<endl;
        }
 	
 		t1->GetEntry(jentry);  		
