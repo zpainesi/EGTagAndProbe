@@ -47,6 +47,7 @@ patTriggerUnpacker = cms.EDProducer("PATTriggerObjectStandAloneUnpacker",
 
 Ntuplizer = cms.EDAnalyzer("Ntuplizer",
                            treeName = cms.string("TagAndProbe"),
+                           photons = cms.InputTag("slimmedPhotons"),
                            electrons = cms.InputTag("gedGsfElectrons"),
                            genParticles = cms.InputTag("genParticles"),                       
                            eleMediumIdMap = cms.InputTag("egmGsfElectronIDs:mvaEleID-Fall17-iso-V1-wp90"),

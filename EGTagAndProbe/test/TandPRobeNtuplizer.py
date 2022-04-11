@@ -86,18 +86,17 @@ if not isMC: # will use 80X
     )
 
 else:
-    process.GlobalTag.globaltag = '106X_mcRun2_asymptotic_preVFP_v6'
+    process.GlobalTag.globaltag = '120X_mcRun3_2021_realistic_v5'
     process.load('EGTagAndProbe.EGTagAndProbe.MCanalysis_cff')
     process.source = cms.Source("PoolSource",
         fileNames = cms.untracked.vstring(
-	  '/store/relval/CMSSW_10_6_8/RelValZEE_13UP16/MINIAODSIM/PU25ns_106X_mcRun2_asymptotic_preVFP_v5_UL16hltval_preVFP_v5-v1/10000/CCB6A88B-A1DE-4044-910A-B548D565AFC4.root',
-          '/store/relval/CMSSW_10_6_8/RelValZEE_13UP16/MINIAODSIM/PU25ns_106X_mcRun2_asymptotic_preVFP_v5_UL16hltval_preVFP_v5-v1/10000/8943C7FE-7326-D64E-9D54-B4FB6EE9229D.root',
-          '/store/relval/CMSSW_10_6_8/RelValZEE_13UP16/MINIAODSIM/PU25ns_106X_mcRun2_asymptotic_preVFP_v5_UL16hltval_preVFP_v5-v1/10000/362B166F-348C-1948-B1BB-F26AEABED9FB.root' 
+          'file:5d81ca77-f54c-4e3b-848e-f13b7b4e789e.root'
         )
     )
     process.Ntuplizer.useHLTMatch = cms.bool(False) #In case no HLT object in MC sample considered or you're fed up with trying to find the right HLT collections
 
 if isMINIAOD:
+    process.Ntuplizer.photons = cms.InputTag("slimmedPhotons")
     process.Ntuplizer.electrons = cms.InputTag("slimmedElectrons")
     #process.Ntuplizer.egmGsfElectronIDSequence = cms.InputTag("slimmedElectrons")
     process.Ntuplizer.genParticles = cms.InputTag("prunedGenParticles")
@@ -111,7 +110,7 @@ if options.inputFiles:
     process.source.fileNames = cms.untracked.vstring(options.inputFiles)
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(-1)
+    input = cms.untracked.int32(1000)
 )
 
 if options.maxEvents >= -1:
