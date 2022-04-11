@@ -144,13 +144,11 @@ class Ntuplizer : public edm::EDAnalyzer {
 		float _l1tPhi;
 		int _l1tIso;
 		int _l1tEmuQual;
-
         float _genE;
         float _genMass;
         float _genPt;
 		float _genEta;
 		float _genPhi;
-        
 		float _l1tEmuPt;
 		float _l1tEmuEta;
 		float _l1tEmuPhi;
@@ -390,7 +388,14 @@ void Ntuplizer::Initialize() {
 	this -> _l1tPhi = 666;
 	this -> _l1tQual = -1;
 	this -> _l1tIso = -1;
-	this -> _l1tEmuPt = -1;
+	
+    this -> _genE = -1;
+    this -> _genMass = -1;
+	this -> _genPt = 666;
+	this -> _genEta = 666;
+	this -> _genPhi = -1;
+	
+    this -> _l1tEmuPt = -1;
 	this -> _l1tEmuEta = 666;
 	this -> _l1tEmuPhi = 666;
 	this -> _l1tEmuQual = -1;
@@ -500,7 +505,7 @@ void Ntuplizer::beginJob()
 	this -> _tree -> Branch("genPt",  &_genPt,  "genPt/F");
 	this -> _tree -> Branch("genEta",  &_genEta,  "genEta/F");
 	this -> _tree -> Branch("genPhi",  &_genPhi,  "genPhi/F");
-    this -> _tree -> Branch("l1tEmuPt",  &_l1tEmuPt,  "l1tEmuPt/F");
+	this -> _tree -> Branch("l1tEmuPt",  &_l1tEmuPt,  "l1tEmuPt/F");
 	this -> _tree -> Branch("l1tEmuEta", &_l1tEmuEta, "l1tEmuEta/F");
 	this -> _tree -> Branch("l1tEmuPhi", &_l1tEmuPhi, "l1tEmuPhi/F");
 	this -> _tree -> Branch("l1tEmuQual", &_l1tEmuQual, "l1tEmuQual/I");
@@ -1009,7 +1014,7 @@ bool Ntuplizer::matchToTruth(const edm::Ptr<reco::GsfElectron> ele,
 	// Find the closest status 1 gen electron to the reco electron
 	double dR = 999;
 	const reco::Candidate *closestElectron = 0;
-       int particleIndex(-1);
+    int particleIndex(-1);
 	for(size_t i=0; i<prunedGenParticles->size();i++){
 		const reco::Candidate *particle = &(*prunedGenParticles)[i];
 		// Drop everything that is not electron or not status 1
@@ -1036,8 +1041,6 @@ bool Ntuplizer::matchToTruth(const edm::Ptr<reco::GsfElectron> ele,
     _genPt   = particle->pt();
     _genEta  = particle->eta();
     _genPhi  = particle->phi();
-
-
 
 	return true;
 
