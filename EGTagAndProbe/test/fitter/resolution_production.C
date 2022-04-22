@@ -9,7 +9,7 @@ void resolution_production(int mode=0)
 
     //produceResolution(infile,ofileName,prefix,maxEvents);
   if(mode==0)
-  produceResolution("/grid_mnt/t3storage3/athachay/l1egamma/data/run3MC/TandPFromMiniAOD_120X_mcRun3_2021_realistic_v5-v2.root",
+  produceResolution("/grid_mnt/t3storage3/athachay/l1egamma/data/run3MC/TandPNTuples_UnpackedMiniAOD_12XSamples.root",
                     "resolution.root",
                     "run3MC_12_0_2_",
                     false,
@@ -22,8 +22,14 @@ void resolution_production(int mode=0)
                     false,
                    -1e5);
 
+  if(mode==2)
+  produceResolution("/grid_mnt/t3storage3/athachay/l1egamma/data/run3MC/TandPNTuples_DefaultReEmulated_12XSamples.root",
+                    "resolution.root",
+                    "run3MC_12_0_2_defaultReco_",
+                    true,
+                   -10000);
   if(mode==3)
-  produceResolution("/grid_mnt/t3storage3/athachay/l1egamma/data/run3MC/DYtoLL_TandP_12_0_2_Reacliberated608Files.root",
+  produceResolution("/grid_mnt/t3storage3/athachay/l1egamma/data/run3MC/TagAndProbe_RecalibEmulReco_120Xsample.root",
                     "resolution.root",
                     "run3MC_12_0_2_Recalib_",
                     true,
