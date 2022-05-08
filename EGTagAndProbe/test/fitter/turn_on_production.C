@@ -61,6 +61,28 @@ void turn_on_production(int mode=0)
                     true,
                    doFull*1e5
                    );
+    if(mode==5)
+    produceTurnOns("/grid_mnt/t3storage3/athachay/l1egamma/data/run3MC/TagAndProbe_EtCaliberatedReEmulationV3p2_120Xsample_CaloParams_2022_v0_1_part2.root",
+                    "turnon.root",
+                    "run3MC_12_0_2_RecalibV3_",
+                    true,
+                   -1e5
+                   );
+    if(mode==6)
+    produceTurnOns("/grid_mnt/t3storage3/athachay/l1egamma/data/run3MC/TagAndProbe_EtCaliberatedReEmulationV3p2_120Xsample_CaloParams_2022_v0_1_part2.root",
+                    "turnon.root",
+                    "run3MC_12_0_2_test",
+                    true,
+                   doFull*1e4
+                   );
+    if(mode==5)
+    produceTurnOns("/grid_mnt/t3storage3/athachay/l1egamma/data/run3MC/TagAndProbe_EtCaliberatedReEmulationV3p2_120Xsample_CaloParams_2022_v0_1_part2.root",
+                    "turnon.root",
+                    "run3MC_12_0_2_RecalibV3_",
+                    true,
+                   -1e5
+                   );
+ 
 
 }
 
@@ -80,6 +102,13 @@ void produceTurnOns(string infile,string ofileName,string prefix="",bool doEmula
     {
         xEdges_fine[i]=0.0+1.0*i;
     }
+
+    std::vector<TH1D*> efficHists;
+	
+
+
+     std::map<string,efficiencyMeasurement * > triggers;
+    
 
     std::vector<TH1D*> efficHists;
 	
@@ -130,12 +159,14 @@ void produceTurnOns(string infile,string ofileName,string prefix="",bool doEmula
            hasL1[triggerPrefix[ii]]=0;
            hasL1LooseIso[triggerPrefix[ii]]=0;
            hasL1TightIso[triggerPrefix[ii]]=0;
-           t1->SetBranchAddress("hasL1"+emulationSelection+"_24"     ,  &hasL1[triggerPrefix[ii]]    );
+           t1->SetBranchAddress("hasL1"+emulationSelection +emulationSelection2+"_"+ii    ,  &hasL1[triggerPrefix[ii]]    );
            t1->SetBranchAddress("hasL1"+emulationSelection+"_looseiso"+emulationSelection2+ii,&hasL1LooseIso[triggerPrefix[ii]+"_looseiso"]);
            t1->SetBranchAddress("hasL1"+emulationSelection+"_tightiso"+emulationSelection2+ii,&hasL1TightIso[triggerPrefix[ii]+"_tightiso"]);
+           
            triggerStore_hasL1[triggerPrefix[ii]+"_default"] = new efficiencyMeasurement(string(triggerPrefix[ii])+"_default",XBINS,xEdges);
            triggerStore_hasL1LooseIso[triggerPrefix[ii]+"_looseiso_def"] = new efficiencyMeasurement(string(triggerPrefix[ii]+"_looseiso_def"),XBINS,xEdges);
            triggerStore_hasL1TightIso[triggerPrefix[ii]+"_tightiso_def"] = new efficiencyMeasurement(string(triggerPrefix[ii]+"_tightiso_def"),XBINS,xEdges);
+           
            triggerStore_hasL1[triggerPrefix[ii]] = new efficiencyMeasurement(string(triggerPrefix[ii]),XBINSfine,xEdges_fine);
            triggerStore_hasL1LooseIso[triggerPrefix[ii]+"_looseiso"] = new efficiencyMeasurement(string(triggerPrefix[ii]+"_looseiso"),XBINSfine,xEdges_fine);
            triggerStore_hasL1TightIso[triggerPrefix[ii]+"_tightiso"] = new efficiencyMeasurement(string(triggerPrefix[ii]+"_tightiso"),XBINSfine,xEdges_fine);
@@ -264,13 +295,6 @@ void produceTurnOns(string infile,string ofileName,string prefix="",bool doEmula
 
                     triggers["L1_30"]->fill(hasL1_30,eleProbeSclEt);
                     triggers["L1_looseiso_30"]->fill(hasL1_30,eleProbeSclEt);
-                    triggers["L1_tightiso_30"]->fill(hasL1_tightiso_30,eleProbeSclEt);
-
-                    triggers["L1_34"]->fill(hasL1_34,eleProbeSclEt);
-                    triggers["L1_looseiso_34"]->fill(hasL1_34,eleProbeSclEt);
-                    triggers["L1_tightiso_34"]->fill(hasL1_tightiso_34,eleProbeSclEt);
-
-                    triggers["L1_40"]->fill(hasL1_40,eleProbeSclEt);
                     triggers["L1_looseiso_40"]->fill(hasL1_40,eleProbeSclEt);
                     triggers["L1_tightiso_40"]->fill(hasL1_tightiso_40,eleProbeSclEt);
                     
