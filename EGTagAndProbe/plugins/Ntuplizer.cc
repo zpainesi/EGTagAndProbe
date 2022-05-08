@@ -19,6 +19,7 @@
 #include <FWCore/Framework/interface/Event.h>
 #include <FWCore/Framework/interface/ESHandle.h>
 #include <FWCore/Utilities/interface/InputTag.h>
+#include <DataFormats/PatCandidates/interface/Photon.h>
 #include <DataFormats/PatCandidates/interface/Electron.h>
 #include "FWCore/ServiceRegistry/interface/Service.h"
 #include "FWCore/Common/interface/TriggerNames.h"
@@ -33,6 +34,7 @@
 
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
 
+#define N_GEN_MAX 5000
 
 //Set this variable to decide the number of triggers that you want to check simultaneously
 #define NUMBER_OF_MAXIMUM_TRIGGERS 64
@@ -62,6 +64,7 @@ class Ntuplizer : public edm::EDAnalyzer {
 		virtual void endRun(edm::Run const&, edm::EventSetup const&);
 		void Initialize();
 		bool hasFilters(const pat::TriggerObjectStandAlone&  obj , const std::vector<std::string>& filtersToLookFor);
+		void addTheGenInfo(	const edm::Handle<edm::View<reco::GenParticle>>  &genParticles);
 		bool matchToTruth(const edm::Ptr<reco::GsfElectron> ele, 
 				const edm::Handle<edm::View<reco::GenParticle>>  &genParticles);
 
@@ -85,6 +88,12 @@ class Ntuplizer : public edm::EDAnalyzer {
 		std::vector<float> _allEl_Phi;
 		std::vector<float> _allEl_SclEt;
 		std::vector<float> _allEl_Charge;
+
+		//////////////////// All Electrons ////////////////////////////////////
+		std::vector<float> _allPho_Pt;
+		std::vector<float> _allPho_Eta;
+		std::vector<float> _allPho_Phi;
+		std::vector<float> _allPho_SclEt;
 
                 std::vector<float> _allL1tPt;
                 std::vector<float> _allL1tEta;
@@ -135,6 +144,11 @@ class Ntuplizer : public edm::EDAnalyzer {
 		float _l1tPhi;
 		int _l1tIso;
 		int _l1tEmuQual;
+        float _genE;
+        float _genMass;
+        float _genPt;
+		float _genEta;
+		float _genPhi;
 		float _l1tEmuPt;
 		float _l1tEmuEta;
 		float _l1tEmuPhi;
@@ -154,7 +168,24 @@ class Ntuplizer : public edm::EDAnalyzer {
 		int _eleTagCharge;
 		float _Mee;
 		int _Nvtx;
-                //float _dR_histo; //Charis test
+
+        
+        int nPhotons;
+        float allPhotonPDGID[N_GEN_MAX];
+        float allPhotonScEt[N_GEN_MAX];
+        float allPhotonPt[N_GEN_MAX];
+        float allPhotonEta[N_GEN_MAX];
+        float allPhotonPhi[N_GEN_MAX];
+
+        int nGenParticle;
+        float genParticlePDGID[N_GEN_MAX];
+        float genParticlePt[N_GEN_MAX];
+        float genParticleEta[N_GEN_MAX];
+        float genParticlePhi[N_GEN_MAX];
+        float genParticleMass[N_GEN_MAX];
+        float genParticleMother[N_GEN_MAX];
+            
+            //float _dR_histo; //Charis test
 
 
 		int _hasL1[100];
@@ -169,6 +200,7 @@ class Ntuplizer : public edm::EDAnalyzer {
                 int _hasL1Emu_tightiso[100];
                 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
           
+		edm::EDGetTokenT< vector<pat::Photon>  >  _photonsTag;
 		edm::EDGetTokenT<edm::View<reco::GsfElectron> >  _electronsTag;
 		edm::EDGetTokenT<edm::View<reco::GenParticle> > _genParticlesTag;
 		edm::EDGetTokenT<edm::ValueMap<bool> > _eleLooseIdMapTag;
@@ -212,6 +244,7 @@ class Ntuplizer : public edm::EDAnalyzer {
 
 // ----Constructor and Destructor -----
 Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig) :
+	_photonsTag       (consumes<vector<pat::Photon> >                     (iConfig.getParameter<edm::InputTag>("photons"))),
 	_electronsTag       (consumes<edm::View<reco::GsfElectron> >                     (iConfig.getParameter<edm::InputTag>("electrons"))),
 	_genParticlesTag (consumes<edm::View<reco::GenParticle> > (iConfig.getParameter<edm::InputTag>("genParticles"))),
 	_eleLooseIdMapTag  (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleLooseIdMap"))),
@@ -345,12 +378,24 @@ void Ntuplizer::Initialize() {
 	this -> _hltPt = -1;
 	this -> _hltEta = 666;
 	this -> _hltPhi = 666;
-	this -> _l1tPt = -1;
+    this -> _genE = -1;
+    this -> _genMass = -1;
+	this -> _genPt =-1.0;
+	this -> _genEta = 666;
+	this -> _genPhi = -1;
+    this -> _l1tPt = -1;
 	this -> _l1tEta = 666;
 	this -> _l1tPhi = 666;
 	this -> _l1tQual = -1;
 	this -> _l1tIso = -1;
-	this -> _l1tEmuPt = -1;
+	
+    this -> _genE = -1;
+    this -> _genMass = -1;
+	this -> _genPt = 666;
+	this -> _genEta = 666;
+	this -> _genPhi = -1;
+	
+    this -> _l1tEmuPt = -1;
 	this -> _l1tEmuEta = 666;
 	this -> _l1tEmuPhi = 666;
 	this -> _l1tEmuQual = -1;
@@ -419,7 +464,23 @@ void Ntuplizer::beginJob()
 	this -> _tree -> Branch("EventNumber",&_indexevents,"EventNumber/l");
 	this -> _tree -> Branch("RunNumber",&_runNumber,"RunNumber/I");
 	this -> _tree -> Branch("lumi",&_lumi,"lumi/I");
-	this -> _tree -> Branch("eleProbeTriggerBits", &_eleProbeTriggerBits, "eleProbeTriggerBits/l");
+	
+	this -> _tree -> Branch("nPhotons",&nPhotons);
+	this -> _tree -> Branch("allPhotonPt"   ,  allPhotonPt ,  "allPhotonPt[nPhotons]/F");
+	this -> _tree -> Branch("allPhotonScEt"   ,  allPhotonPt ,  "allPhotonPt[nPhotons]/F");
+	this -> _tree -> Branch("allPhotonEta"  ,  allPhotonEta,  "allPhotonEta[nPhotons]/F");
+	this -> _tree -> Branch("allPhotonPhi"  ,  allPhotonPhi,  "allPhotonPhi[nPhotons]/F");
+	
+
+    this -> _tree -> Branch("nGenParticle",&nGenParticle);
+	this -> _tree -> Branch("genParticlePDGID",  genParticlePDGID,"genParticlePDGID[nGenParticle]/F");
+	this -> _tree -> Branch("genParticlePt"   ,  genParticlePt ,  "genParticlePt[nGenParticle]/F");
+	this -> _tree -> Branch("genParticleEta"  ,  genParticleEta,  "genParticleEta[nGenParticle]/F");
+	this -> _tree -> Branch("genParticlePhi"  ,  genParticlePhi,  "genParticlePhi[nGenParticle]/F");
+	this -> _tree -> Branch("genParticleMass"  ,  genParticleMass,  "genParticleMass[nGenParticle]/F");
+	this -> _tree -> Branch("genParticleMother",  genParticleMother,  "genParticleMother[nGenParticle]/F");
+
+    this -> _tree -> Branch("eleProbeTriggerBits", &_eleProbeTriggerBits, "eleProbeTriggerBits/l");
 	this -> _tree -> Branch("eleTagTriggerBits", &_eleTagTriggerBits, "eleTagTriggerBits/l");
 	this -> _tree -> Branch("eleProbePt",  &_eleProbePt,  "eleProbePt/F");
 	this -> _tree -> Branch("eleProbeEta", &_eleProbeEta, "eleProbeEta/F");
@@ -439,6 +500,11 @@ void Ntuplizer::beginJob()
 	this -> _tree -> Branch("l1tPhi", &_l1tPhi, "l1tPhi/F");
 	this -> _tree -> Branch("l1tQual", &_l1tQual, "l1tQual/I");
 	this -> _tree -> Branch("l1tIso", &_l1tIso, "l1tIso/I");
+	this -> _tree -> Branch("genE",  &_genE,  "genE/F");
+	this -> _tree -> Branch("genMass",  &_genMass,  "genMass/F");
+	this -> _tree -> Branch("genPt",  &_genPt,  "genPt/F");
+	this -> _tree -> Branch("genEta",  &_genEta,  "genEta/F");
+	this -> _tree -> Branch("genPhi",  &_genPhi,  "genPhi/F");
 	this -> _tree -> Branch("l1tEmuPt",  &_l1tEmuPt,  "l1tEmuPt/F");
 	this -> _tree -> Branch("l1tEmuEta", &_l1tEmuEta, "l1tEmuEta/F");
 	this -> _tree -> Branch("l1tEmuPhi", &_l1tEmuPhi, "l1tEmuPhi/F");
@@ -535,6 +601,7 @@ void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& eSetup)
 {
 	
         // search for the tag in the event
+	edm::Handle< vector<pat::Photon> > photons;
 	edm::Handle<edm::View<reco::GsfElectron> > electrons;
 	edm::Handle<edm::View<reco::GenParticle> > genParticles;
 	edm::Handle<edm::ValueMap<bool> > loose_id_decisions;
@@ -547,6 +614,7 @@ void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& eSetup)
 	edm::Handle<edm::TriggerResults> triggerBits;
 	edm::Handle<std::vector<reco::Vertex> >  vertices;
 
+	iEvent.getByToken(this -> _photonsTag, photons);
 	iEvent.getByToken(this -> _electronsTag, electrons);
 	iEvent.getByToken(this -> _eleLooseIdMapTag, loose_id_decisions);
         /////////////////////////////// Pantelis TightIDs ////////////////////////////////////////////////////////////////////////////////
@@ -576,7 +644,6 @@ void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& eSetup)
 
 	this -> _allEl_Size=electrons->size();      
 
-
 	for(unsigned int k=0; k<electrons->size(); ++k){
 		const auto ele = electrons->ptrAt(k);
 		this->_allEl_Pt.push_back(ele->pt());
@@ -584,6 +651,15 @@ void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& eSetup)
 		this->_allEl_Phi.push_back(ele->phi());
 		this->_allEl_SclEt.push_back((ele->superCluster()->energy()) / cosh(ele->superCluster()->eta()));
 		this->_allEl_Charge.push_back(ele->charge());
+	}
+
+	nPhotons=photons->size();
+    for(unsigned int k=0; k<photons->size(); ++k){
+		const auto ele = photons->at(k);
+		allPhotonPt[k]=ele.pt();
+		allPhotonEta[k]=ele.eta();
+		allPhotonPhi[k]=ele.phi();
+		allPhotonScEt[k]=ele.superCluster()->energy() / cosh(ele.superCluster()->eta());
 	}
 	//////////////////////////////////////////////////////////////////////////////////////
 	for (unsigned int i = 0; i< electrons->size(); ++i){
@@ -856,6 +932,8 @@ void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& eSetup)
 			this -> _eleProbeTriggerBits = this -> _eleProbeTriggerBitSet.to_ulong();
 			this -> _eleTagTriggerBits = this -> _eleTagTriggerBitSet.to_ulong();
 			//std::cout << "++++++++++ FILL ++++++++++" << std::endl;
+            nGenParticle=0;
+            addTheGenInfo(genParticles);
 			this -> _tree -> Fill();
 
 		}
@@ -890,6 +968,41 @@ bool Ntuplizer::hasFilters(const pat::TriggerObjectStandAlone&  obj , const std:
 	return true;
 }
 
+void Ntuplizer::addTheGenInfo( const edm::Handle<edm::View<reco::GenParticle>> &prunedGenParticles  )
+{
+
+
+	// 
+	// Explicit loop and geometric matching method
+	//
+
+	// Find the closest status 1 gen electron to the reco electron
+	double dR = 999;
+
+    nGenParticle=0;
+
+	for(size_t i=0; i<prunedGenParticles->size();i++){
+		const reco::Candidate *particle = &(*prunedGenParticles)[i];
+		
+        // Drop everything that is not electron or not status 1
+		//if( abs(particle->pdgId()) != 11 || particle->status() != 1 || particle->pt()<5)
+		if(  particle->pt() < 1.5 )
+			continue;
+        genParticlePDGID[nGenParticle] = particle->pdgId();
+        genParticlePt[nGenParticle] = particle->pt();
+        genParticleEta[nGenParticle] = particle->eta();
+        genParticlePhi[nGenParticle] = particle->phi();
+        genParticleMass[nGenParticle] = particle->mass();
+        genParticleMother[nGenParticle] = particle->mother()->pdgId();
+            
+        nGenParticle++;
+
+        if (nGenParticle > N_GEN_MAX)		    
+        {
+            std::cout<<" nGenParticle > N_GEN_MAX , Break !! \n";
+        }
+    	}
+}
 
 bool Ntuplizer::matchToTruth(const edm::Ptr<reco::GsfElectron> ele, 
 		const edm::Handle<edm::View<reco::GenParticle>> &prunedGenParticles){
@@ -901,6 +1014,7 @@ bool Ntuplizer::matchToTruth(const edm::Ptr<reco::GsfElectron> ele,
 	// Find the closest status 1 gen electron to the reco electron
 	double dR = 999;
 	const reco::Candidate *closestElectron = 0;
+    int particleIndex(-1);
 	for(size_t i=0; i<prunedGenParticles->size();i++){
 		const reco::Candidate *particle = &(*prunedGenParticles)[i];
 		// Drop everything that is not electron or not status 1
@@ -911,6 +1025,7 @@ bool Ntuplizer::matchToTruth(const edm::Ptr<reco::GsfElectron> ele,
 		if( dRtmp < dR ){
 			dR = dRtmp;
 			closestElectron = particle;
+            particleIndex=i;
 		}
 	}
 	// See if the closest electron (if it exists) is close enough.
@@ -918,6 +1033,14 @@ bool Ntuplizer::matchToTruth(const edm::Ptr<reco::GsfElectron> ele,
 	if( !(closestElectron != 0 && dR < 0.1) ) {
 		return false;
 	}
+    
+    const reco::Candidate *particle = &(*prunedGenParticles)[particleIndex];
+
+    _genE    = particle->energy();
+    _genMass = particle->mass();
+    _genPt   = particle->pt();
+    _genEta  = particle->eta();
+    _genPhi  = particle->phi();
 
 	return true;
 
