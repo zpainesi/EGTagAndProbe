@@ -121,7 +121,7 @@ if not isMC: # will use 80X
     )
 
 else:
-    process.GlobalTag.globaltag = '120X_mcRun3_2021_realistic_v9'
+    process.GlobalTag.globaltag = '123X_mcRun3_2021_realistic_v13'
     process.load('EGTagAndProbe.EGTagAndProbe.MCanalysis_cff')
     process.source = cms.Source("PoolSource",
      fileNames= cms.untracked.vstring(
@@ -150,17 +150,13 @@ else:
     process = L1TTurnOffUnpackStage2GtGmtAndCalo(process)
 
 
-#process.load("L1Trigger.L1TCalorimeter.caloStage2Params_2016_v2_2_cfi")
-#process.load("L1Trigger.L1TCalorimeter.caloStage2Params_2016_v3_3_1_2018_EcalSF_cfi")
-#process.load("L1Trigger.L1TCalorimeter.caloStage2Params_2016_v3_3_1_2018_EcalSF_EGcalib_cfi")
-process.load("L1Trigger.L1TCalorimeter.caloParams_2018_v1_3_cfi")
-
+process.load("L1Trigger.L1TCalorimeter.caloParams_2022_v0_2_cfi")
 
 #### handling of cms line options for tier3 submission
 #### the following are dummy defaults, so that one can normally use the config changing file list by hand etc.
 
 if options.JSONfile:
-    print("Using JSON: " , options.JSONfile)
+    print "Using JSON: " , options.JSONfile
     process.source.lumisToProcess = LumiList.LumiList(filename = options.JSONfile).getVLuminosityBlockRange()
 
 if options.inputFiles:
@@ -193,7 +189,7 @@ process.schedule = cms.Schedule(process.p) # do my sequence pls
 
 # Silence output
 process.load("FWCore.MessageService.MessageLogger_cfi")
-process.MessageLogger.cerr.FwkReport.reportEvery = 1
+process.MessageLogger.cerr.FwkReport.reportEvery = 100
 
 # Adding ntuplizer
 process.TFileService=cms.Service('TFileService',fileName=cms.string(options.outputFile))
