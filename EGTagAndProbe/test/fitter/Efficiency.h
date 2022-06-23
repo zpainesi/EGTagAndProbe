@@ -10,6 +10,7 @@ class efficiencyMeasurement
         TH1D* passHist;
         TH1D* failHist;
         TH1D* effiHist;
+        TGraphAsymmErrors*  eff_gr; 
         bool divByTotalForEfficiency;
         double divTotal;
         efficiencyMeasurement(std::string namep)
@@ -19,8 +20,8 @@ class efficiencyMeasurement
             passHist=nullptr;
             failHist=nullptr;
             effiHist=nullptr;
+            eff_gr=nullptr;
         }
-
         
         efficiencyMeasurement(std::string namep,Int_t XBINS,Double_t *xEdges): passHist(nullptr),failHist(nullptr),effiHist(nullptr)
         {
@@ -57,6 +58,7 @@ class efficiencyMeasurement
             passHist->Write();
             failHist->Write();
             effiHist->Write();
+            if(eff_gr) eff_gr->Write();
         }
         
         efficiencyMeasurement * Clone(string namep)
@@ -118,6 +120,7 @@ class efficiencyMeasurement
           if(passHist) delete passHist;
           if(failHist) delete failHist;
           if(effiHist) delete effiHist;
+          //if(eff_gr)   delete eff_gr;
 
         }
 
@@ -140,6 +143,7 @@ class efficiencyMeasurement
           	double aeff;
           	double n,w;
             
+
             auto tot= passHist->GetEntries() + failHist->GetEntries();
     	    for (int k=1; k<=(passHist->GetNbinsX()); ++k)
     		{
@@ -165,19 +169,24 @@ class efficiencyMeasurement
                   		p = N2/N1;
                   		n = N1+N2;
                   		w = N2/n;
-                		if (N1*p>100 || N1*(1-p)>100){ //cout<< " pass " <<endl;
+                		if (N1*p>100 || N1*(1-p)>100){
+                        //cout<< " pass " <<endl;
     		    		eU = sqrt(p*(1-p)/N1);
     		    		eL = sqrt(p*(1-p)/N1);
-                        	}
-                      		else
-                        	{   //cout<<" pass2 "<<endl;
-                          		eU = (1-BetaInverse(aeff,N1-N2,N2+1))-p;
-                          		eL = p-(1-BetaInverse(1-aeff,N1-N2+1,N2));
-                        	}
+                        }
+                        else
+                        {   //cout<<" pass2 "<<endl;
+                        	eU = (1-BetaInverse(aeff,N1-N2,N2+1))-p;
+                        	eL = p-(1-BetaInverse(1-aeff,N1-N2+1,N2));
+                        }
                 	}
-    		    effiHist->SetBinError(k,eL);
-	        }
+                  effiHist->SetBinError(k,eL);
+              
+ //    std::cout<<" num : "<<num<<" , den : "<<den<<" , eU "<<eU<<" , eL : "<<eL<<"( "<<sqrt(p*(1-p)/N1)<<","<<BetaInverse(aeff,N1-N2,N2+1)-p<<p-(1-BetaInverse(1-aeff,N1-N2+1,N2))<<"  )"<<"\n";
 
+	        }
+          //eff_gr = new TGraphAsymmErrors(passHist->GetNbinsX(),x,y,xL_err,xR_err,yL_err,yR_err);
+          eff_gr = new TGraphAsymmErrors(effiHist);
         }
 
 };
