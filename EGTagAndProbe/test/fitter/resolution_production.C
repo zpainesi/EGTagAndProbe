@@ -23,11 +23,11 @@ void resolution_production(int mode=0)
                    -1e5);
 
   if(mode==3)
-  produceResolution("/grid_mnt/t3storage3/athachay/l1egamma/data/run3MC/DYtoLL_TandP_12_0_2_Reacliberated608Files.root",
+  produceResolution("/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/athachay/store/mcDYToLL_120X_mcRun3_2021_realistic_v5-v2/TagAndProbe_EtCaliberatedReEmulationV2p1_120Xsample_CaloParams_2022_v0_1.root",
                     "resolution.root",
-                    "run3MC_12_0_2_Recalib_",
+                    "run3MC_12_3_0_pre3RecalibV2_",
                     true,
-                   -10000);
+                   5e5);
 
 
 }

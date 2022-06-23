@@ -23,7 +23,7 @@
 void produceTurnOns(string infile,string ofileName,string prefix="",bool doEmulationBranches=false,Long64_t maxEvents=1000);
 void turn_on_production(int mode=0)
 {
-    int doFull = 1;
+    int doFull = -1;
  //   produceTurnOns(infile,ofileName,prefix,maxEvents);
     if(mode==0)
     produceTurnOns("/grid_mnt/t3storage3/athachay/l1egamma/data/run3MC/TandPFromMiniAOD_120X_mcRun3_2021_realistic_v5-v2.root",
@@ -40,11 +40,11 @@ void turn_on_production(int mode=0)
                    -1*doFull*1e6
                    );
     if(mode==3)
-    produceTurnOns("/grid_mnt/t3storage3/athachay/l1egamma/data/run3MC/DYtoLL_TandP_12_0_2_Reacliberated608Files.root",
+    produceTurnOns("/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/athachay/store/mcDYToLL_120X_mcRun3_2021_realistic_v5-v2/TagAndProbe_EtCaliberatedReEmulationV2p1_120Xsample_CaloParams_2022_v0_1.root",
                     "turnon.root",
-                    "run3MC_12_0_2_Recalib_",
+                    "run3MC_12_3_0_pre3RecalibV2_",
                     true,
-                   -1*doFull*1e5
+                   -1*doFull*5e5
                    );
 }
 
