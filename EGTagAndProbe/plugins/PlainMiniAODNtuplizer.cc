@@ -82,7 +82,7 @@ class PlainMiniAODNtuplizer : public edm::one::EDAnalyzer<edm::one::SharedResour
        edm::EDGetTokenT <double > rhoToken;
        edm::EDGetTokenT <edm::View<pat::Jet>> recJetToken_;
        edm::EDGetTokenT <edm::View<pat::Photon>> photonsToken_ ;
-       edm::EDGetTokenT <edm::View<reco::GsfElectron>> electronsToken_ ;
+       edm::EDGetTokenT <edm::View<pat::Electron>> electronsToken_ ;
        edm::EDGetTokenT <edm::View<reco::SuperCluster>> scToken_ ;
        edm::EDGetTokenT <std::vector<reco::Vertex>> verticesToken_;
 
@@ -124,7 +124,7 @@ PlainMiniAODNtuplizer::PlainMiniAODNtuplizer(const edm::ParameterSet& iConfig)
    isMiniAOD=true;
    photonsToken_       = consumes<edm::View<pat::Photon>>(iConfig.getParameter<edm::InputTag>("photons"));
    recJetToken_       = consumes<edm::View<pat::Jet>>(iConfig.getParameter<edm::InputTag>("recJets"));
-   electronsToken_       = consumes<edm::View<reco::GsfElectron>>(iConfig.getParameter<edm::InputTag>("electrons"));
+   electronsToken_       = consumes<edm::View<pat::Electron>>(iConfig.getParameter<edm::InputTag>("electrons"));
 
    primaryVtxToken_       =consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("vertices"));
    l1EGToken =       consumes<l1t::EGammaBxCollection>                   (iConfig.getParameter<edm::InputTag>("l1EG"));
@@ -228,20 +228,27 @@ void PlainMiniAODNtuplizer::addElectronBranches()
       m_tree->Branch("electrons_phi",   storageMapFloatArray["electrons_phi"],"electrons_phi[nElectrons]/F");
       storageMapFloatArray["electrons_e"] = new Float_t[N_ITEMS_MAX];
       m_tree->Branch("electrons_e",   storageMapFloatArray["electrons_e"],"electrons_e[nElectrons]/F");
+      storageMapFloatArray["electrons_id_wp80"] = new Float_t[N_ITEMS_MAX];
+      m_tree->Branch("electrons_id_wp80",   storageMapFloatArray["electrons_id_wp80"],"electrons_id_wp80[nElectrons]/F");
+      storageMapFloatArray["electrons_id_wp90"] = new Float_t[N_ITEMS_MAX];
+      m_tree->Branch("electrons_id_wp90",   storageMapFloatArray["electrons_id_wp90"],"electrons_id_wp90[nElectrons]/F");
+
 }
 
 void PlainMiniAODNtuplizer::fillElectronBranches(const edm::Event & iEvent)
 {
-   edm::Handle<edm::View<reco::GsfElectron>>  electronsHandle ; 
+   edm::Handle<edm::View<pat::Electron>>  electronsHandle ; 
    iEvent.getByToken(electronsToken_,electronsHandle);
    storageMapInt["nElectrons"]=0;
    Int_t idx=0;
     for (auto const& ele : *electronsHandle){
-        storageMapFloatArray["electrons_scEt"][idx]       =             (ele.correctedEcalEnergy())/cosh(ele.eta());
+        storageMapFloatArray["electrons_scEt"][idx]     =             (ele.correctedEcalEnergy())/cosh(ele.eta());
         storageMapFloatArray["electrons_pt"][idx]       =             ele.et();
         storageMapFloatArray["electrons_eta"][idx]      =             ele.eta();
         storageMapFloatArray["electrons_phi"][idx]      =             ele.phi();
         storageMapFloatArray["electrons_e"][idx]        =             ele.energy();
+        storageMapFloatArray["electrons_id_wp80"][idx]    =             ele.electronID("mvaEleID-Fall17-iso-V2-wp80");
+        storageMapFloatArray["electrons_id_wp90"][idx]    =             ele.electronID("mvaEleID-Fall17-iso-V2-wp90");
         idx++;
     }
     storageMapInt["nElectrons"]=idx;

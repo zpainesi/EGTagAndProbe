@@ -9,8 +9,7 @@ process.GlobalTag.globaltag = '106X_dataRun2_v25'
 process.source = cms.Source("PoolSource",
                                 # replace 'myfile.root' with the source file you want to use
                                 fileNames = cms.untracked.vstring(
-                    "file:f94ebbeb-4ac5-4668-bc60-0503ef541bc5.root"
-                    ),
+                    "file:/afs/cern.ch/work/a/athachay/private/l1egamma/run3/performace_unpacked/CMSSW_12_3_7/src/EGTagAndProbe/EGTagAndProbe/test/f94ebbeb-4ac5-4668-bc60-0503ef541bc5.root"),
                 duplicateCheckMode=cms.untracked.string("noDuplicateCheck"),
                             )
 
