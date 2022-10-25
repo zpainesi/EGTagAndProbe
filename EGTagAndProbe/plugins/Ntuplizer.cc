@@ -149,6 +149,9 @@ class Ntuplizer : public edm::EDAnalyzer {
         float _genPt;
 		float _genEta;
 		float _genPhi;
+		float _genClosesetZDauEt;
+        float _isDaughterOfZ;
+        float _isBremSafe;
 		float _l1tEmuPt;
 		float _l1tEmuEta;
 		float _l1tEmuPhi;
@@ -373,8 +376,8 @@ void Ntuplizer::Initialize() {
 	this -> _eleTagPhi = -1.;
 	this -> _eleTagCharge = 0;
 	this -> _Mee = 0;
-	this -> _isTagHLTmatched = false;
-	this -> _isProbeHLTmatched = false;
+	this -> _isTagHLTmatched = 0;
+	this -> _isProbeHLTmatched = 0;
 	this -> _hltPt = -1;
 	this -> _hltEta = 666;
 	this -> _hltPhi = 666;
@@ -383,6 +386,9 @@ void Ntuplizer::Initialize() {
 	this -> _genPt =-1.0;
 	this -> _genEta = 666;
 	this -> _genPhi = -1;
+	this -> _genClosesetZDauEt = -1;
+	this -> _isDaughterOfZ = 0.0;
+	this -> _isBremSafe = 0.0;
     this -> _l1tPt = -1;
 	this -> _l1tEta = 666;
 	this -> _l1tPhi = 666;
@@ -394,7 +400,7 @@ void Ntuplizer::Initialize() {
 	this -> _genPt = 666;
 	this -> _genEta = 666;
 	this -> _genPhi = -1;
-	
+
     this -> _l1tEmuPt = -1;
 	this -> _l1tEmuEta = 666;
 	this -> _l1tEmuPhi = 666;
@@ -505,6 +511,9 @@ void Ntuplizer::beginJob()
 	this -> _tree -> Branch("genPt",  &_genPt,  "genPt/F");
 	this -> _tree -> Branch("genEta",  &_genEta,  "genEta/F");
 	this -> _tree -> Branch("genPhi",  &_genPhi,  "genPhi/F");
+	this -> _tree -> Branch("genClosesetZDauEt",  &_genClosesetZDauEt,  "genClosesetZDauEt/F");
+	this -> _tree -> Branch("isDaughterOfZ",  &_isDaughterOfZ,  "isDaughterOfZ/F");
+	this -> _tree -> Branch("isBremSafe",  &_isBremSafe,  "isBremSafe/F");
 	this -> _tree -> Branch("l1tEmuPt",  &_l1tEmuPt,  "l1tEmuPt/F");
 	this -> _tree -> Branch("l1tEmuEta", &_l1tEmuEta, "l1tEmuEta/F");
 	this -> _tree -> Branch("l1tEmuPhi", &_l1tEmuPhi, "l1tEmuPhi/F");
@@ -652,7 +661,6 @@ void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& eSetup)
 		this->_allEl_SclEt.push_back((ele->superCluster()->energy()) / cosh(ele->superCluster()->eta()));
 		this->_allEl_Charge.push_back(ele->charge());
 	}
-
 	nPhotons=photons->size();
     for(unsigned int k=0; k<photons->size(); ++k){
 		const auto ele = photons->at(k);
@@ -933,7 +941,8 @@ void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& eSetup)
 			this -> _eleTagTriggerBits = this -> _eleTagTriggerBitSet.to_ulong();
 			//std::cout << "++++++++++ FILL ++++++++++" << std::endl;
             nGenParticle=0;
-            addTheGenInfo(genParticles);
+            if(this->_useGenMatch)
+                addTheGenInfo(genParticles);
 			this -> _tree -> Fill();
 
 		}
@@ -1024,13 +1033,22 @@ bool Ntuplizer::matchToTruth(const edm::Ptr<reco::GsfElectron> ele,
 		double dRtmp = deltaR( ele->p4(), particle->p4() );
 		if( dRtmp < dR ){
 			dR = dRtmp;
+            this->_isBremSafe=1.0;
 			closestElectron = particle;
             particleIndex=i;
-		}
+	    for(size_t ii=0; ii<prunedGenParticles->size();ii++){
+		    const reco::Candidate *particle2 = &(*prunedGenParticles)[ii];
+	   	        if( particle2->pdgId() != 22  ) continue;
+	   	        if(particle2->pt() < 1.5 ) continue;
+                if(deltaR(particle2->p4(),particle->p4()) < 0.5) continue;
+                this->_isBremSafe=0.0;
+         }
+        }
 	}
 	// See if the closest electron (if it exists) is close enough.
 	// If not, no match found.
 	if( !(closestElectron != 0 && dR < 0.1) ) {
+        this->_isBremSafe=0.0;
 		return false;
 	}
     
@@ -1041,9 +1059,25 @@ bool Ntuplizer::matchToTruth(const edm::Ptr<reco::GsfElectron> ele,
     _genPt   = particle->pt();
     _genEta  = particle->eta();
     _genPhi  = particle->phi();
+    if(particle->mother()->pdgId() == 23 ) _isDaughterOfZ=1.0;
 
-	return true;
+    // storing the Z-->ee pt
+    dR=0.3;
+    for(size_t i=0; i<prunedGenParticles->size();i++){
+		const reco::Candidate *particle = &(*prunedGenParticles)[i];
+		// Drop everything that is not electron or not status 1
+		if( abs(particle->pdgId()) != 11 || particle->mother()->pdgId() != 23 || particle->pt()<5)
+			continue;
+		//
+		double dRtmp = deltaR( ele->p4(), particle->p4() );
+		if( dRtmp < dR ){
+			dR = dRtmp;
+    	    _genClosesetZDauEt=particle->pt();
+        }
+    }
 
+
+    return true;
 }
 
 
