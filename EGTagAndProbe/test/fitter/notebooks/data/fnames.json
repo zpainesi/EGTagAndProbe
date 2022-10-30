@@ -1,0 +1,115 @@
+{
+    "desc" : {
+
+    },
+    "fnames": {
+        "dataR3Unpaked_postCalib" : "data/sept9/egamma2022PostRecalib_TagAndProbe_DataRun3_2022resolution.root",
+        "data2018" : "data/run2/data2018_default_resolution.root",
+        "dataR3Unpaked_postCalib": "data/oct3/TagAndProbe_DataRun3_2022res_eg2022PostRecalib_resolution.root",
+        
+        "run3MC": "data/oct3/TagAndProbe_DataRun3_2022res_run3MC_default_vsSCEt_resolution.root",
+        "run3MCVsGenEt": "data/oct3/TagAndProbe_DataRun3_2022res_run3MC_default_vsGenEt_resolution.root",
+        "data2018": "data/run2/data2018_default_resolution.root",
+        
+        "run3MCWithGenEt": "data/oct3/TagAndProbe_MC122X_GenEtRecalib_res_run3MC_GENEt_vsSCEt_resolution.root",
+        "run3MCWithGenEtVsGenEt": "data/oct3/TagAndProbe_MC122X_GenEtRecalib_res_run3MC_GENEt_vsGenEt_resolution.root",
+        "run3MCWithGenEtVsGenEtBremSafe": "data/oct3/TagAndProbe_DataRun3_2022run3MC_isBremSafe_resolution.root",
+        "run3MCWithGenEtVsGenEtZee": "data/oct3/TagAndProbe_DataRun3_2022run3MC_resolution_ZToEEGenEt.root",
+        "run3MCWithGenEtVsGenEtZDau": "data/oct3/TagAndProbe_DataRun3_2022run3MC_resolution_isZDau.root",
+        
+        "run3MCWithZDauGenEtVsGenEt": "data/oct14/v2/TagAndProbe_MC122X_res_GENEtCalib_vsGenEt.root",
+        "run3MCWithZDauGenEtVsGenEtBremSafe": "data/oct3/TagAndProbe_DataRun3_2022run3MC_resolution_ZDauGenEtCalib_isBremSafe.root",
+        "run3MCWithZDauGenEtVsSCEt": "data/oct14/v2/TagAndProbe_MC122X_res_GENEtCalib_vsSCEt.root",
+        
+        "run3DataWithHybridVsPFEt": "data/oct14/TagAndProbe_DataRun3_2022resPFEt_eg2022PR_ReEmulHybrid_resolution.root",
+        "run3DataWithHybridVsSCEt": "data/oct14/TagAndProbe_DataRun3_2022resSCEt_eg2022PR_ReEmulHybrid_resolution.root",
+        "run3DataDefaultVsSCEt": "data/oct14/TagAndProbe_DataRun3_2022resSCEt_eg2022PR_ReEmulDefault_resolution.root",
+        "run3DataDefaultVsPFEt": "data/oct14/TagAndProbe_DataRun3_2022resPFEt_eg2022PR_ReEmulDefault_resolution.root",
+        
+        "run3MCWithZDauGenEtVsPFEt": "data/oct14/v2/TagAndProbe_MC122X_res_GENEtCalib_vsPFEt.root",
+        
+        "run3MCWithDefaultVsSCEt" : "data/oct14/v2/TagAndProbe_MC122X_res_DefaultCalibration_vsSCEt.root",
+        "run3MCWithDefaultVsPFEt" : "data/oct14/v2/TagAndProbe_MC122X_res_DefaultCalibration_vsPFEt.root",
+        "run3MCWithDefaultVsGenEt": "data/oct14/v2/TagAndProbe_MC122X_res_DefaultCalibration_vsGenEt.root",
+        
+        "run3MCWithHybridVsSCEt" : "data/oct25/TagAndProbe_MC122X_HybriCalib_oldIso_res_vsSCEt.root",
+        "run3MCWithHybridVsPFEt" : "data/oct25/TagAndProbe_MC122X_HybriCalib_oldIso_res_vsPFEt.root",
+        "run3MCWithHybridVsGenEt": "data/oct25/TagAndProbe_MC122X_HybriCalib_oldIso_res_vsGenEt.root",
+        
+        "run3MCWithHybridV3VsSCEt" : "data/oct25/TagAndProbe_MC122X_HybridV3Calib_newIso_res_vsSCEt.root",
+        "run3MCWithHybridV3VsPFEt" : "data/oct25/TagAndProbe_MC122X_HybridV3Calib_newIso_res_vsPFEt.root",
+        "run3MCWithHybridV3VsGenEt": "data/oct25/TagAndProbe_MC122X_HybridV3Calib_newIso_res_vsGENEt.root",
+        
+        "run3Data2022EDefaultVsSCEt"   : "data/oct25/TagAndProbe_DataRun3_2022Eres_defLUT_oldIso_vsSCEt.root",
+        "run3Data2022EDefaultVsPFEt"   : "data/oct25/TagAndProbe_DataRun3_2022Eres_defLUT_oldIso_vsPFEt.root",
+        "run3Data2022EDefaultNewIsoVsSCEt"   : "data/oct25/TagAndProbe_DataRun3_2022Eres_defLUT_newIso_vsSCEt.root",
+        "run3Data2022EDefaultNewIsoVsPFEt"   : "data/oct25/TagAndProbe_DataRun3_2022Eres_defLUT_newIso_vsPFEt.root",
+        
+        "run3Data2022EWithHybridVsSCEt": "data/oct25/TagAndProbe_DataRun3_2022Eres_newLUT_oldIso_vsSCEt.root",
+        "run3Data2022EWithHybridVsPFEt": "data/oct25/TagAndProbe_DataRun3_2022Eres_newLUT_oldIso_vsPFEt.root",
+        "run3Data2022EWithHybridNewIsoVsSCEt": "data/oct25/TagAndProbe_DataRun3_2022Eres_newLUT_newIso_vsSCEt.root",
+        "run3Data2022EWithHybridNewIsoVsPFEt": "data/oct25/TagAndProbe_DataRun3_2022Eres_newLUT_newIso_vsPFEt.root",
+        
+        "run3Data2022EWithHybridV3OldIsoVsSCEt"   : "data/oct25/TagAndProbe_DataRun3_2022Eres_hybridV3_oldIso_vsSCEt.root",
+        "run3Data2022EWithHybridV3OldIsoVsPFEt"   : "data/oct25/TagAndProbe_DataRun3_2022Eres_hybridV3_oldIso_vsPFEt.root",
+        "run3Data2022EWithHybridV3NewIsoVsSCEt"   : "data/oct25/TagAndProbe_DataRun3_2022Eres_hybridV3_newIso_vsSCEt.root",
+        "run3Data2022EWithHybridV3NewIsoVsPFEt"   : "data/oct25/TagAndProbe_DataRun3_2022Eres_hybridV3_newIso_vsPFEt.root"
+                
+    },
+    "colours": {
+        "dataRun3_unpacked": 1,
+        "dataR3Unpaked_preCalib": 432,
+        "dataR3Unpaked_postCalib": 418,
+        "run3MC": 600,
+        "run3MCVsGenEt": 633,
+        "data2018": 633,
+        "run3MCWithGenEt": 616,
+        "run3MCWithGenEtVsGenEt": 801,
+        "run3MCWithGenEtVsGenEtBremSafe": 434,
+        "run3MCWithGenEtVsGenEtZee": 417,
+        "run3MCWithGenEtVsGenEtZDau": 1,
+        "run3MCWithZDauGenEtVsGenEt": 600,
+        "run3MCWithZDauGenEtVsGenEtBremSafe": 600,
+        "run3MCWithZDauGenEtVsSCEt": 600,
+        "run3DataWithHybridVsPFEt": 418,
+        "run3DataWithHybridVsSCEt": 418,
+        "run3DataDefaultVsPFEt": 632,
+        "run3DataDefaultVsSCEt": 632,
+        "run3MCWithZDauGenEtVsPFEt": 600,
+        "run3MCWithDefaultGenEtVsSCEt": 616,
+        "run3MCWithDefaultGenEtVsPFEt": 616,
+        "run3MCWithDefaultGenEtVsGenEt": 616
+    },
+    "legends": {
+        "dataRun3_unpacked": "Run3 Unpacked",
+        "dataR3Unpaked_preCalib": "Run3 Unpacked",
+        "dataR3Unpaked_postCalib": "Run3 Unpacked",
+        "run3MC": "Caliberated wrt. SC E_{T}",
+        "run3MCVsGenEt": "Caliberated wrt. SC E_{T}",
+        "data2018": "Data 2018",
+        "run3MCWithGenEt": "Caliberated wrt. E_{T}^{SC}",
+        "run3MCWithGenEtVsGenEt": "Caliberated wrt. GEN E_{T} ",
+        "run3MCWithGenEtVsGenEtBremSafe": "Caliberated wrt. GEN E_{T} , BremSafe",
+        "run3MCWithGenEtVsGenEtZee": "Caliberated wrt. GEN E_{T} , Z to e E_{T}",
+        "run3MCWithGenEtVsGenEtZDau": "Caliberated wrt. GEN E_{T}",
+        "run3MCWithZDauGenEtVsGenEt": "MC,E_{T}^{GEN} based Caliberation",
+        "run3MCWithZDauGenEtVsGenEtBremSafe": "Caliberated wrt. Z-Dau GEN E_{T} , isBremsafe ",
+        "run3MCWithZDauGenEtVsSCEt": "MC,E_{T}^{GEN} based Caliberation",
+        "run3DataWithHybridVsPFEt": "Data,Hybrid Caliberation",
+        "run3DataWithHybridVsSCEt": "Data,Hybrid Caliberation",
+        "run3DataDefaultVsPFEt": "Data,Default Caliberation",
+        "run3DataDefaultVsSCEt": "Data,Default Caliberation",
+        "run3MCWithZDauGenEtVsPFEt": "MC,E_{T}^{GEN} based Caliberation",
+        "run3MCWithDefaultVsSCEt": "MC, Default Caliberation",
+        "run3MCWithDefaultVsPFEt": "MC, Default Caliberation",
+        "run3MCWithDefaultVsGenEt": "MC, Default Caliberation",
+        "run3Data2022EWithHybridVsSCEt": "Hybrid Calib.",
+        "run3Data2022EWithHybridVsPFEt": "Hybrid Calib.",
+        "run3Data2022EDefaultVsSCEt"   : "Default Calib.",
+        "run3Data2022EDefaultVsPFEt"   : "Default Calib.",
+        "run3Data2022EWithHybridNewIsoVsSCEt": "Hybrid Calib.",
+        "run3Data2022EWithHybridNewIsoVsPFEt": "Hybrid Calib.",
+        "run3Data2022EDefaultNewIsoVsSCEt"   : "Default Calib.",
+        "run3Data2022EDefaultNewIsoVsPFEt"   : "Default Calib."
+    }
+}
