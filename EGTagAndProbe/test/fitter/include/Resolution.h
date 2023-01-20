@@ -1,6 +1,6 @@
 #include "TROOT.h"
 #define BARREL_BEG -0.01
-#define BARREL_END  1.440
+#define BARREL_END  1.305
 #define ENDCAP_BEG    1.479
 #define ENDCAP_END    2.500
 
