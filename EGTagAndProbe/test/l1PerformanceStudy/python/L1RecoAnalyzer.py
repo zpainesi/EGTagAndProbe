@@ -101,6 +101,10 @@ th1Store["nTriggerTowerOverNVtx"]= ROOT.TH1F("nTriggerTowerOverNVtx","",400,0.0,
 th1Store["nECALTPOverNVtx"]      = ROOT.TH1F("nECALTPOverNVtx","",120,-0.5,29.5)
 th1Store["nHCALTPOverNVtx"]      = ROOT.TH1F("nHCALTPOverNVtx","",400,-0.5,49.5)
 
+th1Store["TriggerTowerEnergy"]= ROOT.TH1F("TriggerTowerEnergy","",80,-0.25,39.75)
+th1Store["ECALTPEnergy"]      = ROOT.TH1F("ECALTPEnergy","",80,-0.25,39.75)
+th1Store["HCALTPEnergy"]      = ROOT.TH1F("HCALTPEnergy","",80,-0.25,39.75)
+
 th1Store["isoEtPU45To50"]      = ROOT.TH1F("isoEtPU45To50","",50,0.0,50.0)
 th1Store["isoEt"]      = ROOT.TH1F("isoEt","",50,0.0,50.0)
 
@@ -219,6 +223,16 @@ for fname in allFnames:
         th1Store["nTriggerTowerOverNVtx"].Fill(eEmuTree.L1CaloTower.nTower/eTree.Vertex.nVtx)
         th1Store["nHCALTPOverNVtx"].Fill(eTree.CaloTP.nHCALTP/eTree.Vertex.nVtx)
         th1Store["nECALTPOverNVtx"].Fill(eTree.CaloTP.nECALTP/eTree.Vertex.nVtx)
+
+        x=np.array(eTree.L1CaloTower.iet)
+        for e in x:
+            th1Store["TriggerTowerEnergy"].Fill(e)
+        x=np.array(eTree.CaloTP.hcalTPet)
+        for e in x:
+            th1Store["HCALTPEnergy"].Fill(e)
+        x=np.array(eTree.CaloTP.ecalTPet)
+        for e in x:
+            th1Store["ECALTPEnergy"].Fill(e)
 
         nProcessed+=1      
         x=np.array(eTree.CaloTP.hcalTPieta)

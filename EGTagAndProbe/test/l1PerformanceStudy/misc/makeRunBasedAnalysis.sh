@@ -1,5 +1,5 @@
 
-version=2p2
+version=2p4
 
 ./misc/condorJobMakerGenericRunBased.py \
     --exe                /grid_mnt/t3storage3/athachay/l1egamma/triggerPerformance/CMSSW_12_3_5/src/EGTagAndProbe/EGTagAndProbe/test/l1PerformanceStudy/python/L1RecoAnalyzer.py \
@@ -10,6 +10,6 @@ version=2p2
     --dest               results/l1HealthAnalysis/$version/ \
     --jn                 10000 \
     --fn                 1 \
-    --maxEvt             -1 \
+    --maxEvt             20000 \
     --tag                l1Health_$version \
     --maxMeterialize     300
