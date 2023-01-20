@@ -1,7 +1,10 @@
+#include "TROOT.h"
 #define BARREL_BEG -0.01
 #define BARREL_END  1.305
 #define ENDCAP_BEG    1.479
-#define ENDCAP_END    2.400
+#define ENDCAP_END    2.500
+
+using namespace std;
 
 class resolutionMeasurement
 {
@@ -13,6 +16,9 @@ class resolutionMeasurement
         TH2D *res_endcap_2d    ;
         TH2D *res_inclusive_2d ;
         TH1D *res_barrel       ;
+        TH1D *scale_endcap       ;
+        TH1D *scale_inclusive    ;
+        TH1D *scale_barrel       ;
         TH1D *res_endcap       ;
         TH1D *res_inclusive    ;
         TH1D *var_barrel       ;
@@ -25,6 +31,9 @@ class resolutionMeasurement
             res_barrel_2d       = nullptr; 
             res_endcap_2d       = nullptr; 
             res_inclusive_2d    = nullptr; 
+            scale_barrel          = nullptr; 
+            scale_endcap          = nullptr; 
+            scale_inclusive       = nullptr; 
             res_barrel          = nullptr; 
             res_endcap          = nullptr; 
             res_inclusive       = nullptr; 
@@ -47,6 +56,9 @@ class resolutionMeasurement
             res_barrel_2d       = new TH2D((name+"2dResBarrel").c_str(),"2d res barrel",BINS,Edges,dXBINS,dXEdges);
             res_endcap_2d       = new TH2D((name+"2dResECap").c_str(),"2d res endcap",BINS,Edges,dXBINS,dXEdges);
             res_inclusive_2d    = new TH2D((name+"2dResInclusive").c_str(),"2d res inclusive",BINS,Edges,dXBINS,dXEdges);
+            scale_barrel        = new TH1D((name+"ScaleBarrel").c_str(),"dependent scale  barrel",BINS,Edges);
+            scale_endcap        = new TH1D((name+"ScaleECap").c_str(),"dependent scale endcap",BINS,Edges);
+            scale_inclusive     = new TH1D((name+"ScaleInclusive").c_str(),"dependent res inclusive",BINS,Edges);
             res_barrel          = new TH1D((name+"ResBarrel").c_str(),"dependent res barrel",BINS,Edges);
             res_endcap          = new TH1D((name+"ResECap").c_str(),"dependent res endcap",BINS,Edges);
             res_inclusive       = new TH1D((name+"ResInclusive").c_str(),"dependent res inclusive",BINS,Edges);
@@ -76,6 +88,9 @@ class resolutionMeasurement
             res_barrel_2d    ->Write(); 
             res_endcap_2d    ->Write();
             res_inclusive_2d ->Write();
+            scale_barrel       ->Write();
+            scale_endcap       ->Write();
+            scale_inclusive    ->Write();
             res_barrel       ->Write();
             res_endcap       ->Write();
             res_inclusive    ->Write();
@@ -90,6 +105,9 @@ class resolutionMeasurement
           if( not res_barrel_2d    ) delete res_barrel_2d    ;
           if( not res_endcap_2d    ) delete res_endcap_2d    ;
           if( not res_inclusive_2d ) delete res_inclusive_2d ;
+          if( not scale_barrel       ) delete scale_barrel       ;
+          if( not scale_endcap       ) delete scale_endcap       ;
+          if( not scale_inclusive    ) delete scale_inclusive    ;
           if( not res_barrel       ) delete res_barrel       ;
           if( not res_endcap       ) delete res_endcap       ;
           if( not res_inclusive    ) delete res_inclusive    ;
@@ -136,6 +154,8 @@ class resolutionMeasurement
         		    res_inclusive->SetBinContent(i,fwhm / max);	
         	        res_inclusive->SetBinError(i,fwhm / (sqrt(projectionY_inclusive->Integral())));
         		    
+                    scale_inclusive->SetBinContent(i,mean);	
+        		    
                     //res_inclusive->SetBinContent(i,rms / mean);
         	        //res_inclusive->SetBinError(i,rms / (sqrt(projectionY_inclusive->Integral())));
         	
@@ -154,6 +174,8 @@ class resolutionMeasurement
         
         		    res_barrel->SetBinContent(i,fwhm / max);		
         	        res_barrel->SetBinError(i,fwhm / (sqrt(projectionY_barrel->Integral())));
+                    scale_barrel->SetBinContent(i,mean);	
+                    scale_barrel->SetBinError(i,mean/sqrt(projectionY_barrel->Integral()));	
         	        //res_barrel->SetBinContent(i,rms / mean);
         	        //res_barrel->SetBinError(i,rms / (sqrt(projectionY_barrel->Integral())));
         
@@ -172,6 +194,8 @@ class resolutionMeasurement
         
         		    res_endcap->SetBinContent(i,fwhm / max);	
         	        res_endcap->SetBinError(i,fwhm / (sqrt(projectionY_endcap->Integral())));
+                    scale_endcap->SetBinContent(i,mean);	
+                    scale_endcap->SetBinError(i,mean/sqrt(projectionY_endcap->Integral()));	
                     //res_endcap->SetBinContent(i,rms / mean);
         	        //res_endcap->SetBinError(i,rms / (sqrt(projectionY_endcap->Integral())));
         

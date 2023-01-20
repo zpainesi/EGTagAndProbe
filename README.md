@@ -2,9 +2,6 @@ Forked from charis's original [repo@GitLab ](https://gitlab.cern.ch/ckoraka/EGTa
 
 checkout [`triggerEfficDev`](https://github.com/ats2008/EGTagAndProbe/tree/triggerEfficDev) branch for updatd codes and docs
 
-#### Patches for CMSSW_12_0_2
-  *  Need to remove `import command` in `L1Trigger/Configuration/python/customiseUtils.py`  [ commands depreicated in py3 and bugfix already in 12_X master] 
-
 
 # EGTagAndProbe
 Set of tools to evaluate L1EG trigger performance on T&amp;P

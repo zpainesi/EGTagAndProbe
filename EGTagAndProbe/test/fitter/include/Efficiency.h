@@ -1,3 +1,5 @@
+#include "TROOT.h"
+#include "TGraphAsymmErrors.h"
 
 
 double BetaInverse(double x,double p, double q);
@@ -6,7 +8,7 @@ class efficiencyMeasurement
 {
 
     public :
-        string name;
+        std::string name;
         TH1D* passHist;
         TH1D* failHist;
         TH1D* effiHist;
@@ -34,7 +36,7 @@ class efficiencyMeasurement
         {   
            
             freeMem();
-            std::cout<<" Allocation for "<<name<<" bins  : "<<XBINS<<"  [ "<<xEdges[0]<<","<<xEdges[XBINS-1] <<" ] "<<"\n";
+ //           std::cout<<" Allocation for "<<name<<" bins  : "<<XBINS<<"  [ "<<xEdges[0]<<","<<xEdges[XBINS-1] <<" ] "<<"\n";
             passHist = new TH1D(("hist_"+name+"Pass").c_str(),("hist_"+name+"Pass").c_str(),XBINS,xEdges);
             failHist = new TH1D(("hist_"+name+"Fail").c_str(),("hist_"+name+"Fail").c_str(),XBINS,xEdges);
             effiHist = new TH1D(("hist_"+name+"Efficiency").c_str(),("hist_"+name+"Efficiency").c_str(),XBINS,xEdges);
@@ -61,7 +63,7 @@ class efficiencyMeasurement
             if(eff_gr) eff_gr->Write();
         }
         
-        efficiencyMeasurement * Clone(string namep)
+        efficiencyMeasurement * Clone(std::string namep)
         {
 
             auto cl= (efficiencyMeasurement *) new efficiencyMeasurement(namep);
@@ -161,7 +163,7 @@ class efficiencyMeasurement
     		    }
     		    
                 N2 = num; N1 = den;
-    		    p  = 0;  eU = 0; 	    eL = 0;
+    		    p  = 0;  eU = 0; 	    eL = 1.0;
           	    aeff = (1-a)/2;
           	    n,w;
           	    	if (N1 > 0)

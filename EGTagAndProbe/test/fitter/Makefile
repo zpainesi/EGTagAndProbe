@@ -16,7 +16,13 @@ turn_on_productionNoRunFilter : src/turn_on_productionNoRunFilter.cc
 turn_on_productionSCEt : src/turn_on_productionSCEt.cc 
 	$(CXX) $(CXXFLAGS) -I$(INCPATH) -o $@.exe $<  $(LIBS)
 
+turn_on_productionSCEt_nvtx : src/turn_on_productionSCEt_nvtx.cc 
+	$(CXX) $(CXXFLAGS) -I$(INCPATH) -o $@.exe $<  $(LIBS)
+
 turn_on_productionPFEt : src/turn_on_productionPFEt.cc 
+	$(CXX) $(CXXFLAGS) -I$(INCPATH) -o $@.exe $<  $(LIBS)
+
+turn_on_productionPFEt_nvtx : src/turn_on_productionPFEt_nvtx.cc 
 	$(CXX) $(CXXFLAGS) -I$(INCPATH) -o $@.exe $<  $(LIBS)
 
 turn_on_productionGenEt : src/turn_on_productionGenEt.cc 
@@ -38,6 +44,12 @@ resolution_productionGenEt : src/resolution_productionGenEt.cc
 	$(CXX) $(CXXFLAGS) -I$(INCPATH) -o $@.exe $<  $(LIBS)
 
 resolution_productionGen_PFEt : src/resolution_productionGen_PFEt.cc
+	$(CXX) $(CXXFLAGS) -I$(INCPATH) -o $@.exe $<  $(LIBS)
+
+resolution_productionSCEt_noEventScan : src/resolution_productionSCEt_noEventScan.cc
+	$(CXX) $(CXXFLAGS) -I$(INCPATH) -o $@.exe $<  $(LIBS)
+
+L1EGRatePlotter: src/L1EGRatePlotter.cc
 	$(CXX) $(CXXFLAGS) -I$(INCPATH) -o $@.exe $<  $(LIBS)
 
 clean :
