@@ -29,16 +29,18 @@ using namespace std;
 
 TString getFloatAsTstring(Float_t val,Int_t nDes=2)
 {
+
     std::stringstream ss;
     ss << std::fixed << setprecision(nDes) << val;
     std::string mystring = ss.str();
+
     return TString(mystring.c_str());
 
 }
 void resolution_production(int mode=0)
 {
 /*
-  //produceResolution(infile,ofileName,prefix,maxEvents);
+    //produceResolution(infile,ofileName,prefix,maxEvents);
   if(mode==0)
   produceResolution("/grid_mnt/t3storage3/athachay/l1egamma/data/run3Data/TagAndProbe_DataRun3_2022C_unpacked_jul29.root",
                     "resolution.root",
@@ -218,6 +220,7 @@ void produceResolution(string infile,string ofileName, TString treeName,string p
         float   eleProbeEta;
         float   eleProbePhi;
         float   eleProbeSclEt;
+        float   genPt(1.0);
         float   eleTagPt;
         float   eleTagEta;
         float   eleTagPhi;
@@ -227,6 +230,9 @@ void produceResolution(string infile,string ofileName, TString treeName,string p
         float   l1tPt;
         float   l1tEta;
         float   l1tPhi;
+        float isBremSafe;
+        float isDaughterOfZ;
+        float genClosesetZDauEt;
         int     eleProbeCharge;
         int     eleTagCharge;
         int     allEl_Size;
@@ -240,18 +246,8 @@ void produceResolution(string infile,string ofileName, TString treeName,string p
     std::map<Int_t , std::map<string,resolutionMeasurement * > > resolutionMap;
     std::map<Int_t , std::map<string,TH2D * > > occupancyMap;
 
-    const Int_t PtBINS = 14; 
-	Double_t PtEdges[PtBINS + 1] = {5., 10., 14., 18., 20., 23., 26., 30., 40., 50., 60., 70., 80., 90., 100.};
-    
-    const Int_t PtBINSV2 = 12; 
-	Double_t PtEdgesV2[PtBINSV2 + 1] = {5., 10., 14., 18., 26., 30., 40., 50., 60., 70., 80., 90., 100.};
-    const Int_t PtBINSV3 = 100; 
-	Double_t PtEdgesV3[PtBINSV3 + 1] ; for(int i=0;i< PtBINSV3+1 ; i++)  PtEdgesV3[i]=i;
-    
-    const Int_t PtBINSV4= 22; 
-	Double_t PtEdgesV4[PtBINSV4 +1] = {2., 5,8,11,14,17,20,23,26,30,35,40,46,50,55,60,65,70,75,80,85,90,100};
-    
-
+    const Int_t PtBINS = 16; 
+	Double_t PtEdges[PtBINS + 1] = {5., 10., 14., 18., 20., 23., 26., 30., 40., 50., 60., 70., 80., 90., 100., 140.0,300.0};
     const Int_t dPtBINS = 400; 
 	Double_t dPtEdges[dPtBINS + 1];
     for(int i=0;i<=dPtBINS;i++) dPtEdges[i] = -0.005 + 0.01*i ;
@@ -294,25 +290,14 @@ void produceResolution(string infile,string ofileName, TString treeName,string p
         std::cout<<"Making efficiencies for Run Number "<<idx<<"\n"; 
       
         addEtaBinsForResolution( resolutionMapOnEta[idx] );
-        resolutionMap[idx]["PFEtVsSCEtovePFEt"    ] = new resolutionMeasurement("PFEtVsSCEtovePFEt",PtBINS,PtEdges,dPtBINS,dPtEdges);
 
         resolutionMap[idx]["EtaVsdEta"] = new resolutionMeasurement("EtaVsdEta",EtaBINS,EtaEdges,dEtaBINS,dEtaEdges);
         resolutionMap[idx]["PhiVsdPhi"] = new resolutionMeasurement("PhiVsdPhi",PhiBINS,PhiEdges,dPhiBINS,dPhiEdges);
-        resolutionMap[idx]["EtaVsdEta_GreaterThan32"] = new resolutionMeasurement("EtaVsdEta_GreaterThan32",EtaBINS,EtaEdges,dEtaBINS,dEtaEdges);
-        resolutionMap[idx]["PhiVsdPhi_GreaterThan32"] = new resolutionMeasurement("PhiVsdPhi_GreaterThan32",PhiBINS,PhiEdges,dPhiBINS,dPhiEdges);
-        resolutionMap[idx]["EtaVsdEta_GreaterThan20"] = new resolutionMeasurement("EtaVsdEta_GreaterThan20",EtaBINS,EtaEdges,dEtaBINS,dEtaEdges);
-        resolutionMap[idx]["PhiVsdPhi_GreaterThan20"] = new resolutionMeasurement("PhiVsdPhi_GreaterThan20",PhiBINS,PhiEdges,dPhiBINS,dPhiEdges);
         
         resolutionMap[idx]["EtVsdEt"  ] = new resolutionMeasurement("EtVsdEt",PtBINS,PtEdges,dPtBINS,dPtEdges);
         resolutionMap[idx]["EtaVsdEt"  ] = new resolutionMeasurement("EtaVsdEt",EtaBINS,EtaEdges,dPtBINS,dPtEdges);
         resolutionMap[idx]["EtVsdEt_highReso"  ] = new resolutionMeasurement("EtVsdEt_highReso",PtBINS,PtEdges,dPtHighResBINS,dPtHighResEdges);
         resolutionMap[idx]["EtaVsdEt_highReso"  ] = new resolutionMeasurement("EtaVsdEt_highReso",EtaBINS,EtaEdges,dPtHighResBINS,dPtHighResEdges);
-        resolutionMap[idx]["EtaVsdEt_GThan32_highReso"  ] = new resolutionMeasurement("EtaVsdEt_GThan32_highReso",EtaBINS,EtaEdges,dPtHighResBINS,dPtHighResEdges);
-        resolutionMap[idx]["EtaVsdEt_GThan20_highReso"  ] = new resolutionMeasurement("EtaVsdEt_GThan20_highReso",EtaBINS,EtaEdges,dPtHighResBINS,dPtHighResEdges);
-        
-        resolutionMap[idx]["EtVsdEtV2_highReso"  ] = new resolutionMeasurement("EtVsdEtV2_highReso",PtBINSV2,PtEdgesV2,dPtHighResBINS,dPtHighResEdges);
-        resolutionMap[idx]["EtVsdEtV3_highReso"  ] = new resolutionMeasurement("EtVsdEtV3_highReso",PtBINSV3,PtEdgesV3,dPtHighResBINS,dPtHighResEdges);
-        resolutionMap[idx]["EtVsdEtV4_highReso"  ] = new resolutionMeasurement("EtVsdEtV4_highReso",PtBINSV4,PtEdgesV4,dPtHighResBINS,dPtHighResEdges);
 
         resolutionMap[idx]["Pt5To15EtVsdEt"  ] = new resolutionMeasurement("Pt5To15EtVsdEt",PtBINS,PtEdges,dPtBINS,dPtEdges);
         resolutionMap[idx]["Pt5To15EtaVsdEt"  ] = new resolutionMeasurement("Pt5To15VsdEt",EtaBINS,EtaEdges,dPtBINS,dPtEdges);
@@ -323,11 +308,6 @@ void produceResolution(string infile,string ofileName, TString treeName,string p
         resolutionMap[idx]["PtGThan20EtaVsdEt"  ] = new resolutionMeasurement("PtGThan20EtaVsdEt",EtaBINS,EtaEdges,dPtBINS,dPtEdges);
         resolutionMap[idx]["PtGThan20EtVsdEt_highReso"  ] = new resolutionMeasurement("PtGThan20EtVsdEt_highReso",PtBINS,PtEdges,dPtHighResBINS,dPtHighResEdges);
         resolutionMap[idx]["PtGThan20EtaVsdEt_highReso"  ] = new resolutionMeasurement("PtGThan20EtaVsdEt_highReso",EtaBINS,EtaEdges,dPtHighResBINS,dPtHighResEdges);
-
-        resolutionMap[idx]["PtGThan32EtVsdEt"  ] = new resolutionMeasurement("PtGThan32EtVsdEt",PtBINS,PtEdges,dPtBINS,dPtEdges);
-        resolutionMap[idx]["PtGThan32EtaVsdEt"  ] = new resolutionMeasurement("PtGThan32EtaVsdEt",EtaBINS,EtaEdges,dPtBINS,dPtEdges);
-        resolutionMap[idx]["PtGThan32EtVsdEt_highReso"  ] = new resolutionMeasurement("PtGThan32EtVsdEt_highReso",PtBINS,PtEdges,dPtHighResBINS,dPtHighResEdges);
-        resolutionMap[idx]["PtGThan32EtaVsdEt_highReso"  ] = new resolutionMeasurement("PtGThan32EtaVsdEt_highReso",EtaBINS,EtaEdges,dPtHighResBINS,dPtHighResEdges);
 
         resolutionMap[idx]["Pt0To20EtVsdEt"  ] = new resolutionMeasurement("Pt0To20EtVsdEt",PtBINS,PtEdges,dPtBINS,dPtEdges);
         resolutionMap[idx]["Pt0To20EtaVsdEt"  ] = new resolutionMeasurement("Pt0To20EtaVsdEt",EtaBINS,EtaEdges,dPtBINS,dPtEdges);
@@ -364,14 +344,14 @@ void produceResolution(string infile,string ofileName, TString treeName,string p
         resolutionMap[idx]["Pt200ToXEtVsdEt_highReso"  ] = new resolutionMeasurement("Pt200ToXEtVsdEt_highReso",PtBINS,PtEdges,dPtHighResBINS,dPtHighResEdges);
         resolutionMap[idx]["Pt200ToXEtaVsdEt_highReso"  ] = new resolutionMeasurement("Pt200ToXEtaVsdEt_highReso",EtaBINS,EtaEdges,dPtHighResBINS,dPtHighResEdges);
 
-        occupancyMap[idx]["ocuppancyInclusive"] = new TH2D("ocuppancyInclusive","ocuppancyInclusive",128,-2.5,2.5,64,-3.2,3.2);
-        occupancyMap[idx]["ocuppancy0To20"   ]    = new TH2D("ocuppancy0To20"  ,"ocuppancy0To20"  ,128,-2.5,2.5,64,-3.2,3.2);
-        occupancyMap[idx]["ocuppancy20To40"  ]    = new TH2D("ocuppancy20To40"  ,"ocuppancy20To40"  ,128,-2.5,2.5,64,-3.2,3.2);
-        occupancyMap[idx]["ocuppancy40To60"  ]    = new TH2D("ocuppancy40To60"  ,"ocuppancy40To60"  ,128,-2.5,2.5,64,-3.2,3.2);
-        occupancyMap[idx]["ocuppancy60To80"  ]    = new TH2D("ocuppancy60To80"  ,"ocuppancy60To80"  ,128,-2.5,2.5,64,-3.2,3.2);
-        occupancyMap[idx]["ocuppancy80To120" ]    = new TH2D("ocuppancy80To120" ,"ocuppancy80To120" ,128,-2.5,2.5,64,-3.2,3.2);
-        occupancyMap[idx]["ocuppancy120To200"]    = new TH2D("ocuppancy120To200","ocuppancy120To200",128,-2.5,2.5,64,-3.2,3.2);
-        occupancyMap[idx]["ocuppancy200ToX"  ]    = new TH2D("ocuppancy200ToX"  ,"ocuppancy200ToX"  ,128,-2.5,2.5,64,-3.2,3.2);
+        occupancyMap[idx]["ocuppancyInclusive"  ] = new TH2D("ocuppancyInclusive","ocuppancyInclusive",50,-2.5,2.5,64,-3.2,3.2);
+        occupancyMap[idx]["ocuppancy0To20"  ]     = new TH2D("ocuppancy20To40"  ,"ocuppancy20To40"  ,50,-2.5,2.5,64,-3.2,3.2);
+        occupancyMap[idx]["ocuppancy20To40"  ]    = new TH2D("ocuppancy20To40"  ,"ocuppancy20To40"  ,50,-2.5,2.5,64,-3.2,3.2);
+        occupancyMap[idx]["ocuppancy40To60"  ]    = new TH2D("ocuppancy40To60"  ,"ocuppancy40To60"  ,50,-2.5,2.5,64,-3.2,3.2);
+        occupancyMap[idx]["ocuppancy60To80"  ]    = new TH2D("ocuppancy60To80"  ,"ocuppancy60To80"  ,50,-2.5,2.5,64,-3.2,3.2);
+        occupancyMap[idx]["ocuppancy80To120"  ]   = new TH2D("ocuppancy80To120" ,"ocuppancy80To120" ,50,-2.5,2.5,64,-3.2,3.2);
+        occupancyMap[idx]["ocuppancy120To200"  ]  = new TH2D("ocuppancy120To200","ocuppancy120To200",50,-2.5,2.5,64,-3.2,3.2);
+        occupancyMap[idx]["ocuppancy200ToX"  ]    = new TH2D("ocuppancy200ToX"  ,"ocuppancy200ToX"  ,50,-2.5,2.5,64,-3.2,3.2);
 
         if(doAllRuns)
             break;
@@ -388,10 +368,13 @@ void produceResolution(string infile,string ofileName, TString treeName,string p
     t1->SetBranchAddress("eleProbePhi",&eleProbePhi);
     t1->SetBranchAddress("eleProbeSclEt",&eleProbeSclEt);
     t1->SetBranchAddress("eleTagPt",&eleTagPt);
+    t1->SetBranchAddress("eleTagPt",&eleTagPt);
     t1->SetBranchAddress("eleTagEta",&eleTagEta);
     t1->SetBranchAddress("eleTagPhi",&eleTagPhi);
     t1->SetBranchAddress("RunNumber",&RunNumber	);
-    //t1->SetBranchAddress("hltPt",&hltPt);
+    t1->SetBranchAddress("isBremSafe",&isBremSafe);
+    t1->SetBranchAddress("isDaughterOfZ",&isDaughterOfZ);
+    t1->SetBranchAddress("genClosesetZDauEt",&genClosesetZDauEt);
     //t1->SetBranchAddress("hltEta",&hltEta);
     //t1->SetBranchAddress("hltPhi",&hltPhi);
     Int_t l1tEmuRawEt(100);
@@ -401,6 +384,7 @@ void produceResolution(string infile,string ofileName, TString treeName,string p
         t1->SetBranchAddress("l1tEmuPt",&l1tPt);
         t1->SetBranchAddress("l1tEmuEta",&l1tEta);
         t1->SetBranchAddress("l1tEmuPhi",&l1tPhi);
+        t1->SetBranchAddress("genPt",&genPt);
     }
     else
     {
@@ -426,32 +410,36 @@ void produceResolution(string infile,string ofileName, TString treeName,string p
     Float_t avgPU=0.0;
     Float_t total=0.0;
     int k=0;
-    int nProcessedEvents=0;
-    std::cout<<" [ np : "<< nProcessedEvents<<"  ] "<<endl;
+    int nProcessedEvents;
+
     for (int jentry=0; jentry<nentries; jentry++){
         t1->GetEntry(jentry);
        if(l1tEmuRawEt < 0 ){   k++;   continue ;  }
-       if(l1tPt < 0.0 ){   continue ;  }
+       
+//       std::cout<<" isBremSafe : "<<isBremSafe<<"\n";
+//       if(isBremSafe < 0.5) continue ;
+//       if(isDaughterOfZ < 0.5) continue ;
        // if(Nvtx >52) continue;   
         
+        
         // For PF Et
+//        eleProbeSclEt=genClosesetZDauEt;
         if(jentry%reportEvery==0)
         {
              t_end = std::chrono::high_resolution_clock::now();
              cout<<"Processing Entry "<<jentry<<" / "<<nentries<<"  [ "<<100.0*jentry/nentries<<"  % ]  "
              << " Elapsed time : "<< std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0
              <<"  Estimated time left : "<< std::chrono::duration<double, std::milli>(t_end-t_start).count()*( nentries - jentry)/jentry * 0.001
-             <<" [ np : "<< nProcessedEvents<<"  ] "
              <<endl;
         }
  
+        eleProbeSclEt=eleProbePt;
        //if(not doAllRuns)
        //{
-       if( std::find(RunNumbers.begin(),RunNumbers.end(),RunNumber)  == RunNumbers.end() )
-       {
-            continue;
-       }
-
+           if( std::find(RunNumbers.begin(),RunNumbers.end(),RunNumber)  == RunNumbers.end() )
+           {
+                continue;
+           }
        //}
 
        if( doAllRuns)
@@ -462,41 +450,26 @@ void produceResolution(string infile,string ofileName, TString treeName,string p
         eB.SetPtEtaPhiM(eleTagPt,eleTagEta,eleTagPhi,0.5e-3);
         //std::cout<<"Ea , eb "<<eA.Pt()<<" , "<<eB.Pt()<<" Mass  : "<<(eA+eB).M()<<"\n";
 		
-        nProcessedEvents+=1;
+        nProcessedEvents++;
 
-        if(isProbeLoose==1 and   (fabs(eleProbeEta) < 2.5) ){
+        if(isProbeLoose==1 and   (fabs(eleProbeEta) < 2.4) ){
         pT->Fill(eleProbeSclEt);
         mass->Fill((eA+eB).M());
 		avgPU+=Nvtx;
         total+=1;
-          
-            fillEtaBinsForResolution(resolutionMapOnEta[RunNumber],eleProbeEta,l1tPt/eleProbeSclEt);
+            
             resolutionMap[RunNumber]["PFEtVsSCEtovePFEt"  ]->Fill(  eleProbeEta,eleProbePt,eleProbeSclEt/eleProbePt  );
+            fillEtaBinsForResolution(resolutionMapOnEta[RunNumber],eleProbeEta,l1tPt/eleProbeSclEt);
 
             resolutionMap[RunNumber]["EtaVsdEta"] ->Fill(eleProbeEta,abs(eleProbeEta),l1tEta -  eleProbeEta);
             resolutionMap[RunNumber]["PhiVsdPhi"] ->Fill(eleProbeEta,eleProbePhi,l1tPhi-eleProbePhi);
             resolutionMap[RunNumber]["EtaVsdEt"]  ->Fill(eleProbeEta,abs(eleProbeEta),l1tPt/eleProbeSclEt);
             resolutionMap[RunNumber]["EtVsdEt"]   ->Fill(eleProbeEta,eleProbeSclEt,l1tPt/eleProbeSclEt);
-            resolutionMap[RunNumber]["EtVsdEt_highReso"]   ->Fill(eleProbeEta,eleProbeSclEt,l1tPt/eleProbeSclEt);
-            resolutionMap[RunNumber]["EtVsdEtV2_highReso"]   ->Fill(eleProbeEta,eleProbeSclEt,l1tPt/eleProbeSclEt);
-            resolutionMap[RunNumber]["EtVsdEtV3_highReso"]   ->Fill(eleProbeEta,eleProbeSclEt,l1tPt/eleProbeSclEt);
-            resolutionMap[RunNumber]["EtVsdEtV4_highReso"]   ->Fill(eleProbeEta,eleProbeSclEt,l1tPt/eleProbeSclEt);
             resolutionMap[RunNumber]["EtaVsdEt_highReso"]  ->Fill(eleProbeEta,abs(eleProbeEta),l1tPt/eleProbeSclEt);
-            
-           if(eleProbeSclEt > 32.0)
-           {
-                    resolutionMap[RunNumber]["EtaVsdEta_GreaterThan32"] ->Fill(eleProbeEta,abs(eleProbeEta),l1tEta -  eleProbeEta);
-                    resolutionMap[RunNumber]["PhiVsdPhi_GreaterThan32"] ->Fill(eleProbeEta,eleProbePhi,l1tPhi-eleProbePhi);
-                    resolutionMap[RunNumber]["EtaVsdEt_GThan32_highReso"]  ->Fill(eleProbeEta,abs(eleProbeEta),l1tPt/eleProbeSclEt);
-           }
-            
-           if(eleProbeSclEt > 20.0)
-           {
-                    resolutionMap[RunNumber]["EtaVsdEta_GreaterThan20"] ->Fill(eleProbeEta,abs(eleProbeEta),l1tEta -  eleProbeEta);
-                    resolutionMap[RunNumber]["PhiVsdPhi_GreaterThan20"] ->Fill(eleProbeEta,eleProbePhi,l1tPhi-eleProbePhi);
-                    resolutionMap[RunNumber]["EtaVsdEt_GThan20_highReso"]  ->Fill(eleProbeEta,abs(eleProbeEta),l1tPt/eleProbeSclEt);
-           }
+            resolutionMap[RunNumber]["EtVsdEt_highReso"]   ->Fill(eleProbeEta,eleProbeSclEt,l1tPt/eleProbeSclEt);
             occupancyMap[RunNumber]["ocuppancyInclusive"]->Fill(l1tEta,l1tPhi);
+            resolutionMap[idx]["PFEtVsSCEtovePFEt"    ] = new resolutionMeasurement("PFEtVsSCEtovePFEt",PtBINS,PtEdges,dPtBINS,dPtEdges);
+
 		 if( ( eleProbeSclEt < 15.0 ) and ( eleProbeSclEt > 5.0 ) )
           {
             resolutionMap[RunNumber]["Pt5To15EtaVsdEt"]  ->Fill(eleProbeEta,abs(eleProbeEta),l1tPt/eleProbeSclEt);
@@ -504,25 +477,14 @@ void produceResolution(string infile,string ofileName, TString treeName,string p
             resolutionMap[RunNumber]["Pt5To15EtaVsdEt_highReso"]  ->Fill(eleProbeEta,abs(eleProbeEta),l1tPt/eleProbeSclEt);
             resolutionMap[RunNumber]["Pt5To15EtVsdEt_highReso"]   ->Fill(eleProbeEta,eleProbeSclEt,l1tPt/eleProbeSclEt);
           } 
-         if( eleProbeSclEt > 20.0 )
+       if( eleProbeSclEt > 20.0 )
           {
             resolutionMap[RunNumber]["PtGThan20EtaVsdEt"]  ->Fill(eleProbeEta,abs(eleProbeEta),l1tPt/eleProbeSclEt);
             resolutionMap[RunNumber]["PtGThan20EtVsdEt"]   ->Fill(eleProbeEta,eleProbeSclEt,l1tPt/eleProbeSclEt);
             resolutionMap[RunNumber]["PtGThan20EtaVsdEt_highReso"]  ->Fill(eleProbeEta,abs(eleProbeEta),l1tPt/eleProbeSclEt);
             resolutionMap[RunNumber]["PtGThan20EtVsdEt_highReso"]   ->Fill(eleProbeEta,eleProbeSclEt,l1tPt/eleProbeSclEt);
           }
-         if( eleProbeSclEt > 32.0 )
-          {
-            resolutionMap[RunNumber]["PtGThan32EtaVsdEt"]  ->Fill(eleProbeEta,abs(eleProbeEta),l1tPt/eleProbeSclEt);
-            resolutionMap[RunNumber]["PtGThan32EtVsdEt"]   ->Fill(eleProbeEta,eleProbeSclEt,l1tPt/eleProbeSclEt);
-            resolutionMap[RunNumber]["PtGThan32EtaVsdEt_highReso"]  ->Fill(eleProbeEta,abs(eleProbeEta),l1tPt/eleProbeSclEt);
-            resolutionMap[RunNumber]["PtGThan32EtVsdEt_highReso"]   ->Fill(eleProbeEta,eleProbeSclEt,l1tPt/eleProbeSclEt);
-          }
-          if  (true)
-          {
-
-          }
-          else if( eleProbeSclEt < 20.0 )
+          if( eleProbeSclEt < 20.0 )
           {
             occupancyMap[RunNumber]["ocuppancy0To20"]->Fill(l1tEta,l1tPhi);
             resolutionMap[RunNumber]["Pt0To20EtaVsdEt"]  ->Fill(eleProbeEta,abs(eleProbeEta),l1tPt/eleProbeSclEt);
@@ -546,7 +508,7 @@ void produceResolution(string infile,string ofileName, TString treeName,string p
             resolutionMap[RunNumber]["Pt40To60EtaVsdEt_highReso"]  ->Fill(eleProbeEta,abs(eleProbeEta),l1tPt/eleProbeSclEt);
             resolutionMap[RunNumber]["Pt40To60EtVsdEt_highReso"]   ->Fill(eleProbeEta,eleProbeSclEt,l1tPt/eleProbeSclEt);
           }
-          else if( eleProbeSclEt < 80.0 )
+          if( eleProbeSclEt < 80.0 )
           {
             occupancyMap[RunNumber]["ocuppancy60To80"]->Fill(l1tEta,l1tPhi);
             resolutionMap[RunNumber]["Pt60To80EtaVsdEt"]  ->Fill(eleProbeEta,abs(eleProbeEta),l1tPt/eleProbeSclEt);
@@ -579,6 +541,7 @@ void produceResolution(string infile,string ofileName, TString treeName,string p
             resolutionMap[RunNumber]["Pt200ToXEtVsdEt_highReso"]   ->Fill(eleProbeEta,eleProbeSclEt,l1tPt/eleProbeSclEt);
           }
 			
+
 		}
 
      }
@@ -646,9 +609,8 @@ void produceResolution(string infile,string ofileName, TString treeName,string p
 
 
     }
-    
-    std::cout<<"Processed events  " <<nProcessedEvents<<"\n";;
     std::cout<<"Averate PU : " <<avgPU/total<<"\n";;
+    
 
 
     ofile->Purge();
@@ -690,3 +652,4 @@ int  main(int argc , char **argv )
                      );
 }
 
+//infile=/grid_mnt/t3storage3/athachay/l1egamma/data/run3MC/TagAndProbe_ReEmul_122Xsample_CaloParams_2022_v0_2_withPFA1p_recaliberatedZDauGenEt_v0_p1.root

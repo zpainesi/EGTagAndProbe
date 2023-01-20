@@ -95,10 +95,8 @@ void tokenize(const std::string& str, std::vector<std::string>& tokens, const st
 void produceTurnOns(string infile,string ofileName,TString treeName,string prefix,bool doEmulationBranches, bool doAllRuns,std::vector<Int_t> RunNumbers,Long64_t maxEvents,Int_t reportEvery)
 {
 
-	//const Int_t XBINS = 38; 
-	//Double_t xEdges[XBINS + 1] = {1., 3., 5., 7., 9.,  10., 12., 15., 18., 20., 22., 24., 26., 28., 29., 30., 31., 32., 33., 34., 35., 36., 37., 38., 39., 40., 41., 42., 43., 45., 50., 60., 70., 100., 200., 300., 400., 600., 1000.};
-	const Int_t XBINS = 37; 
-	Double_t xEdges[XBINS + 1] = {1., 3., 5., 7., 9.,  10., 12., 15., 18., 20., 22., 24., 26., 28., 29., 30., 31., 32., 33., 34., 35., 36., 37., 38., 39., 40., 41., 42., 43., 45., 50., 60., 70., 100., 200., 300., 400.,  1000.};
+	const Int_t XBINS = 38; 
+	Double_t xEdges[XBINS + 1] = {1., 3., 5., 7., 9.,  10., 12., 15., 18., 20., 22., 24., 26., 28., 29., 30., 31., 32., 33., 34., 35., 36., 37., 38., 39., 40., 41., 42., 43., 45., 50., 60., 70., 100., 200., 300., 400., 600., 1000.};
 	
     const Int_t XBINSfine = 100; 
 	Double_t xEdges_fine[XBINSfine + 1];
@@ -160,15 +158,14 @@ void produceTurnOns(string infile,string ofileName,TString treeName,string prefi
         std::cout<<"setting non emu \n";
     }
     
-    const Int_t ET_MIN(9);
-    const Int_t ET_MAX(40);
+    const Int_t ET_MAX(100);
     std::map<Int_t,TString> triggerPrefix;
     std::map<TString,int> hasL1,hasL1LooseIso,hasL1TightIso;
     std::map<Int_t , std::map<TString,efficiencyMeasurement*> > triggerStore;
 
 
     TString trPrefixA="L1Et",prefixL1;
-    for(Int_t ii=ET_MIN;ii<ET_MAX;ii++)
+    for(Int_t ii=0;ii<ET_MAX;ii++)
     {
            triggerPrefix[ii]=trPrefixA+ii; 
            hasL1[triggerPrefix[ii]]=0;
@@ -193,7 +190,7 @@ void produceTurnOns(string infile,string ofileName,TString treeName,string prefi
         std::cout<<"Making efficiencies for Run Number "<<idx<<"\n"; 
         
         
-        for(Int_t ii=ET_MIN;ii<ET_MAX;ii++)
+        for(Int_t ii=0;ii<ET_MAX;ii++)
         {
 
                triggerPrefix[ii]=trPrefixA+ii; 
@@ -258,14 +255,14 @@ void produceTurnOns(string infile,string ofileName,TString treeName,string prefi
        
        t1->GetEntry(jentry); 
 
-       //if(l1tEmuRawEt < 0.0 ){   k++;   continue ;  }
+       if(l1tEmuRawEt < 0.0 ){   k++;   continue ;  }
+       if(l1tPt < 0.0 ){   continue ;  }
        if(jentry%reportEvery ==0 )
        {
             t_end = std::chrono::high_resolution_clock::now();
              cout<<" Run : "<<RunNumber<<"  Processing Entry "<<jentry<<" / "<<nentries<<"  [ "<<100.0*jentry/nentries<<"  % ]  "
              << " Elapsed time : "<< std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0
              <<"  Estimated time left : "<< std::chrono::duration<double, std::milli>(t_end-t_start).count()*( nentries - jentry)/jentry * 0.001
-             <<"  NP : "<<nEventsProcessed<<" "
              <<endl;
        }
         
@@ -274,21 +271,20 @@ void produceTurnOns(string infile,string ofileName,TString treeName,string prefi
        //{
        // if( std::find(RunNumbers.begin(),RunNumbers.end(),RunNumber)  == RunNumbers.end() )
        //     {
-       //          continue;
+       //         continue;
        //     }
        //}
-       if( RunNumber < 356811) continue; 
-            RunNumber=0;
 
        if(doAllRuns)
        {
+            RunNumber=0;
        }    
 
        nEventsProcessed++;
        if( isProbeLoose==1 && fabs(eleProbeEta) < 2.5  && sqrt(pow(eleProbeEta-eleTagEta,2)+pow(eleProbePhi-eleTagPhi,2))>0.6 ) 
           {
            	
-               for(Int_t ii=ET_MIN; ii< ET_MAX;ii++)
+               for(Int_t ii=0; ii< ET_MAX;ii++)
                {
                    triggerStore[RunNumber][triggerPrefix[ii]+"_default"]->fill(hasL1[triggerPrefix[ii]],eleProbeSclEt);
                    triggerStore[RunNumber][triggerPrefix[ii]+"_looseiso_def"]->fill(hasL1LooseIso[triggerPrefix[ii]+"_looseiso"],eleProbeSclEt);
@@ -358,7 +354,7 @@ void produceTurnOns(string infile,string ofileName,TString treeName,string prefi
         std::cout<<"\n Making the directory : "<<it->first << " | "<<rn<<" rnStr : "<<rnStr<<"\n";
         //ofile-cidls();
         //dir->cd();
-        for(Int_t ii= ET_MIN; ii< ET_MAX;ii++)
+        for(Int_t ii=0; ii< ET_MAX;ii++)
         {
             if(ii%10==0)
                 std::cout<<"Processing "<<ii<<"GeV  \n";
