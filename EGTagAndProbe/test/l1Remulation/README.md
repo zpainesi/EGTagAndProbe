@@ -30,4 +30,4 @@ A template file or the imput json maybe found in the `data` folder
 
 
 ### Step 3 Produce the Condor Jobs
- - Customize the job maked here `misc/makeL1ReEmulJobs.sh`   
+ - Customize the job maker here `misc/makeL1ReEmulJobs.sh`   
