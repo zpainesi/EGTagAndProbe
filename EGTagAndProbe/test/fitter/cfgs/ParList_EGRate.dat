@@ -1,0 +1,10 @@
+NtupleFileName=cfgs/Ntuple_rate.txt
+OutputFileName=HistgramFile_Rate_Run3.root
+EtMaxCutoff=255
+RateHistoNames=SingleEG_rate_inclusive,DoubleEG_rate_inclusive,SingleEG_rate_TightIso,SingleEG_rate_LooseIso,DoubleEG_rate_LooseIso
+Bunches=2448
+LumiScaleFactor=1.0
+treeName=L1UpgradeTree
+treeNamePU=L1EventTree
+DoPVfilter=0
+MaxEvents=-1

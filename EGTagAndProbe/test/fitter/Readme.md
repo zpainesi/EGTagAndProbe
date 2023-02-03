@@ -25,6 +25,16 @@ Running the executable
 ./resolution_productionXXXEt.exe cfgs/customize_MC_hybridMC_newIso_scet.cfg
 ```
 
+#### Rates 
+Making the rate measuring executable 
+```
+make L1EGRatePlotter
+```
+customize the `cfgs/ParList_EGRate.dat` and `cfgs/Ntuple_rate.txt`
+```
+./L1EGRatePlotter.exe cfgs/ParList_EGRate.dat
+```
+
 #### Making plots
 One can use the jupyter-notebooks in `notebooks/` to make the plots
 
