@@ -243,8 +243,15 @@ void produceResolution(string infile,string ofileName, TString treeName,string p
     const Int_t PtBINS = 14; 
 	Double_t PtEdges[PtBINS + 1] = {5., 10., 14., 18., 20., 23., 26., 30., 40., 50., 60., 70., 80., 90., 100.};
     
+    //const Int_t PtBINSV2 = 12; 
+	//Double_t PtEdgesV2[PtBINSV2 + 1] = {5., 10., 14., 18., 26., 30., 40., 50., 60., 70., 80., 90., 100.};
+
+    //const Int_t PtBINSV2 = 13; 
+	//Double_t PtEdgesV2[PtBINSV2 + 1] = {5.0, 10.0, 14.0, 18.0, 22.0, 26.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0, 100.0};
+    
     const Int_t PtBINSV2 = 12; 
-	Double_t PtEdgesV2[PtBINSV2 + 1] = {5., 10., 14., 18., 26., 30., 40., 50., 60., 70., 80., 90., 100.};
+	Double_t PtEdgesV2[PtBINSV2 + 1] = {5.0, 10.0, 15.0, 20.0, 25.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0, 100.0};
+
     const Int_t PtBINSV3 = 100; 
 	Double_t PtEdgesV3[PtBINSV3 + 1] ; for(int i=0;i< PtBINSV3+1 ; i++)  PtEdgesV3[i]=i;
     
