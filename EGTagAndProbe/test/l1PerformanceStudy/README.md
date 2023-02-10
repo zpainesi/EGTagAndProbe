@@ -3,7 +3,7 @@ Ntuple Production :
 cmsDriver command used :
 
 ```
-cmsDriver l1Ntuple -s RAW2DIGI   \
+cmsDriver.py l1Ntuple -s RAW2DIGI   \
         --python_filename=egcheck.py -n 6060   \
 		--no_output   \
 		--era=Run3   \
