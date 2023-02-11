@@ -45,11 +45,16 @@ Use `egcheck_expanded.py`
       ```
       python3  misc/makRunFileMapJson.py
       ```
+    - produce the fill -> File Map json
+      ```
+      python3 misc/makeFillFileMap.py  --fillInuput data.csv --runInuput misc/runFileMapEraG.json
+      ```
 - Step 2 make Histograms
     - Uses : python/L1RecoAnalyzer.py
     - Condor Jobs
     ```sh
-     ./misc/makeRunBasedAnalysis.sh   
+     ./misc/makeRunBasedAnalysis.sh    # For Run Based
+     ./misc/makeFillBasedAnalysis.sh   # For Fill Based
     ```
     - See the results in `results/l1HealthAnalysis/`
 
