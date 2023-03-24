@@ -132,6 +132,7 @@ class Ntuplizer : public edm::EDAnalyzer {
 		float _eleProbePhi;
 		// std::vector<float> _eleProbePhi;
 		float _eleProbeSclEt;
+		float _eleProbeCorrectedSclEt;
 		//std::vector<float> _eleProbeSclEt;
 		int _eleProbeCharge;
 		//std::vector<float> _eleProbeCharge;
@@ -369,6 +370,7 @@ void Ntuplizer::Initialize() {
 	this -> _eleProbePt = -1.;
 	this -> _eleProbeEta = -1.;
 	this -> _eleProbePhi = -1.;
+	this -> _eleProbeCorrectedSclEt = -1.;
 	this -> _eleProbeSclEt = -1.;
 	this -> _eleProbeCharge = 0;
 	this -> _eleTagPt = -1.;
@@ -491,6 +493,7 @@ void Ntuplizer::beginJob()
 	this -> _tree -> Branch("eleProbePt",  &_eleProbePt,  "eleProbePt/F");
 	this -> _tree -> Branch("eleProbeEta", &_eleProbeEta, "eleProbeEta/F");
 	this -> _tree -> Branch("eleProbePhi", &_eleProbePhi, "eleProbePhi/F");
+	this -> _tree -> Branch("eleProbeCorrectedSclEt",  &_eleProbeCharge,  "eleProbeCorrectedSclEt/F");
 	this -> _tree -> Branch("eleProbeSclEt",  &_eleProbeSclEt,  "eleProbeSclEt/F");
 	this -> _tree -> Branch("eleProbeCharge",  &_eleProbeCharge,  "eleProbeCharge/I");
 	this -> _tree -> Branch("eleTagPt",  &_eleTagPt,  "eleTagPt/F");
@@ -925,7 +928,8 @@ void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& eSetup)
 			this -> _eleProbePt = eleProbe->pt();
 			this -> _eleProbeEta = eleProbe->eta();
 			this -> _eleProbePhi = eleProbe->phi();
-			this -> _eleProbeSclEt = (eleProbe->superCluster()->energy()) / cosh(eleProbe->superCluster()->eta()) ;
+			this -> _eleProbeCorrectedSclEt = eleProbe->superCluster()->correctedEnergy() / cosh(eleProbe->superCluster()->eta()) ;
+			this -> _eleProbeSclEt          = eleProbe->superCluster()->energy() / cosh(eleProbe->superCluster()->eta()) ;
 			this -> _eleProbeCharge = eleProbe->charge();
 
 
