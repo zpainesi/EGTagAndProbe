@@ -1,7 +1,7 @@
 #ifndef GENMATCHELEFILTER_H
 #define GENMATCHELEFILTER_H
 
-#include "FWCore/Framework/interface/EDFilter.h"
+#include "FWCore/Framework/interface/one/EDFilter.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include <FWCore/Framework/interface/Frameworkfwd.h>
 #include <FWCore/Framework/interface/Event.h>
@@ -19,7 +19,7 @@ using namespace std;
 // using namespace reco;
 
  
-class genMatchEleFilter : public edm::EDFilter {
+class genMatchEleFilter : public edm::one::EDFilter<> {
 
     public:
         genMatchEleFilter(const edm::ParameterSet &);
