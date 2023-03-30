@@ -91,21 +91,22 @@ egmGsfElectronIDSequence = cms.Sequence(egmGsfElectronIDTask)
 
 if not isMC: # will use 80X
     from Configuration.AlCa.autoCond import autoCond
-    process.GlobalTag.globaltag = '124X_dataRun3_Prompt_v10'
+    process.GlobalTag.globaltag = '130X_dataRun3_Prompt_v1'
     process.load('EGTagAndProbe.EGTagAndProbe.tagAndProbe_cff')
     process.source = cms.Source("PoolSource",
         fileNames = cms.untracked.vstring(
-            '/store/data/Run2022F/EGamma/MINIAOD/PromptReco-v1/000/362/154/00000/045d56d5-569d-4380-907a-e251680f98fe.root'
+            '/store/data/Run2022G/EGamma/MINIAOD/PromptReco-v1/000/362/720/00000/0138bf47-5143-472f-8534-217007e8fa63.root',
         ),
 
         secondaryFileNames = cms.untracked.vstring(
-    '/store/data/Run2022F/EGamma/RAW/v1/000/362/154/00000/8e3a25da-1ca5-4bde-b966-f4151557bb21.root',
-    '/store/data/Run2022F/EGamma/RAW/v1/000/362/154/00000/92a10dba-8fa4-4988-a990-a3d0ca149b5f.root',
-    '/store/data/Run2022F/EGamma/RAW/v1/000/362/154/00000/a8597577-282a-4f12-9f3e-9abfe4920a2b.root',
-    '/store/data/Run2022F/EGamma/RAW/v1/000/362/154/00000/a935cb5a-7679-4907-9918-1024c5e4a764.root',
-    '/store/data/Run2022F/EGamma/RAW/v1/000/362/154/00000/b575a335-a0b1-4252-a8f7-26ab5cb86218.root',
-    '/store/data/Run2022F/EGamma/RAW/v1/000/362/154/00000/e75aa9aa-3f82-4f35-af50-697e30da4cfd.root',
-	)
+          '/store/data/Run2022G/EGamma/RAW/v1/000/362/720/00000/1b8cca41-4006-4d9f-b09e-da62de168701.root',
+          '/store/data/Run2022G/EGamma/RAW/v1/000/362/720/00000/cf9e57ac-b7f6-410c-a2a1-b32766436f11.root',
+          '/store/data/Run2022G/EGamma/RAW/v1/000/362/720/00000/650a83d6-eb55-4363-b554-b215bbc7cc5c.root',
+          '/store/data/Run2022G/EGamma/RAW/v1/000/362/720/00000/43be0c19-43f2-4ba4-9298-0c670fa063fd.root',
+          '/store/data/Run2022G/EGamma/RAW/v1/000/362/720/00000/d6e721d8-7d0b-4ad1-8bc9-5faaa249cea1.root',
+          '/store/data/Run2022G/EGamma/RAW/v1/000/362/720/00000/44f9a415-b092-43ab-a763-534abf990915.root'
+
+      )
     )
 else:
     process.GlobalTag.globaltag = '123X_mcRun3_2021_realistic_v13'
@@ -137,7 +138,7 @@ else:
     process = L1TTurnOffUnpackStage2GtGmtAndCalo(process)
 
 
-process.load("L1Trigger.L1TCalorimeter.caloParams_2022_v0_4_cfi")
+process.load("L1Trigger.L1TCalorimeter.caloParams_2022_v0_6_modZS0p5_cfi")
 
 #### handling of cms line options for tier3 submission
 #### the following are dummy defaults, so that one can normally use the config changing file list by hand etc.
@@ -154,7 +155,7 @@ if options.secondaryFilesList:
     process.source.secondaryFileNames = cms.untracked.vstring(listSecondaryFiles)
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(2000)
+    input = cms.untracked.int32(500)
 )
 
 if options.maxEvents >= -1:
@@ -163,6 +164,8 @@ if options.skipEvents >= 0:
     process.source.skipEvents = cms.untracked.uint32(options.skipEvents)
 
 process.options = cms.untracked.PSet(
+    numberOfStreams = cms.untracked.uint32(0),
+    numberOfThreads = cms.untracked.uint32(1),
     wantSummary = cms.untracked.bool(True)
 )
 
