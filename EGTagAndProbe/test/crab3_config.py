@@ -4,7 +4,7 @@ from WMCore.Configuration import Configuration
 config = Configuration()
 
 config.section_("General")
-config.General.requestName = 'TagAndProbe_eraG_recaliberated_EGamma_ZS0p5_v3'
+config.General.requestName = 'TagAndProbe_eraG_recaliberated_EGamma_ZS0p5_v4'
 config.General.workArea = 'crab_projects'
 
 config.section_("JobType")

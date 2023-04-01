@@ -95,17 +95,16 @@ if not isMC: # will use 80X
     process.load('EGTagAndProbe.EGTagAndProbe.tagAndProbe_cff')
     process.source = cms.Source("PoolSource",
         fileNames = cms.untracked.vstring(
-            '/store/data/Run2022G/EGamma/MINIAOD/PromptReco-v1/000/362/720/00000/0138bf47-5143-472f-8534-217007e8fa63.root',
+        '/store/data/Run2022G/EGamma/MINIAOD/PromptReco-v1/000/362/720/00000/0138bf47-5143-472f-8534-217007e8fa63.root'
         ),
 
         secondaryFileNames = cms.untracked.vstring(
-          '/store/data/Run2022G/EGamma/RAW/v1/000/362/720/00000/1b8cca41-4006-4d9f-b09e-da62de168701.root',
-          '/store/data/Run2022G/EGamma/RAW/v1/000/362/720/00000/cf9e57ac-b7f6-410c-a2a1-b32766436f11.root',
-          '/store/data/Run2022G/EGamma/RAW/v1/000/362/720/00000/650a83d6-eb55-4363-b554-b215bbc7cc5c.root',
-          '/store/data/Run2022G/EGamma/RAW/v1/000/362/720/00000/43be0c19-43f2-4ba4-9298-0c670fa063fd.root',
-          '/store/data/Run2022G/EGamma/RAW/v1/000/362/720/00000/d6e721d8-7d0b-4ad1-8bc9-5faaa249cea1.root',
-          '/store/data/Run2022G/EGamma/RAW/v1/000/362/720/00000/44f9a415-b092-43ab-a763-534abf990915.root'
-
+            '/store/data/Run2022G/EGamma/RAW/v1/000/362/720/00000/1b8cca41-4006-4d9f-b09e-da62de168701.root',
+            '/store/data/Run2022G/EGamma/RAW/v1/000/362/720/00000/cf9e57ac-b7f6-410c-a2a1-b32766436f11.root',
+            '/store/data/Run2022G/EGamma/RAW/v1/000/362/720/00000/650a83d6-eb55-4363-b554-b215bbc7cc5c.root',
+            '/store/data/Run2022G/EGamma/RAW/v1/000/362/720/00000/43be0c19-43f2-4ba4-9298-0c670fa063fd.root',
+            '/store/data/Run2022G/EGamma/RAW/v1/000/362/720/00000/d6e721d8-7d0b-4ad1-8bc9-5faaa249cea1.root',
+            '/store/data/Run2022G/EGamma/RAW/v1/000/362/720/00000/44f9a415-b092-43ab-a763-534abf990915.root'
       )
     )
 else:
@@ -164,8 +163,6 @@ if options.skipEvents >= 0:
     process.source.skipEvents = cms.untracked.uint32(options.skipEvents)
 
 process.options = cms.untracked.PSet(
-    numberOfStreams = cms.untracked.uint32(0),
-    numberOfThreads = cms.untracked.uint32(1),
     wantSummary = cms.untracked.bool(True)
 )
 
