@@ -1,10 +1,17 @@
 import json
+import argparse 
+parser= argparse.ArgumentParser()
+parser.add_argument('--runInput',help='Input file with comma separated "file,run1,run2.."')
+parser.add_argument('--output' ,help='Json Input file with run file map')
 
-f=open('allRunNumbers','r')
+args=parser.parse_args()
+
+f=open(args.runInput,'r')
 txt=f.readlines()
 f.close()
 
 runFnameMap={}
+
 for l in txt:
     items=l[:-2].split(',')
     runs=items[1:]
@@ -17,6 +24,6 @@ for l in txt:
 print("Number of files : " ,len(txt))
 print("Number of runs : "  ,len(runFnameMap))
 
-f=open('misc/runFileMap.json','w')
+f=open(args.output,'w')
 json.dump(runFnameMap,f,indent=4)
 f.close()
