@@ -80,12 +80,12 @@ egmGsfElectronIDSequence = cms.Sequence(egmGsfElectronIDTask)
 
 if not isMC: # will use 80X
     from Configuration.AlCa.autoCond import autoCond
-    process.GlobalTag.globaltag = '130X_dataRun3_Prompt_v2'
+    process.GlobalTag.globaltag = '130X_dataRun3_Prompt_v3'
     process.load('EGTagAndProbe.EGTagAndProbe.tagAndProbe_cff')
     process.source = cms.Source("PoolSource",
         fileNames = cms.untracked.vstring(
 	  '/store/data/Run2023B/EGamma0/MINIAOD/PromptReco-v1/000/366/450/00000/98c61bed-3d83-4477-81f3-38ef60a12bcf.root'
-        ),
+     ),
     )
 
 else:
@@ -118,6 +118,8 @@ process.maxEvents = cms.untracked.PSet(
 
 if options.maxEvents >= -1:
     process.maxEvents.input = cms.untracked.int32(options.maxEvents)
+
+process.maxEvents.input = -1
 #if options.skipEvents >= 0:
 #    process.source.skipEvents = cms.untracked.uint32(options.skipEvents)
 
