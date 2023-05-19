@@ -106,6 +106,8 @@ th1Store["ECALTPEnergy"]      = ROOT.TH1F("ECALTPEnergy","",80,-0.25,39.75)
 th1Store["HCALTPEnergy"]      = ROOT.TH1F("HCALTPEnergy","",80,-0.25,39.75)
 
 th1Store["isoEtPU45To50"]      = ROOT.TH1F("isoEtPU45To50","",50,0.0,50.0)
+th1Store["isoEtPU55To70"]      = ROOT.TH1F("isoEtPU55To70","",50,0.0,50.0)
+th1Store["isoEtPU50To60"]      = ROOT.TH1F("isoEtPU50To60","",50,0.0,50.0)
 th1Store["isoEt"]      = ROOT.TH1F("isoEt","",50,0.0,50.0)
 
 th1Store["nVtxVsNTT"]        = ROOT.TH2F("nVtxVsNTT","",80,-0.5,79.5,220,-0.5,219.5)
@@ -212,6 +214,12 @@ for fname in allFnames:
             if eTree.Vertex.nVtx >=45  and eTree.Vertex.nVtx <=50: 
                 th1Store["isoEtPU45To50"].Fill( eTree.L1Upgrade.egIsoEt[a] )                
                 th1Store["isoEtPU45To50"].Fill( eTree.L1Upgrade.egIsoEt[b] )                
+            if eTree.Vertex.nVtx >=50  and eTree.Vertex.nVtx <=60: 
+                th1Store["isoEtPU50To60"].Fill( eTree.L1Upgrade.egIsoEt[a] )                
+                th1Store["isoEtPU50To60"].Fill( eTree.L1Upgrade.egIsoEt[b] )                
+            if eTree.Vertex.nVtx >=55  and eTree.Vertex.nVtx <=70: 
+                th1Store["isoEtPU55To70"].Fill( eTree.L1Upgrade.egIsoEt[a] )                
+                th1Store["isoEtPU55To70"].Fill( eTree.L1Upgrade.egIsoEt[b] )                
  
         if eTree.Vertex.nVtx < minPU:
             continue

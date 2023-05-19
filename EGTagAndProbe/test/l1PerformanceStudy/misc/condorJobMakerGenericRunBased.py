@@ -35,7 +35,7 @@ tag=""
 parser = argparse.ArgumentParser()
 parser.add_argument("--exe", help="Executable")
 parser.add_argument("--runFileMap", help="{ run:[ Files] } Map ")
-parser.add_argument("--runs", help="runs To Process")
+parser.add_argument("--runs", help="runs To Process",default="*")
 parser.add_argument("--runScript", help="template runscript")
 parser.add_argument("--cfg", help="Configuration template file")
 parser.add_argument("--dest", help="destination",default='./')
@@ -84,6 +84,8 @@ print()
 
 FileMap=open(FileSource,'r')
 runFileMap=json.load(FileMap)
+if '*' in runs:
+    runs=list(runFileMap.keys())
 FileMap.close()
 print("Number avilable runs = ",len(runFileMap))
 

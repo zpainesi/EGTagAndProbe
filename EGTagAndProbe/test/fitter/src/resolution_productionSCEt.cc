@@ -35,6 +35,18 @@ TString getFloatAsTstring(Float_t val,Int_t nDes=2)
     return TString(mystring.c_str());
 
 }
+
+double deltaPhi( double dphi) 
+{
+    if ( dphi > M_PI ) {
+         dphi -= 2.0*M_PI;
+      } 
+   else if ( dphi <= -M_PI ) {
+         dphi += 2.0*M_PI;
+      }
+
+    return dphi;
+}
 void resolution_production(int mode=0)
 {
 /*
@@ -276,9 +288,9 @@ void produceResolution(string infile,string ofileName, TString treeName,string p
     const Int_t PhiBINS = 68; 
 	Double_t PhiEdges[PhiBINS + 1] ;
     for(int i=0;i<=PhiBINS;i++) PhiEdges[i] = -3.4 + 0.1*i ;
-    const Int_t dPhiBINS = 200; 
+    const Int_t dPhiBINS = 150; 
 	Double_t dPhiEdges[dPhiBINS + 1];
-    for(int i=0;i<=dPhiBINS;i++) dPhiEdges[i] = -1.005 + 0.01*i ;
+    for(int i=0;i<=dPhiBINS;i++) dPhiEdges[i] = -1.005 + 0.01*4/3.0*i ;
     
     auto mass= new TH1F("mass","mass",200.0,0.5,199.5);
     auto pT  = new TH1F("pT","pT",200.0,0.5,199.5);
@@ -481,7 +493,7 @@ void produceResolution(string infile,string ofileName, TString treeName,string p
             resolutionMap[RunNumber]["PFEtVsSCEtovePFEt"  ]->Fill(  eleProbeEta,eleProbePt,eleProbeSclEt/eleProbePt  );
 
             resolutionMap[RunNumber]["EtaVsdEta"] ->Fill(eleProbeEta,abs(eleProbeEta),l1tEta -  eleProbeEta);
-            resolutionMap[RunNumber]["PhiVsdPhi"] ->Fill(eleProbeEta,eleProbePhi,l1tPhi-eleProbePhi);
+            resolutionMap[RunNumber]["PhiVsdPhi"] ->Fill(eleProbeEta,eleProbePhi,deltaPhi(l1tPhi-eleProbePhi));
             resolutionMap[RunNumber]["EtaVsdEt"]  ->Fill(eleProbeEta,abs(eleProbeEta),l1tPt/eleProbeSclEt);
             resolutionMap[RunNumber]["EtVsdEt"]   ->Fill(eleProbeEta,eleProbeSclEt,l1tPt/eleProbeSclEt);
             resolutionMap[RunNumber]["EtVsdEt_highReso"]   ->Fill(eleProbeEta,eleProbeSclEt,l1tPt/eleProbeSclEt);
@@ -493,14 +505,14 @@ void produceResolution(string infile,string ofileName, TString treeName,string p
            if(eleProbeSclEt > 32.0)
            {
                     resolutionMap[RunNumber]["EtaVsdEta_GreaterThan32"] ->Fill(eleProbeEta,abs(eleProbeEta),l1tEta -  eleProbeEta);
-                    resolutionMap[RunNumber]["PhiVsdPhi_GreaterThan32"] ->Fill(eleProbeEta,eleProbePhi,l1tPhi-eleProbePhi);
+                    resolutionMap[RunNumber]["PhiVsdPhi_GreaterThan32"] ->Fill(eleProbeEta,eleProbePhi,deltaPhi(l1tPhi-eleProbePhi) );
                     resolutionMap[RunNumber]["EtaVsdEt_GThan32_highReso"]  ->Fill(eleProbeEta,abs(eleProbeEta),l1tPt/eleProbeSclEt);
            }
             
            if(eleProbeSclEt > 20.0)
            {
                     resolutionMap[RunNumber]["EtaVsdEta_GreaterThan20"] ->Fill(eleProbeEta,abs(eleProbeEta),l1tEta -  eleProbeEta);
-                    resolutionMap[RunNumber]["PhiVsdPhi_GreaterThan20"] ->Fill(eleProbeEta,eleProbePhi,l1tPhi-eleProbePhi);
+                    resolutionMap[RunNumber]["PhiVsdPhi_GreaterThan20"] ->Fill(eleProbeEta,eleProbePhi,deltaPhi(l1tPhi-eleProbePhi) );
                     resolutionMap[RunNumber]["EtaVsdEt_GThan20_highReso"]  ->Fill(eleProbeEta,abs(eleProbeEta),l1tPt/eleProbeSclEt);
            }
             occupancyMap[RunNumber]["ocuppancyInclusive"]->Fill(l1tEta,l1tPhi);
