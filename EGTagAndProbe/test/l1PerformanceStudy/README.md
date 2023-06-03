@@ -52,6 +52,8 @@ Use `egcheck_expanded.py`
       ```
 - Step 2 make Histograms
     - Uses : python/L1RecoAnalyzer.py
+    - set the proper `certification json` in the template configuration [ if no need for imposing cerfication , remove the specific line from the template json]
+        - misc/cfg/l1PerformanceV1.cfg
     - Condor Jobs
     ```sh
      ./misc/makeRunBasedAnalysis.sh    # For Run Based
