@@ -1,8 +1,8 @@
 import json
 import argparse 
 parser= argparse.ArgumentParser()
-parser.add_argument('--runInput',help='Input file with comma separated "file,run1,run2.."')
-parser.add_argument('--output' ,help='Json Input file with run file map')
+parser.add_argument('-i','--runInput',help='Input file with comma separated "file,run1,run2.."')
+parser.add_argument('-o','--output' ,help='Json Input file with run file map')
 
 args=parser.parse_args()
 

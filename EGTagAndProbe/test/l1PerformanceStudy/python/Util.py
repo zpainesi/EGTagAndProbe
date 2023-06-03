@@ -2,6 +2,41 @@ import os, sys
 import ROOT
 import numpy as np
 
+class unpackedTAndPTree():
+    
+    def __init__(self,TandPTree=None):
+        self.TandPTree = TandPTree
+        self.initialized = False
+    
+    def setTree(tree=None):
+        self.TandPTree = tree
+
+    def initializeTree(self):
+        print("Initializing")
+        if not self.TandPTree:
+            print("Please Initialize the tree first !")
+            exit(1)
+        self.TandPTree.BuildIndex('EventNumber')
+        self.initialized=True
+
+    def getEventIdx(self,EventNumber):
+        print(f"{EventNumber=}")
+        if not self.TandPTree:
+            print("Please Initialize the tree first !")
+            exit(1)
+        if not self.initialized:
+            self.initializeTree()
+        print(EventNumber)
+        print(int(EventNumber))
+        return int(self.TandPTree.GetEntryNumberWithBestIndex(EventNumber))
+
+def isGoodRunLumi(data,run,lumi):
+    run=str(run)
+    if run in data:
+        for lumiRange in data[run]:
+            if lumi <= lumiRange[1] and lumi>=lumiRange[0]:
+                return True
+    return False
 
 def saveTheDictionary(aCollection,fname=None,folder=None,fileExists=False):
     outfile=folder
