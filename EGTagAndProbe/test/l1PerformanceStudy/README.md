@@ -67,8 +67,9 @@ Use `egcheck_expanded.py`
 
 
 ### Producing TagAndProbe Ntuples
-`python/L1TAndPProducer.py` merges the objects from TagAndProbe Ntuple and l1Ntuples from Raw-Reco re-emulated jobs.  It can take in a `certification json` as well. Note :
-    - The `certification json` should be hardcoded in the templte json being used
-    - Path to the `TagAndProbe Unpacked` ntuples are also hardcoded in the template config.
-The template config being used is : `misc/cfg/l1TagAndP.cfg`
-The jobs can be parallalized in condor. Execute the `misc/makeRunBasedTandPMaker.sh` after customization to make the condor jobs. This step uses the run vs file map produced for the previos workflow
+ `python/L1TAndPProducer.py` merges the objects from TagAndProbe Ntuple and l1Ntuples from Raw-Reco re-emulated jobs.  It can take in a `certification json` as well. Note :
+   - The `certification json` should be hardcoded in the templte json being used
+   - Path to the `TagAndProbe Unpacked` ntuples are also hardcoded in the template config.
+ The template config being used is : `misc/cfg/l1TagAndP.cfg`
+ 
+ The jobs can be parallalized in condor. Execute the `misc/makeRunBasedTandPMaker.sh` after customization to make the condor jobs. This step uses the run vs file map produced for the previos workflow
