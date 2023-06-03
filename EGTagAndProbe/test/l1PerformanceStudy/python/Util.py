@@ -20,15 +20,13 @@ class unpackedTAndPTree():
         self.initialized=True
 
     def getEventIdx(self,EventNumber):
-        print(f"{EventNumber=}")
         if not self.TandPTree:
             print("Please Initialize the tree first !")
             exit(1)
         if not self.initialized:
             self.initializeTree()
-        print(EventNumber)
-        print(int(EventNumber))
-        return int(self.TandPTree.GetEntryNumberWithBestIndex(EventNumber))
+        
+        return self.TandPTree.GetEntryNumberWithIndex(EventNumber)
 
 def isGoodRunLumi(data,run,lumi):
     run=str(run)
