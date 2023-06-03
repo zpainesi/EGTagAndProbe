@@ -1,9 +1,12 @@
 import FWCore.ParameterSet.VarParsing as VarParsing
 import FWCore.PythonUtilities.LumiList as LumiList
 import FWCore.ParameterSet.Config as cms
-process = cms.Process("TagAndProbe")
+from Configuration.StandardSequences.Eras import eras
+from Configuration.Eras.Era_Run3_cff import Run3
 
-isMC = True
+process = cms.Process("TagAndProbe",eras.Run3)
+
+isMC = False
 isMINIAOD = True
 
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
@@ -77,11 +80,11 @@ egmGsfElectronIDSequence = cms.Sequence(egmGsfElectronIDTask)
 
 if not isMC: # will use 80X
     from Configuration.AlCa.autoCond import autoCond
-    process.GlobalTag.globaltag = '106X_dataRun2_v25'
+    process.GlobalTag.globaltag = '130X_dataRun3_Prompt_v2'
     process.load('EGTagAndProbe.EGTagAndProbe.tagAndProbe_cff')
     process.source = cms.Source("PoolSource",
         fileNames = cms.untracked.vstring(
-	  '/store/mc/Run3Winter21DRMiniAOD/DYToLL_M-50_TuneCP5_14TeV-pythia8/MINIAODSIM/FlatPU30to80FEVT_112X_mcRun3_2021_realistic_v16-v2/120000/08ea458b-8a11-4822-b49c-cee9b4a85630.root'
+	  '/store/data/Run2023B/EGamma0/MINIAOD/PromptReco-v1/000/366/450/00000/98c61bed-3d83-4477-81f3-38ef60a12bcf.root'
         ),
     )
 
