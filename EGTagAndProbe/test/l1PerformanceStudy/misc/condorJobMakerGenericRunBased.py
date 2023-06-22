@@ -40,6 +40,7 @@ parser.add_argument("--runScript", help="template runscript")
 parser.add_argument("--cfg", help="Configuration template file")
 parser.add_argument("--dest", help="destination",default='./')
 parser.add_argument("--jn", help="Max number of Jobs",default='10')
+parser.add_argument("--rn", help="File per Job",default=1)
 parser.add_argument("--fn", help="File per Job",default=1)
 parser.add_argument("--maxEvt", help="Mac Events per Job , -1 for all",default=100)
 parser.add_argument("--tag", help="Job Tag",default="")
@@ -54,7 +55,8 @@ runScriptTemplate=args.runScript
 cfgScriptTemplate=args.cfg
 destination=args.dest
 NJOBS=int(args.jn)
-RUNS_PER_JOB=int(args.fn)
+RUNS_PER_JOB=int(args.rn)
+FILES_PER_JOB=int(args.fn)
 NEVENTS_PER_JOB=int(args.maxEvt)
 tag=args.tag
 maxMeterialize=int(args.maxMeterialize)
@@ -126,61 +128,76 @@ condorScript.write(condorScriptString)
 n=int(len(runs)/RUNS_PER_JOB) + 1
 if n < NJOBS:
     NJOBS=n
-print("Making ",NJOBS," Jobs ")
+print("Making Run ",NJOBS," Jobs ")
 
 njobs=0
 for ii in range(NJOBS):
     i=ii+ZERO_OFFSET
     
-    dirName= pwd+'/'+head+'/Job_'+str(i)
+    dirNameM= pwd+'/'+head+'/Job_'+str(i)
     
     if(ii%10==0) : print("\nJob Made : ",end = " " )
     print(ii,end =" ")
-
-    if os.path.exists(dirName):
-        k=True
-    else:
-        os.system('mkdir '+dirName)
     
-    cfgFileName='customize_'+str(i)+'.cfg'
-    cfgFile=open(dirName+'/'+cfgFileName,'w')
-    tmp=''
     k=0
     rIdx=''
+    fnamesToLoad=[]
     while k <RUNS_PER_JOB:
         if len(runs) < 1 :
             break
         r=runs.pop(0)
         rIdx=r+'_'
         for fname in runFileMap[r]:
-          tmp+=fname+"\n"
+          fnamesToLoad.append(fname)
         k+=1
-    rIdx=rIdx[:-1]
-    if len(rIdx) > 18:
+    rIdxM=rIdx[:-1]
+    if len(rIdx) > 6:
         rIdx=str(i)
-    tmp=configurationTxt.replace("@@FNAMES",tmp[:-1])
-    tmp=tmp.replace("@@TAG",tag)
-    tmp=tmp.replace("@@IDX",str(rIdx))
-    tmp=tmp.replace("@@OFFSET_IDX",str(i*offsetStep))
-    tmp=tmp.replace("@@MAXEVENTS",str(NEVENTS_PER_JOB))
-    cfgFile.write(tmp)
-    cfgFile.close()   
     
-    runScriptName=dirName+'/'+tag+'run'+str(i)+'.sh'
-    if os.path.exists(runScriptName+'.sucess'):
-       os.system('rm '+runScriptName+'.sucess')
-    runScript=open(runScriptName,'w')
-    tmp=runScriptTxt.replace("@@DIRNAME",dirName)
-    tmp=tmp.replace("@@IDX",str(i))
-    tmp=tmp.replace("@@CFGFILENAME",cfgFileName)
-    tmp=tmp.replace("@@RUNSCRIPT",runScriptName)
-    tmp=tmp.replace("@@EXECUTABLE",executable)
-    runScript.write(tmp)
-    runScript.close()
-    os.system('chmod +x '+runScriptName)
-    if maxMeterialize < 0:
-        condorScript.write("queue filename matching ("+runScriptName+")\n")
-    njobs+=1
+    filesLeft = len(fnamesToLoad)> 0
+    nJobInRun=0
+    while filesLeft:
+        nJobInRun+=1
+        tmp=''
+        for j in range(FILES_PER_JOB):
+            fname=fnamesToLoad.pop(0)
+            tmp+=fname+"\n"
+            filesLeft = len(fnamesToLoad) > 0
+            if not filesLeft:
+                break
+        dirName= dirNameM+f"_{nJobInRun}"
+        rIdx=rIdxM+f"_{nJobInRun}"
+        if os.path.exists(dirName):
+            k=True
+        else:
+            os.system('mkdir '+dirName)
+        
+        cfgFileName='customize_'+str(i)+'.cfg'
+        cfgFile=open(dirName+'/'+cfgFileName,'w')
+        
+        tmp=configurationTxt.replace("@@FNAMES",tmp[:-1])
+        tmp=tmp.replace("@@TAG",tag)
+        tmp=tmp.replace("@@IDX",str(rIdx))
+        tmp=tmp.replace("@@OFFSET_IDX",str(i*offsetStep))
+        tmp=tmp.replace("@@MAXEVENTS",str(NEVENTS_PER_JOB))
+        cfgFile.write(tmp)
+        cfgFile.close()   
+        
+        runScriptName=dirName+'/'+tag+'run'+str(i)+f'_{rIdx}'+'.sh'
+        if os.path.exists(runScriptName+'.sucess'):
+           os.system('rm '+runScriptName+'.sucess')
+        runScript=open(runScriptName,'w')
+        tmp=runScriptTxt.replace("@@DIRNAME",dirName)
+        tmp=tmp.replace("@@IDX",str(i))
+        tmp=tmp.replace("@@CFGFILENAME",cfgFileName)
+        tmp=tmp.replace("@@RUNSCRIPT",runScriptName)
+        tmp=tmp.replace("@@EXECUTABLE",executable)
+        runScript.write(tmp)
+        runScript.close()
+        os.system('chmod +x '+runScriptName)
+        if maxMeterialize < 0:
+            condorScript.write("queue filename matching ("+runScriptName+")\n")
+        njobs+=1
 if maxMeterialize >=0:
     condorScript.write("queue filename matching ("+head+"/*/*.sh)\n")
     

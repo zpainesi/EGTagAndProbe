@@ -197,14 +197,15 @@ for fname in allFnames:
         eTree.GetEntry(eid)
         eEmuTree.GetEntry(eid)
 
-        print(  "eid : ",eid," / ",maxEvents_,"/ ",maxEvents," | ", 
-                " event : "  ,eTree.Event.run ,
-                " nHCALTP : ",eTree.CaloTP.nHCALTP,
-                " C nTT " , eEmuTree.L1CaloTower.nTower,
-                " isGoodRunLumi : ", isGoodRunLumi( certificationData , eTree.Event.run , eTree.Event.lumi)
-             )
-        if not isGoodRunLumi( certificationData , eTree.Event.run , eTree.Event.lumi):
-            continue
+        #print(  "eid : ",eid," / ",maxEvents_,"/ ",maxEvents," | ", 
+        #        " event : "  ,eTree.Event.run ,
+        #        " nHCALTP : ",eTree.CaloTP.nHCALTP,
+        #        " C nTT " , eEmuTree.L1CaloTower.nTower,
+        #        " isGoodRunLumi : ", isGoodRunLumi( certificationData , eTree.Event.run , eTree.Event.lumi)
+        #     )
+        if certificationData:
+            if not isGoodRunLumi( certificationData , eTree.Event.run , eTree.Event.lumi):
+                continue
 
         if(eid%500==0):
             print("   Doing i = ",eid," / ",maxEvents_,

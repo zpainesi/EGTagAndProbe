@@ -58,12 +58,13 @@ if(maxEvtsSuperSeeder > 0):
 print("maxevents : ",maxEvents)
 
 branchesToFill=[
-        'Mee',
+        'Mee','Nvtx',
         'eleTagPt','eleTagEta','eleTagPhi','eleTagCharge',
         'eleProbePt','eleProbeEta','eleProbePhi','eleProbeCharge',
         'eleProbeSclEt','isProbeLoose','isProbeMedium','isProbeTight',
         'l1tPt','l1tEta','l1tPhi','l1tQual','l1tIso',
-        'l1tEmuPt','l1tEmuEta','l1tEmuPhi','l1tEmuQual','l1tEmuIso'
+        'l1tEmuPt','l1tEmuEta','l1tEmuPhi','l1tEmuQual','l1tEmuIso',
+        'l1tEmuIsoEt','l1tEmuTowerIEta','l1tEmuTowerIPhi','l1tEmuRawEt','l1tEmuNTT'
 ]
 
 branches=np.unique(branchesToFill)
@@ -172,16 +173,16 @@ def getTagAndProbe(unpackedTree,evtNumber):
             'l1tQual' : unpackedTree.TandPTree.l1tQual,
             'l1tIso' : unpackedTree.TandPTree.l1tIso,
         
-            'l1tEmuPt'  :  -1.0 ,
-            'l1tEmuEta' :  666.0 ,
-            'l1tEmuPhi' :  666.0 ,
-            'l1tEmuQual':  -1.0 ,
-            'l1tEmuIso' :  8.0 ,
-            'l1tEmuIsoEt' :  -1.0 ,
-            'l1tEmuTowerIEta' :  -666.0 ,
-            'l1tEmuTowerIPhi' :  -666.0 ,
-            'l1tEmuRawEt' :  -1.0 ,
-            'l1tEmuNTT' :  -1.0 ,
+            'l1tEmuPt'         :  -1.0 ,
+            'l1tEmuEta'        :  666.0 ,
+            'l1tEmuPhi'        :  666.0 ,
+            'l1tEmuQual'       :  -1.0 ,
+            'l1tEmuIso'        :  8.0 ,
+            'l1tEmuIsoEt'      :  -1.0 ,
+            'l1tEmuTowerIEta'  :  -666.0 ,
+            'l1tEmuTowerIPhi'  :  -666.0 ,
+            'l1tEmuRawEt'      :  -1.0 ,
+            'l1tEmuNTT'        :  -1.0 ,
 
         }
         
@@ -192,6 +193,17 @@ def getTagAndProbe(unpackedTree,evtNumber):
 def updateL1EmuBranches(emuTree,tAndP):
     idx=-1
     dr=0.3
+    tAndP['l1tEmuPt']        =  -1.0 ,
+    tAndP['l1tEmuEta']       =  666.0 ,
+    tAndP['l1tEmuPhi']       =  666.0 ,
+    tAndP['l1tEmuQual']      =  -1.0 ,
+    tAndP['l1tEmuIso']       =  8.0 ,
+    tAndP['l1tEmuIsoEt']     =  -1.0 ,
+    tAndP['l1tEmuRawEt']     =  -666.0 ,
+    tAndP['l1tEmuTowerIEta'] =  -666.0 ,
+    tAndP['l1tEmuTowerIPhi'] =  -1.0 ,
+    tAndP['l1tEmuNTT']       =  -1.0 ,
+
     for i in range( eTree.L1Upgrade.nEGs):
         if eTree.L1Upgrade.egBx[i]!=0:
             continue
@@ -207,10 +219,10 @@ def updateL1EmuBranches(emuTree,tAndP):
         tAndP['l1tEmuQual'] = eTree.L1Upgrade.egHwQual[idx]
         tAndP['l1tEmuIso'] = eTree.L1Upgrade.egIso[idx]
         tAndP['l1tEmuIsoEt'] = eTree.L1Upgrade.egIsoEt[idx]
-        tAndP['l1tEmuRawEt'] = eTree.L1Upgrade.egRawEt[idx]
-        tAndP['l1tEmuTowerIEta'] = eTree.L1Upgrade.egTowerIEta[idx]
-        tAndP['l1tEmuTowerIPhi'] = eTree.L1Upgrade.egTowerIPhi[idx]
-        tAndP['l1tEmuNTT'] = eTree.L1Upgrade.egNTT[idx]
+        tAndP['l1tEmuRawEt'] = float(eTree.L1Upgrade.egRawEt[idx])
+        tAndP['l1tEmuTowerIEta'] = float(eTree.L1Upgrade.egTowerIEta[idx])
+        tAndP['l1tEmuTowerIPhi'] = float(eTree.L1Upgrade.egTowerIPhi[idx])
+        tAndP['l1tEmuNTT'] = float(eTree.L1Upgrade.egNTT[idx])
     return tAndP
 
 
@@ -254,7 +266,7 @@ for fname in allFnames:
         eEmuTree.GetEntry(eid)
         nProcessed+=1      
         if(eid%500==0):
-            print("   Doing i = ",eid," / ",maxEvents_      )
+            print(f"   Doing i = {nProcessed} [ {eid}] / ",maxEvents_      )
             print("\t Processed  ",nProcessed, " , eventsFound : ",eventsFound," , eventsLost : ",eventsLost , " total number of TAndP : ",nTandPFound)
         isClosed,rslt=doClosure(unpackedTree,eTree,eTree.Event.event)
         
@@ -270,6 +282,7 @@ for fname in allFnames:
         tofill['RunNumber']  =eTree.Event.run
         tofill['lumi']       =eTree.Event.lumi
         tofill['EventNumber']=eTree.Event.event
+        tofill['Nvtx']=eTree.Vertex.nVtx
         
         for tAndP in tAndPs['tAndP']:
             nTandPFound+=1
