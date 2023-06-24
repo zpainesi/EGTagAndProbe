@@ -16,16 +16,11 @@ cmsDriver.py l1Ntuple -s RAW2DIGI   \
 		--no_exec
 ```
 ## Fix for missing tau objects in the file
-- The raw configuration fil produced in the previous step does not run out of the box due to some issue with the `offline Tau reco treee` sequence. This part need to be manually commented out for smooth running. See the fix as below.
+- The raw configuration fil produced in the previous step does not run out of the box due to some issue with the `offline Tau reco treee` sequence. This part need to be manually commented out for smooth running. In egcheck.py  ,Add the following line
+```py
+process.L1NtupleAODCalo = cms.Sequence(process.l1EventTree+process.l1RecoTree+process.l1JetRecoTree+process.l1MetFilterRecoTree+process.l1ElectronRecoTree)
 ```
-edmConfigDump egcheck.py egcheck_expanded.py 
-```
-In egcheck_expanded.py  , update as below
-```diff
-- process.L1NtupleAODCalo = cms.Sequence(process.l1EventTree+process.l1RecoTree+process.l1JetRecoTree+process.l1MetFilterRecoTree+process.l1ElectronRecoTree+process.l1TauRecoTree)
-+ process.L1NtupleAODCalo = cms.Sequence(process.l1EventTree+process.l1RecoTree+process.l1JetRecoTree+process.l1MetFilterRecoTree+process.l1ElectronRecoTree)
-```
-Use `egcheck_expanded.py`
+Use `egcheck.py` for crab jobs that make the Ntuples, 
 
 
 ### Analysis scheme
