@@ -10,7 +10,7 @@ import HLTrigger.HLTfilters.hltHighLevel_cfi as hlt
 HLTLISTTAG = cms.VPSet(
     cms.PSet (
         #HLT = cms.string("HLT_Ele27_WPTight_Gsf_v"),
-        HLT = cms.string("HLT_Ele32_WPTight_Gsf_v"),
+        HLT = cms.string("HLT_Ele32_WPTight_Gsf_v*"),
         path1 = cms.vstring ("hltEle32WPTightGsfTrackIsoFilter"), #FIXME: to check
         path2 = cms.vstring (""),
         leg1 = cms.int32(11),
@@ -20,7 +20,7 @@ HLTLISTTAG = cms.VPSet(
 
 HLTLISTPROBE = cms.VPSet(
     cms.PSet (
-        HLT = cms.string("HLT_Ele32_WPTight_Gsf_v"),
+        HLT = cms.string("HLT_Ele32_WPTight_Gsf_v*"),
         path1 = cms.vstring ("hltEle32WPTightGsfTrackIsoFilter"), #FIXME: to check
         path2 = cms.vstring (""),
         leg1 = cms.int32(11),

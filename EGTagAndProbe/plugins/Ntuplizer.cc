@@ -749,10 +749,6 @@ void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& eSetup)
 						obj.unpackPathNames(names);
 
 						 const edm::TriggerNames::Strings& triggerNames = names.triggerNames();
-                         //for( size_t jj=0;jj<triggerNames.size() ; jj++)
-                         //{
-                         //    std::cout<<"\t"<<jj<<"  iEvent.triggerNames(*triggerBits).triggerNames() [jj ] = "<<triggerNames.at(jj)<<"\n";
-                         //}
 
 						//Looking for the path
 						unsigned int x = 0;
@@ -760,24 +756,16 @@ void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& eSetup)
 
 						for (const tParameterSet& parameter : this -> _parametersTag)
 						{
-                            // std::cout<<__LINE__<<" | "<<parameter.hltPathIndex << " [ max size of names  = "<< triggerNames.size()<< " ] \n";
-                            // std::cout<<"\t"<<__LINE__<<" | "<<parameter.hltPathIndex<<" | "<<triggerNames[58] << " [ max size of names  = "<< triggerNames.size()<< " ] "<<parameter.hltPath.data()<<" \n";
 							
-                            //if ((parameter.hltPathIndex >= 0)&&(obj.hasPathName(parameter.hltPath.data(), true, false)))
 							if (obj.hasPathName(parameter.hltPath.data(), true, false))
 							{
 								foundTrigger = true;
-								//Path found, now looking for the label 1, if present in the parameter set
-								//std::cout << "==== FOUND PATH " << triggerNames[parameter.hltPathIndex] << " ====" << std::endl;
-								//Retrieving filter list for the event
 								const std::vector<std::string>& filters = (parameter.hltFilters1);
 								if (this -> hasFilters(obj, filters))
 								{
-									//std::cout << "#### FOUND ELE WITH HLT PATH " << x << " ####" << std::endl;
 									this -> _hltPt = obj.pt();
 									this -> _hltEta = obj.eta();
 									this -> _hltPhi = obj.phi();			    this -> _eleTagTriggerBitSet[x] = true;			    
-									//std::cout << this -> _eleTagTriggerBitSet.to_string() << std::endl;
 								}
 							}
 							x++;
@@ -802,14 +790,12 @@ void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& eSetup)
 						bool foundTrigger = false;
 						for (const tParameterSet& parameter : this -> _parametersProbe)
 						{
-							//if ((parameter.hltPathIndex >= 0)&&(obj.hasPathName(triggerNames[58], true, false)))
                             if (obj.hasPathName(parameter.hltPath.data(), true, false))
 							{
 								foundTrigger = true;			  
 								const std::vector<std::string>& filters = (parameter.hltFilters1);
 								if (this -> hasFilters(obj, filters))
 								{
-									//std::cout << "#### FOUND ELE WITH HLT PATH " << x << " ####" << std::endl;
 									this -> _hltPt = obj.pt();
 									this -> _hltEta = obj.eta();
 									this -> _hltPhi = obj.phi();

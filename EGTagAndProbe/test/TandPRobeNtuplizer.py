@@ -84,7 +84,7 @@ if not isMC: # will use 80X
     process.load('EGTagAndProbe.EGTagAndProbe.tagAndProbe_cff')
     process.source = cms.Source("PoolSource",
         fileNames = cms.untracked.vstring(
-	  '/store/data/Run2023B/EGamma0/MINIAOD/PromptReco-v1/000/366/450/00000/98c61bed-3d83-4477-81f3-38ef60a12bcf.root'
+        '/store/data/Run2023C/EGamma0/MINIAOD/PromptReco-v4/000/368/669/00000/20964dee-ee89-4cc9-affe-cfbe966e3519.root'
         ),
     )
 
