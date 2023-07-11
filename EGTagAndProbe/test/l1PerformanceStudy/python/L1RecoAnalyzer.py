@@ -1,6 +1,7 @@
 from __future__ import print_function
 from collections import OrderedDict
 import ROOT 
+import json
 from Util  import *
 
 import os,sys
@@ -36,8 +37,14 @@ treeName=getValueFromConfigs(cfgTxt,"treeName",default="tagsDumper/trees/Data_13
 emuTreeName=getValueFromConfigs(cfgTxt,"emuTreeName",default="tagsDumper/trees/Data_13TeV_TrippleHTag_0")
 outTreeName=getValueFromConfigs(cfgTxt,"outTreeName",default="Data_13TeV_TrippleHTag_0")
 processID=getValueFromConfigs(cfgTxt,"processID",default="DATA")
+certificationJson=getValueFromConfigs(cfgTxt,"certificationJson",default=None)
 allFriendTrees=getListOfStringsFromConfigs(cfgTxt,"#FTREE_BEG","#FTREE_END")
 minPU=int(getValueFromConfigs(cfgTxt,"MinPU",default="-1"))
+
+certificationData=None
+if certificationJson:
+    with open(certificationJson,'r') as f:
+        certificationData=json.load(f)
 
 print("allFnames   :  ",              allFnames)
 print("foutName   :  ",               foutName)
@@ -189,11 +196,20 @@ for fname in allFnames:
     for eid in range(maxEvents_):
         eTree.GetEntry(eid)
         eEmuTree.GetEntry(eid)
+
+        #print(  "eid : ",eid," / ",maxEvents_,"/ ",maxEvents," | ", 
+        #        " event : "  ,eTree.Event.run ,
+        #        " nHCALTP : ",eTree.CaloTP.nHCALTP,
+        #        " C nTT " , eEmuTree.L1CaloTower.nTower,
+        #        " isGoodRunLumi : ", isGoodRunLumi( certificationData , eTree.Event.run , eTree.Event.lumi)
+        #     )
+        if certificationData:
+            if not isGoodRunLumi( certificationData , eTree.Event.run , eTree.Event.lumi):
+                continue
+
         if(eid%500==0):
             print("   Doing i = ",eid," / ",maxEvents_,
                  )
-      #  print(" event : "  ,eTree.Event.run ,
-      #        " nHCALTP : ",eTree.CaloTP.nHCALTP, "C nTT " , eEmuTree.L1CaloTower.nTower)
         if(eTree.L1Upgrade.nEGs > 0):
            th1Store["nVtxVsNTT"].Fill( eTree.Vertex.nVtx , eTree.L1Upgrade.egNTT[0]  )
 

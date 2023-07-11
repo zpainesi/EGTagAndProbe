@@ -69,7 +69,7 @@ for fname in allFnames:
     allRuns[fname]=set()
     for eid in range(maxEvents_):
         eTree.GetEntry(eid)
-        if(eid%500==0):
+        if(eid%50==0):
             print("   Doing i = ",eid," / ",maxEvents_,
                  )
         allRuns[fname].add(eTree.Event.run)    
@@ -78,9 +78,12 @@ for fname in allFnames:
     simFile.Close()           
     print("Closing file : ",fname)
 
+
 fout=open(foutName , 'w')
 
 for fname in allRuns:
+    if len(allRuns[fname]) < 1:
+        continue
     fout.write(fname+",")
     for r in allRuns[fname]:
         fout.write(str(r)+",")

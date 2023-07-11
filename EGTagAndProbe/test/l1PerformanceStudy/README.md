@@ -16,16 +16,12 @@ cmsDriver.py l1Ntuple -s RAW2DIGI   \
 		--no_exec
 ```
 ## Fix for missing tau objects in the file
-- The raw configuration fil produced in the previous step does not run out of the box due to some issue with the `offline Tau reco treee` sequence. This part need to be manually commented out for smooth running. See the fix as below.
+- The raw configuration fil produced in the previous step does not run out of the box due to some issue with the `offline Tau reco treee` sequence. This part need to be manually commented out for smooth running. In egcheck.py  ,Add the following line
+```py
+process.L1NtupleAODCalo = cms.Sequence(process.l1EventTree+process.l1RecoTree+process.l1JetRecoTree+process.l1MetFilterRecoTree+process.l1ElectronRecoTree)
 ```
-edmConfigDump egcheck.py egcheck_expanded.py 
-```
-In egcheck_expanded.py  , update as below
-```diff
-- process.L1NtupleAODCalo = cms.Sequence(process.l1EventTree+process.l1RecoTree+process.l1JetRecoTree+process.l1MetFilterRecoTree+process.l1ElectronRecoTree+process.l1TauRecoTree)
-+ process.L1NtupleAODCalo = cms.Sequence(process.l1EventTree+process.l1RecoTree+process.l1JetRecoTree+process.l1MetFilterRecoTree+process.l1ElectronRecoTree)
-```
-Use `egcheck_expanded.py`
+Use `egcheck.py` for crab jobs that make the Ntuples, 
+
 
 ### Analysis scheme
 - Setup the list of files to be processed here `fileList/eraXX.fls`
@@ -51,6 +47,8 @@ Use `egcheck_expanded.py`
       ```
 - Step 2 make Histograms
     - Uses : python/L1RecoAnalyzer.py
+    - set the proper `certification json` in the template configuration [ if no need for imposing cerfication , remove the specific line from the template json]
+        - misc/cfg/l1PerformanceV1.cfg
     - Condor Jobs
     ```sh
      ./misc/makeRunBasedAnalysis.sh    # For Run Based
@@ -63,3 +61,10 @@ Use `egcheck_expanded.py`
     
 
 
+### Producing TagAndProbe Ntuples
+ `python/L1TAndPProducer.py` merges the objects from TagAndProbe Ntuple and l1Ntuples from Raw-Reco re-emulated jobs.  It can take in a `certification json` as well. Note :
+   - The `certification json` should be hardcoded in the templte json being used
+   - Path to the `TagAndProbe Unpacked` ntuples are also hardcoded in the template config.
+ The template config being used is : `misc/cfg/l1TagAndP.cfg`
+ 
+ The jobs can be parallalized in condor. Execute the `misc/makeRunBasedTandPMaker.sh` after customization to make the condor jobs. This step uses the run vs file map produced for the previos workflow
