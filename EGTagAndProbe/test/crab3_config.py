@@ -4,7 +4,7 @@ from WMCore.Configuration import Configuration
 config = Configuration()
 
 config.section_("General")
-config.General.requestName = 'TagAndProbe_eraG_recaliberated_EGamma_ZS0p5_v4'
+config.General.requestName = 'TandP_2023D_reEmulated_v0'
 config.General.workArea = 'crab_projects'
 
 config.section_("JobType")
@@ -13,9 +13,9 @@ config.JobType.psetName = 'TAandPReEmulated_run3.py'
 config.JobType.allowUndistributedCMSSW = True
 
 config.section_("Data")
-config.Data.inputDataset = '/EGamma/Run2022G-PromptReco-v1/MINIAOD'
+config.Data.inputDataset = '/EGamma0/Run2023D-PromptReco-v2/MINIAOD'
 ########################################### Parent Dataset #######################################
-config.Data.secondaryInputDataset= '/EGamma/Run2022G-v1/RAW'
+config.Data.secondaryInputDataset= '/EGamma0/Run2023D-v1/RAW'
 ##################################################################################################
 
 config.Data.inputDBS = 'global'
