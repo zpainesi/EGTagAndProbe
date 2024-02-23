@@ -41,15 +41,13 @@ struct dataConfig{
     
     dataConfig(){
         infile ="";
-        ofileName="turnon_test.root";
+        ofileName="turnons.root";
         prefix="";
         treeName="Ntuplizer/TagAndProbe";
         doEmulationBranches=false;
         doAllRuns=false;
         Int_t reportEvery(500);
         Long64_t maxEvents(-1);
-    
-
     }
 };
 
@@ -128,7 +126,13 @@ void produceTurnOns(string infile,string ofileName,TString treeName,string prefi
     TFile *f=new TFile(infile.c_str(),"READ");
     TTree *t1=(TTree*)(f->Get(treeName));
 	
-
+    if(doEmulationBranches)
+    {
+        ofileName= "reEmulated_"+ofileName;
+    }
+    else{
+        ofileName= "unpacked_"+ofileName;
+    }
     auto ofile=new TFile((prefix+ofileName).c_str(),"RECREATE");
     ofile->cd();
 
@@ -449,9 +453,9 @@ void readParameters(const std::string jfile , struct dataConfig & cfg) {
       if(key=="infile"){
         cfg.infile= value;
       }
-      else if (key=="ofileName")	    {
-                cfg.ofileName= value;
-      }
+      //else if (key=="ofileName")	    {
+      //          cfg.ofileName= value;
+      //}
       else if (key=="treeName")	    {
                 cfg.treeName= value;
       }
