@@ -183,6 +183,10 @@ void produceTurnOns(string infile,string ofileName,TString treeName,string prefi
     }
 
     std::cout<<"  ============   Defining the Efficiency for Run Numbers============ \n";
+    if (RunNumbers.empty())
+    {
+        RunNumbers.push_back(0);
+    }
     for( auto idx : RunNumbers) {
         
         if(doAllRuns)
@@ -244,6 +248,11 @@ void produceTurnOns(string infile,string ofileName,TString treeName,string prefi
     for(int i=0;i<XBINS_forPU;i++) xEdges_forPU[i]= -0.5 + i*1.0;
     triggers["L1_32vsPUoffline40GeV"] = new efficiencyMeasurement("L1_32vsPUoffline40GeV",XBINS,xEdges);
     triggers["L1_32vsPUoffline50GeV"] = new efficiencyMeasurement("L1_32vsPUoffline50GeV",XBINS,xEdges);
+    triggers["L1_32vsPUoffline35GeV"] = new efficiencyMeasurement("L1_32vsPUoffline25GeV",XBINS,xEdges);
+    triggers["L1_28TightvsPUoffline32GeV"] = new efficiencyMeasurement("L1_28TightvsPUoffline32GeV",XBINS,xEdges);
+    triggers["L1_28LoosevsPUoffline32GeV"] = new efficiencyMeasurement("L1_28LoosevsPUoffline32GeV",XBINS,xEdges);
+    triggers["L1_15LoosevsPUoffline18GeV"] = new efficiencyMeasurement("L1_15LoosevsPUoffline18GeV",XBINS,xEdges);
+    triggers["L1_10LoosevsPUoffline12GeV"] = new efficiencyMeasurement("L1_10LoosevsPUoffline12GeV",XBINS,xEdges);
     
 
 	Long64_t nentries = t1->GetEntries();
@@ -272,20 +281,16 @@ void produceTurnOns(string infile,string ofileName,TString treeName,string prefi
              <<endl;
        }
         
-       
-       //if(not doAllRuns)
-       //{
-        if( std::find(RunNumbers.begin(),RunNumbers.end(),RunNumber)  == RunNumbers.end() )
-            {
-                 continue;
-            }
-       //}
 
        if(doAllRuns)
        {
             RunNumber=0;
        }    
-
+       else if( std::find(RunNumbers.begin(),RunNumbers.end(),RunNumber)  == RunNumbers.end() )
+       {
+            continue;
+       }
+       
        nEventsProcessed++;
        if( isProbeLoose==1 && fabs(eleProbeEta) < 2.5  && sqrt(pow(eleProbeEta-eleTagEta,2)+pow(eleProbePhi-eleTagPhi,2))>0.6 ) 
           {
@@ -336,6 +341,20 @@ void produceTurnOns(string infile,string ofileName,TString treeName,string prefi
           {
                triggers["L1_32vsPUoffline40GeV"]->fill(hasL1["L1Et32"],Nvtx);
           }
+          if( isProbeLoose==1 && fabs(eleProbeEta) < 2.5 && eleProbeSclEt > 32.0  && sqrt(pow(eleProbeEta-eleTagEta,2)+pow(eleProbePhi-eleTagPhi,2))>0.6 ) 
+          {
+               triggers["L1_28TightvsPUoffline32GeV"]->fill(hasL1LooseIso[triggerPrefix[32]+"_looseiso"],Nvtx);
+               triggers["L1_28LoosevsPUoffline32GeV"]->fill(hasL1LooseIso[triggerPrefix[32]+"_looseiso"],Nvtx);
+          }
+          if( isProbeLoose==1 && fabs(eleProbeEta) < 2.5 && eleProbeSclEt > 18.0  && sqrt(pow(eleProbeEta-eleTagEta,2)+pow(eleProbePhi-eleTagPhi,2))>0.6 ) 
+          {
+               triggers["L1_15LoosevsPUoffline18GeV"]->fill(hasL1LooseIso[triggerPrefix[15]+"_looseiso"],Nvtx);
+          }
+          if( isProbeLoose==1 && fabs(eleProbeEta) < 2.5 && eleProbeSclEt > 12.0  && sqrt(pow(eleProbeEta-eleTagEta,2)+pow(eleProbePhi-eleTagPhi,2))>0.6 ) 
+          {
+               triggers["L1_10LoosevsPUoffline12GeV"]->fill(hasL1LooseIso[triggerPrefix[10]+"_looseiso"],Nvtx);
+          }
+          
 	}
  	
 	f->Close();
