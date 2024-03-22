@@ -12,6 +12,11 @@ make resolution_productionSCEt
 make  turn_on_productionPFEt
 make resolution_productionPFEt
 ```
+How to run :
+```
+./turn_on_productionPFEt.exe cfgs/customize_2023DNewLayer1_reemulated.cfg
+./resolution_productionPFEt.exe cfgs/customize_2023DNewLayer1_reemulated.cfg
+```
 * Turnons/Resolutions wrt. Gen Et // Only for MC
 ```
 make  turn_on_productionGenEt
