@@ -72,15 +72,13 @@ struct dataConfig{
     
     dataConfig(){
         infile ="";
-        ofileName="turnon_test.root";
+        ofileName="resolutions.root";
         treeName="Ntuplizer/TagAndProbe";
         prefix="";
         doEmulationBranches=false;
         doAllRuns=false;
         Int_t reportEvery(500);
         Long64_t maxEvents(-1);
-    
-
     }
 };
 
@@ -121,9 +119,9 @@ void readParameters(const std::string jfile , struct dataConfig & cfg) {
       if(key=="infile"){
         cfg.infile= value;
       }
-      else if (key=="ofileName")	    {
-                cfg.ofileName= value;
-      }
+      //else if (key=="ofileName")	    {
+      //          cfg.ofileName= value;
+      //}
       else if (key=="treeName")	    {
                 cfg.treeName = value;
       }
@@ -214,6 +212,13 @@ void produceResolution(string infile,string ofileName, TString treeName,string p
     
     TFile *f2=new TFile(infile.c_str());
 	TTree *t1=(TTree*)(f2->Get(treeName));
+    if(doEmulation)
+    {
+        ofileName = "reEmulated_"+ofileName;
+    }
+    else{
+        ofileName = "unpacked_"+ofileName;
+    }
     TFile *ofile =new TFile((prefix+ofileName).c_str(),"RECREATE");
 
         float   eleProbePt;
@@ -426,16 +431,16 @@ void produceResolution(string infile,string ofileName, TString treeName,string p
  
        //if(not doAllRuns)
        //{
-           if( std::find(RunNumbers.begin(),RunNumbers.end(),RunNumber)  == RunNumbers.end() )
-           {
-                continue;
-           }
-       //}
-
        if( doAllRuns)
        {
             RunNumber=0;
        }
+       else if( std::find(RunNumbers.begin(),RunNumbers.end(),RunNumber)  == RunNumbers.end() )
+           {
+                continue;
+           }
+       //}
+        
         eA.SetPtEtaPhiM(eleProbePt,eleProbeEta,eleProbePhi,0.5e-3);
         eB.SetPtEtaPhiM(eleTagPt,eleTagEta,eleTagPhi,0.5e-3);
         //std::cout<<"Ea , eb "<<eA.Pt()<<" , "<<eB.Pt()<<" Mass  : "<<(eA+eB).M()<<"\n";

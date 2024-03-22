@@ -91,20 +91,16 @@ egmGsfElectronIDSequence = cms.Sequence(egmGsfElectronIDTask)
 
 if not isMC: # will use 80X
     from Configuration.AlCa.autoCond import autoCond
-    process.GlobalTag.globaltag = '130X_dataRun3_Prompt_v1'
+    process.GlobalTag.globaltag = '130X_dataRun3_Prompt_v4'
     process.load('EGTagAndProbe.EGTagAndProbe.tagAndProbe_cff')
     process.source = cms.Source("PoolSource",
         fileNames = cms.untracked.vstring(
-        '/store/data/Run2022G/EGamma/MINIAOD/PromptReco-v1/000/362/720/00000/0138bf47-5143-472f-8534-217007e8fa63.root'
+        '/store/data/Run2023D/EGamma0/MINIAOD/PromptReco-v1/000/369/873/00000/880638d7-2704-464e-8c3e-462595cc7f66.root'
         ),
-
         secondaryFileNames = cms.untracked.vstring(
-            '/store/data/Run2022G/EGamma/RAW/v1/000/362/720/00000/1b8cca41-4006-4d9f-b09e-da62de168701.root',
-            '/store/data/Run2022G/EGamma/RAW/v1/000/362/720/00000/cf9e57ac-b7f6-410c-a2a1-b32766436f11.root',
-            '/store/data/Run2022G/EGamma/RAW/v1/000/362/720/00000/650a83d6-eb55-4363-b554-b215bbc7cc5c.root',
-            '/store/data/Run2022G/EGamma/RAW/v1/000/362/720/00000/43be0c19-43f2-4ba4-9298-0c670fa063fd.root',
-            '/store/data/Run2022G/EGamma/RAW/v1/000/362/720/00000/d6e721d8-7d0b-4ad1-8bc9-5faaa249cea1.root',
-            '/store/data/Run2022G/EGamma/RAW/v1/000/362/720/00000/44f9a415-b092-43ab-a763-534abf990915.root'
+        "/store/data/Run2023D/EGamma0/RAW/v1/000/369/873/00000/24f1d929-7f1d-4672-99df-2225214ae1ff.root",
+        "/store/data/Run2023D/EGamma0/RAW/v1/000/369/873/00000/3d6a9121-29e9-48d6-829c-1c14f976890d.root",
+        "/store/data/Run2023D/EGamma0/RAW/v1/000/369/873/00000/4e782ed6-7d8f-4d93-8911-01372ddb97f2.root"
       )
     )
 else:
@@ -137,7 +133,7 @@ else:
     process = L1TTurnOffUnpackStage2GtGmtAndCalo(process)
 
 
-process.load("L1Trigger.L1TCalorimeter.caloParams_2022_v0_6_modZS0p5_cfi")
+process.load("L1Trigger.L1TCalorimeter.caloParams_2023_v0_4_eTRecalib_cfi")
 
 #### handling of cms line options for tier3 submission
 #### the following are dummy defaults, so that one can normally use the config changing file list by hand etc.
@@ -154,7 +150,7 @@ if options.secondaryFilesList:
     process.source.secondaryFileNames = cms.untracked.vstring(listSecondaryFiles)
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(500)
+    input = cms.untracked.int32(100)
 )
 
 if options.maxEvents >= -1:

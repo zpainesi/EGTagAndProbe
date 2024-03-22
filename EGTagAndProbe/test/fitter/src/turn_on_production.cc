@@ -41,15 +41,13 @@ struct dataConfig{
     
     dataConfig(){
         infile ="";
-        ofileName="turnon_test.root";
+        ofileName="turnons.root";
         prefix="";
         treeName="Ntuplizer/TagAndProbe";
         doEmulationBranches=false;
         doAllRuns=false;
         Int_t reportEvery(500);
         Long64_t maxEvents(-1);
-    
-
     }
 };
 
@@ -116,6 +114,7 @@ void produceTurnOns(string infile,string ofileName,TString treeName,string prefi
     Float_t eleProbePhi	;
     Float_t eleTagEta		;
     Float_t eleTagPhi		;
+    Float_t eleProbePt ;
     Float_t eleProbeSclEt ;
     Float_t   l1tPt       ;
     Int_t   l1tEmuRawEt(1)      ;
@@ -127,7 +126,13 @@ void produceTurnOns(string infile,string ofileName,TString treeName,string prefi
     TFile *f=new TFile(infile.c_str(),"READ");
     TTree *t1=(TTree*)(f->Get(treeName));
 	
-
+    if(doEmulationBranches)
+    {
+        ofileName= "reEmulated_"+ofileName;
+    }
+    else{
+        ofileName= "unpacked_"+ofileName;
+    }
     auto ofile=new TFile((prefix+ofileName).c_str(),"RECREATE");
     ofile->cd();
 
@@ -138,6 +143,7 @@ void produceTurnOns(string infile,string ofileName,TString treeName,string prefi
     t1->SetBranchAddress("Nvtx"         ,&Nvtx			        );
     t1->SetBranchAddress("isProbeLoose" ,&isProbeLoose			);
     t1->SetBranchAddress("eleProbeSclEt",&eleProbeSclEt			);
+    t1->SetBranchAddress("eleProbePt",&eleProbePt	     		);
     t1->SetBranchAddress("RunNumber",&RunNumber	);
     
     TString emulationSelection="";
@@ -177,6 +183,10 @@ void produceTurnOns(string infile,string ofileName,TString treeName,string prefi
     }
 
     std::cout<<"  ============   Defining the Efficiency for Run Numbers============ \n";
+    if (RunNumbers.empty())
+    {
+        RunNumbers.push_back(0);
+    }
     for( auto idx : RunNumbers) {
         
         if(doAllRuns)
@@ -238,6 +248,11 @@ void produceTurnOns(string infile,string ofileName,TString treeName,string prefi
     for(int i=0;i<XBINS_forPU;i++) xEdges_forPU[i]= -0.5 + i*1.0;
     triggers["L1_32vsPUoffline40GeV"] = new efficiencyMeasurement("L1_32vsPUoffline40GeV",XBINS,xEdges);
     triggers["L1_32vsPUoffline50GeV"] = new efficiencyMeasurement("L1_32vsPUoffline50GeV",XBINS,xEdges);
+    triggers["L1_32vsPUoffline35GeV"] = new efficiencyMeasurement("L1_32vsPUoffline25GeV",XBINS,xEdges);
+    triggers["L1_28TightvsPUoffline32GeV"] = new efficiencyMeasurement("L1_28TightvsPUoffline32GeV",XBINS,xEdges);
+    triggers["L1_28LoosevsPUoffline32GeV"] = new efficiencyMeasurement("L1_28LoosevsPUoffline32GeV",XBINS,xEdges);
+    triggers["L1_15LoosevsPUoffline18GeV"] = new efficiencyMeasurement("L1_15LoosevsPUoffline18GeV",XBINS,xEdges);
+    triggers["L1_10LoosevsPUoffline12GeV"] = new efficiencyMeasurement("L1_10LoosevsPUoffline12GeV",XBINS,xEdges);
     
 
 	Long64_t nentries = t1->GetEntries();
@@ -253,9 +268,10 @@ void produceTurnOns(string infile,string ofileName,TString treeName,string prefi
     int nEventsProcessed=0;
     for (Long64_t jentry=0; jentry<nentries; jentry++){
        
+       eleProbeSclEt=eleProbePt;
        t1->GetEntry(jentry); 
 
-    //   if(l1tEmuRawEt < 0.0 ){   k++;   continue ;  }
+       //if(l1tEmuRawEt < 0.0 ){   k++;   continue ;  }
        if(jentry%reportEvery ==0 )
        {
             t_end = std::chrono::high_resolution_clock::now();
@@ -265,20 +281,16 @@ void produceTurnOns(string infile,string ofileName,TString treeName,string prefi
              <<endl;
        }
         
-       
-       //if(not doAllRuns)
-       //{
-        if( std::find(RunNumbers.begin(),RunNumbers.end(),RunNumber)  == RunNumbers.end() )
-            {
-                 continue;
-            }
-       //}
 
        if(doAllRuns)
        {
             RunNumber=0;
        }    
-
+       else if( std::find(RunNumbers.begin(),RunNumbers.end(),RunNumber)  == RunNumbers.end() )
+       {
+            continue;
+       }
+       
        nEventsProcessed++;
        if( isProbeLoose==1 && fabs(eleProbeEta) < 2.5  && sqrt(pow(eleProbeEta-eleTagEta,2)+pow(eleProbePhi-eleTagPhi,2))>0.6 ) 
           {
@@ -329,6 +341,20 @@ void produceTurnOns(string infile,string ofileName,TString treeName,string prefi
           {
                triggers["L1_32vsPUoffline40GeV"]->fill(hasL1["L1Et32"],Nvtx);
           }
+          if( isProbeLoose==1 && fabs(eleProbeEta) < 2.5 && eleProbeSclEt > 32.0  && sqrt(pow(eleProbeEta-eleTagEta,2)+pow(eleProbePhi-eleTagPhi,2))>0.6 ) 
+          {
+               triggers["L1_28TightvsPUoffline32GeV"]->fill(hasL1LooseIso[triggerPrefix[32]+"_looseiso"],Nvtx);
+               triggers["L1_28LoosevsPUoffline32GeV"]->fill(hasL1LooseIso[triggerPrefix[32]+"_looseiso"],Nvtx);
+          }
+          if( isProbeLoose==1 && fabs(eleProbeEta) < 2.5 && eleProbeSclEt > 18.0  && sqrt(pow(eleProbeEta-eleTagEta,2)+pow(eleProbePhi-eleTagPhi,2))>0.6 ) 
+          {
+               triggers["L1_15LoosevsPUoffline18eV"]->fill(hasL1LooseIso[triggerPrefix[15]+"_looseiso"],Nvtx);
+          }
+          if( isProbeLoose==1 && fabs(eleProbeEta) < 2.5 && eleProbeSclEt > 12.0  && sqrt(pow(eleProbeEta-eleTagEta,2)+pow(eleProbePhi-eleTagPhi,2))>0.6 ) 
+          {
+               triggers["L1_10LoosevsPUoffline12GeV"]->fill(hasL1LooseIso[triggerPrefix[10]+"_looseiso"],Nvtx);
+          }
+          
 	}
  	
 	f->Close();
@@ -446,9 +472,9 @@ void readParameters(const std::string jfile , struct dataConfig & cfg) {
       if(key=="infile"){
         cfg.infile= value;
       }
-      else if (key=="ofileName")	    {
-                cfg.ofileName= value;
-      }
+      //else if (key=="ofileName")	    {
+      //          cfg.ofileName= value;
+      //}
       else if (key=="treeName")	    {
                 cfg.treeName= value;
       }
