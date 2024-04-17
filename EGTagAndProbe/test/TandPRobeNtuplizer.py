@@ -6,7 +6,7 @@ from Configuration.Eras.Era_Run3_cff import Run3
 
 process = cms.Process("TagAndProbe",eras.Run3)
 
-isMC = True
+isMC = False
 isMINIAOD = True
 
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
@@ -81,19 +81,11 @@ egmGsfElectronIDSequence = cms.Sequence(egmGsfElectronIDTask)
 
 if not isMC: # will use 80X
     from Configuration.AlCa.autoCond import autoCond
-    process.GlobalTag.globaltag = '130X_dataRun3_Prompt_v2'
+    process.GlobalTag.globaltag = '140X_dataRun3_Prompt_v2'
     process.load('EGTagAndProbe.EGTagAndProbe.tagAndProbe_cff')
     process.source = cms.Source("PoolSource",
         fileNames = cms.untracked.vstring(
-            "/store/data/Run2023D/EGamma0/MINIAOD/PromptReco-v2/000/370/667/00000/85f33e1c-f4d0-4534-8257-140030ce8783.root",
-            "/store/data/Run2023D/EGamma0/MINIAOD/PromptReco-v2/000/370/667/00000/a69f9784-c0f4-40a8-8498-affed33d9444.root",
-            "/store/data/Run2023D/EGamma0/MINIAOD/PromptReco-v2/000/370/667/00000/cae35b2f-8d01-4518-9b32-bfbdb6ef1709.root",
-            "/store/data/Run2023D/EGamma0/MINIAOD/PromptReco-v2/000/370/667/00000/d28a27d9-475c-4850-b55b-7660a0d10559.root",
-            "/store/data/Run2023D/EGamma0/MINIAOD/PromptReco-v2/000/370/667/00000/eb014129-e70d-4f13-bbf0-525b2322d4c6.root",
-            "/store/data/Run2023D/EGamma0/MINIAOD/PromptReco-v2/000/370/667/00000/f198995b-2c20-40a0-8f86-543ba3dd1c50.root",
-            "/store/data/Run2023D/EGamma0/MINIAOD/PromptReco-v2/000/370/667/00000/f4ca6e0f-f204-4e80-95ed-678dc8f2212b.root",
-            "/store/data/Run2023D/EGamma0/MINIAOD/PromptReco-v2/000/370/667/00000/f7fa86b6-5e59-4495-9d73-59a7acd41d91.root",
-            "/store/data/Run2023D/EGamma0/MINIAOD/PromptReco-v2/000/370/667/00000/f996f1da-d590-4e7b-b072-1ba647b99f8e.root"
+            "//store/data/Run2024B/EGamma0/MINIAOD/PromptReco-v1/000/378/995/00000/baf0df5e-553d-46d6-ac79-9c2d532d4e90.root"
         ),
     )
 
