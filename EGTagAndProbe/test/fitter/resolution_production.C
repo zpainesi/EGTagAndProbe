@@ -209,6 +209,13 @@ void produceResolution(string infile,string ofileName,string prefix="",bool doEm
              <<endl;
         }
 
+//////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////
+		eleProbeSclEt=eleProbePt;
+	////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
+
+
         pT->Fill(eleProbeSclEt);
         eA.SetPtEtaPhiM(eleProbePt,eleProbeEta,eleProbePhi,0.5e-3);
         eB.SetPtEtaPhiM(eleTagPt,eleTagEta,eleTagPhi,0.5e-3);
@@ -250,7 +257,7 @@ void produceResolution(string infile,string ofileName,string prefix="",bool doEm
             resolutionMap["Pt40To60EtaVsdEt_highReso"]  ->Fill(eleProbeEta,abs(eleProbeEta),l1tPt/eleProbeSclEt);
             resolutionMap["Pt40To60EtVsdEt_highReso"]   ->Fill(eleProbeEta,eleProbeSclEt,l1tPt/eleProbeSclEt);
           }
-          if( eleProbeSclEt < 80.0 )
+          else if( eleProbeSclEt < 80.0 )
           {
             resolutionMap["Pt60To80EtaVsdEt"]  ->Fill(eleProbeEta,abs(eleProbeEta),l1tPt/eleProbeSclEt);
             resolutionMap["Pt60To80EtVsdEt"]   ->Fill(eleProbeEta,eleProbeSclEt,l1tPt/eleProbeSclEt);
