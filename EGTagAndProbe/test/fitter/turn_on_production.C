@@ -130,7 +130,8 @@ void produceTurnOns(string infile,string ofileName,string prefix="",bool doEmula
 
     TFile *f=new TFile(infile.c_str(),"READ");
     TTree *t1=(TTree*)(f->Get("Ntuplizer/TagAndProbe"));
-	
+
+    t1->SetBranchAddress("eleProbePt"  ,&eleProbePt);
     t1->SetBranchAddress("eleProbeEta"  ,&eleProbeEta			);
     t1->SetBranchAddress("eleProbePhi"  ,&eleProbePhi			);
     t1->SetBranchAddress("eleTagEta"    ,&eleTagEta		    	);
@@ -263,7 +264,14 @@ void produceTurnOns(string infile,string ofileName,string prefix="",bool doEmula
        }
 	
 		t1->GetEntry(jentry);  		
-	
+
+
+//////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////
+		eleProbeSclEt=eleProbePt;
+	////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
+
                if( isProbeLoose==1 && fabs(eleProbeEta) < 2.5  && sqrt(pow(eleProbeEta-eleTagEta,2)+pow(eleProbePhi-eleTagPhi,2))>0.6 ) 
                {
                 	
