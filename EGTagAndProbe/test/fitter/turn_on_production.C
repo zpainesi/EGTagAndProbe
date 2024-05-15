@@ -119,6 +119,7 @@ void produceTurnOns(string infile,string ofileName,string prefix="",bool doEmula
     ///////////////////////////////////////////////////////////////////////////////////////////
 
 	double dR,dphi,phi1,phi2;	
+float eleProbePt	;
     float eleProbeEta	;
     float eleProbePhi	;
     float eleTagEta		;
