@@ -447,7 +447,7 @@ void produceResolution(string infile,string ofileName, TString treeName,string p
 		
         nProcessedEvents++;
 
-        if(isProbeLoose==1 and   (fabs(eleProbeEta) < 2.4) ){
+        if(isProbeLoose==1 and   (fabs(eleProbeEta) < 2.5) ){
         pT->Fill(eleProbeSclEt);
         mass->Fill((eA+eB).M());
 		avgPU+=Nvtx;
