@@ -45,89 +45,90 @@
 ██████  ███████  ██████ ███████ ██   ██ ██   ██ ██   ██    ██    ██  ██████  ██   ████
 */
 
-class Ntuplizer_noTagAndProbe : public edm::one::EDAnalyzer<> {
-    public:
-        /// Constructor
-        explicit Ntuplizer_noTagAndProbe(const edm::ParameterSet&);
-        /// Destructor
-        virtual ~Ntuplizer_noTagAndProbe();
+class Ntuplizer_noTagAndProbe : public edm::one::EDAnalyzer<>
+{
+public:
+    /// Constructor
+    explicit Ntuplizer_noTagAndProbe(const edm::ParameterSet&);
+    /// Destructor
+    virtual ~Ntuplizer_noTagAndProbe();
 
-    private:
-        //----edm control---
-        virtual void beginJob() ;
-        virtual void beginRun(edm::Run const&, edm::EventSetup const&);
-        virtual void analyze(const edm::Event&, const edm::EventSetup&);
-        virtual void endJob();
-        virtual void endRun(edm::Run const&, edm::EventSetup const&);
-        void Initialize();
-        bool hasFilters(const pat::TriggerObjectStandAlone&  obj , const std::vector<std::string>& filtersToLookFor);
+private:
+    //----edm control---
+    virtual void beginJob() ;
+    virtual void beginRun(edm::Run const&, edm::EventSetup const&);
+    virtual void analyze(const edm::Event&, const edm::EventSetup&);
+    virtual void endJob();
+    virtual void endRun(edm::Run const&, edm::EventSetup const&);
+    void Initialize();
+    bool hasFilters(const pat::TriggerObjectStandAlone&  obj, const std::vector<std::string>& filtersToLookFor);
 
-        TTree *_tree;
-        TTree *_triggerNamesTreeTag;
-        TTree *_triggerNamesTreeProbe;
-        std::string _treeName;
-        // -------------------------------------
-        // variables to be filled in output tree
-        ULong64_t       _indexevents;
-        Int_t           _runNumber;
-        Int_t           _lumi;
-        unsigned long _eleProbeTriggerBits;
-        unsigned long _eleTagTriggerBits;
-        float _eleProbePt;
-        float _eleProbeEta;
-        float _eleProbePhi;
-        float _eleProbeSclEt;
-        int _eleProbeCharge;
-        float _hltPt;
-        float _hltEta;
-        float _hltPhi;
-        int _l1tQual;
-        float _l1tPt;
-        float _l1tEta;
-        float _l1tPhi;
-        int _l1tIso;
-        int _l1tEmuQual;
-        float _l1tEmuPt;
-        float _l1tEmuEta;
-        float _l1tEmuPhi;
-        int _l1tEmuIso;
-        int _l1tEmuNTT;
-        int _l1tEmuTowerIEta;
-        int _l1tEmuTowerIPhi;
-        int _l1tEmuRawEt;
-        int _l1tEmuIsoEt;
-        Bool_t _isTagHLTmatched;
-        Bool_t _isProbeHLTmatched;
-        Bool_t _isMatched;
-        Bool_t _isOS;
-        int _foundTag;
-        float _eleTagPt;
-        float _eleTagEta;
-        float _eleTagPhi;
-        int _eleTagCharge;
-        float _Mee;
-        int _Nvtx;
+    TTree *_tree;
+    TTree *_triggerNamesTreeTag;
+    TTree *_triggerNamesTreeProbe;
+    std::string _treeName;
+    // -------------------------------------
+    // variables to be filled in output tree
+    ULong64_t       _indexevents;
+    Int_t           _runNumber;
+    Int_t           _lumi;
+    unsigned long _eleProbeTriggerBits;
+    unsigned long _eleTagTriggerBits;
+    float _eleProbePt;
+    float _eleProbeEta;
+    float _eleProbePhi;
+    float _eleProbeSclEt;
+    int _eleProbeCharge;
+    float _hltPt;
+    float _hltEta;
+    float _hltPhi;
+    int _l1tQual;
+    float _l1tPt;
+    float _l1tEta;
+    float _l1tPhi;
+    int _l1tIso;
+    int _l1tEmuQual;
+    float _l1tEmuPt;
+    float _l1tEmuEta;
+    float _l1tEmuPhi;
+    int _l1tEmuIso;
+    int _l1tEmuNTT;
+    int _l1tEmuTowerIEta;
+    int _l1tEmuTowerIPhi;
+    int _l1tEmuRawEt;
+    int _l1tEmuIsoEt;
+    Bool_t _isTagHLTmatched;
+    Bool_t _isProbeHLTmatched;
+    Bool_t _isMatched;
+    Bool_t _isOS;
+    int _foundTag;
+    float _eleTagPt;
+    float _eleTagEta;
+    float _eleTagPhi;
+    int _eleTagCharge;
+    float _Mee;
+    int _Nvtx;
 
-        edm::EDGetTokenT<pat::ElectronRefVector>  _electronsTag;
-        edm::EDGetTokenT<edm::ValueMap<bool> > _eleLooseIdMapTag;
-        edm::EDGetTokenT<edm::ValueMap<bool> > _eleMediumIdMapTag;
-        edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> _triggerObjects;
-        edm::EDGetTokenT<edm::TriggerResults> _triggerBits;
-        edm::EDGetTokenT<l1t::EGammaBxCollection> _L1EGTag  ;
-        edm::EDGetTokenT<l1t::EGammaBxCollection> _L1EmuEGTag  ;
-        edm::EDGetTokenT<std::vector<reco::Vertex>> _VtxTag;
+    edm::EDGetTokenT<pat::ElectronRefVector>  _electronsTag;
+    edm::EDGetTokenT<edm::ValueMap<bool> > _eleLooseIdMapTag;
+    edm::EDGetTokenT<edm::ValueMap<bool> > _eleMediumIdMapTag;
+    edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> _triggerObjects;
+    edm::EDGetTokenT<edm::TriggerResults> _triggerBits;
+    edm::EDGetTokenT<l1t::EGammaBxCollection> _L1EGTag  ;
+    edm::EDGetTokenT<l1t::EGammaBxCollection> _L1EmuEGTag  ;
+    edm::EDGetTokenT<std::vector<reco::Vertex>> _VtxTag;
 
-        //!Contains the parameters
-        tVParameterSet _parametersTag;
-        tVParameterSet _parametersProbe;
+    //!Contains the parameters
+    tVParameterSet _parametersTag;
+    tVParameterSet _parametersProbe;
 
-        edm::InputTag _processName;
-        //! Maximum
-        std::bitset<NUMBER_OF_MAXIMUM_TRIGGERS> _eleProbeTriggerBitSet;
-        std::bitset<NUMBER_OF_MAXIMUM_TRIGGERS> _eleTagTriggerBitSet;
+    edm::InputTag _processName;
+    //! Maximum
+    std::bitset<NUMBER_OF_MAXIMUM_TRIGGERS> _eleProbeTriggerBitSet;
+    std::bitset<NUMBER_OF_MAXIMUM_TRIGGERS> _eleTagTriggerBitSet;
 
 
-        HLTConfigProvider _hltConfig;
+    HLTConfigProvider _hltConfig;
 
 
 };
@@ -142,14 +143,14 @@ class Ntuplizer_noTagAndProbe : public edm::one::EDAnalyzer<> {
 
 // ----Constructor and Destructor -----
 Ntuplizer_noTagAndProbe::Ntuplizer_noTagAndProbe(const edm::ParameterSet& iConfig) :
-_electronsTag       (consumes<pat::ElectronRefVector>                     (iConfig.getParameter<edm::InputTag>("electrons"))),
-_eleLooseIdMapTag  (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleLooseIdMap"))),
-_eleMediumIdMapTag  (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleMediumIdMap"))),
-_triggerObjects (consumes<pat::TriggerObjectStandAloneCollection> (iConfig.getParameter<edm::InputTag>("triggerSet"))),
-_triggerBits    (consumes<edm::TriggerResults>                    (iConfig.getParameter<edm::InputTag>("triggerResultsLabel"))),
-_L1EGTag       (consumes<l1t::EGammaBxCollection>                   (iConfig.getParameter<edm::InputTag>("L1EG"))),
-_L1EmuEGTag    (consumes<l1t::EGammaBxCollection>                   (iConfig.getParameter<edm::InputTag>("L1EmuEG"))),
-_VtxTag         (consumes<std::vector<reco::Vertex>>              (iConfig.getParameter<edm::InputTag>("Vertexes")))
+    _electronsTag       (consumes<pat::ElectronRefVector>                     (iConfig.getParameter<edm::InputTag>("electrons"))),
+    _eleLooseIdMapTag  (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleLooseIdMap"))),
+    _eleMediumIdMapTag  (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleMediumIdMap"))),
+    _triggerObjects (consumes<pat::TriggerObjectStandAloneCollection> (iConfig.getParameter<edm::InputTag>("triggerSet"))),
+    _triggerBits    (consumes<edm::TriggerResults>                    (iConfig.getParameter<edm::InputTag>("triggerResultsLabel"))),
+    _L1EGTag       (consumes<l1t::EGammaBxCollection>                   (iConfig.getParameter<edm::InputTag>("L1EG"))),
+    _L1EmuEGTag    (consumes<l1t::EGammaBxCollection>                   (iConfig.getParameter<edm::InputTag>("L1EmuEG"))),
+    _VtxTag         (consumes<std::vector<reco::Vertex>>              (iConfig.getParameter<edm::InputTag>("Vertexes")))
 {
     this -> _treeName = iConfig.getParameter<std::string>("treeName");
     this -> _processName = iConfig.getParameter<edm::InputTag>("triggerResultsLabel");
@@ -161,7 +162,8 @@ _VtxTag         (consumes<std::vector<reco::Vertex>>              (iConfig.getPa
 
     //Building the trigger arrays
     const std::vector<edm::ParameterSet>& HLTListTag = iConfig.getParameter <std::vector<edm::ParameterSet> > ("triggerListTag");
-    for (const edm::ParameterSet& parameterSet : HLTListTag) {
+    for (const edm::ParameterSet& parameterSet : HLTListTag)
+    {
         tParameterSet pSet;
         pSet.hltPath = parameterSet.getParameter<std::string>("HLT");
         triggerNameTag = pSet.hltPath;
@@ -181,7 +183,8 @@ _VtxTag         (consumes<std::vector<reco::Vertex>>              (iConfig.getPa
 
     //Building the trigger arrays
     const std::vector<edm::ParameterSet>& HLTListProbe = iConfig.getParameter <std::vector<edm::ParameterSet> > ("triggerListProbe");
-    for (const edm::ParameterSet& parameterSet : HLTListProbe) {
+    for (const edm::ParameterSet& parameterSet : HLTListProbe)
+    {
         tParameterSet pSet;
         pSet.hltPath = parameterSet.getParameter<std::string>("HLT");
         triggerNameTag = pSet.hltPath;
@@ -207,7 +210,8 @@ void Ntuplizer_noTagAndProbe::beginRun(edm::Run const& iRun, edm::EventSetup con
 
     Bool_t changedConfig = false;
 
-    if(!this -> _hltConfig.init(iRun, iSetup, this -> _processName.process(), changedConfig)){
+    if(!this -> _hltConfig.init(iRun, iSetup, this -> _processName.process(), changedConfig))
+    {
         std::cout<<"edm::LogError(\"HLTMatchingFilter\") << \"Initialization of HLTConfigProvider failed!!\"";
         //edm::LogError("HLTMatchingFilter") << "Initialization of HLTConfigProvider failed!!";
         return;
@@ -215,13 +219,15 @@ void Ntuplizer_noTagAndProbe::beginRun(edm::Run const& iRun, edm::EventSetup con
 
     const edm::TriggerNames::Strings& triggerNames = this -> _hltConfig.triggerNames();
     //std::cout << " ===== LOOKING FOR THE PATH INDEXES =====" << std::endl;
-    for (tParameterSet& parameter : this -> _parametersTag){
+    for (tParameterSet& parameter : this -> _parametersTag)
+    {
         const std::string& hltPath = parameter.hltPath;
         bool found = false;
         for(unsigned int j=0; j < triggerNames.size(); j++)
         {
             //std::cout << triggerNames[j] << std::endl;
-            if (triggerNames[j].find(hltPath) != std::string::npos) {
+            if (triggerNames[j].find(hltPath) != std::string::npos)
+            {
                 found = true;
                 parameter.hltPathIndex = j;
 
@@ -232,13 +238,15 @@ void Ntuplizer_noTagAndProbe::beginRun(edm::Run const& iRun, edm::EventSetup con
     }
 
 
-    for (tParameterSet& parameter : this -> _parametersProbe){
+    for (tParameterSet& parameter : this -> _parametersProbe)
+    {
         const std::string& hltPath = parameter.hltPath;
         bool found = false;
         for(unsigned int j=0; j < triggerNames.size(); j++)
         {
             //std::cout << triggerNames[j] << std::endl;
-            if (triggerNames[j].find(hltPath) != std::string::npos) {
+            if (triggerNames[j].find(hltPath) != std::string::npos)
+            {
                 found = true;
                 parameter.hltPathIndex = j;
 
@@ -251,7 +259,8 @@ void Ntuplizer_noTagAndProbe::beginRun(edm::Run const& iRun, edm::EventSetup con
 
 }
 
-void Ntuplizer_noTagAndProbe::Initialize() {
+void Ntuplizer_noTagAndProbe::Initialize()
+{
     this -> _indexevents = 0;
     this -> _runNumber = 0;
     this -> _lumi = 0;
@@ -380,202 +389,211 @@ void Ntuplizer_noTagAndProbe::analyze(const edm::Event& iEvent, const edm::Event
 
     const edm::TriggerNames &names = iEvent.triggerNames(*triggerBits);
 
-    for( edm::View<pat::Electron>::const_iterator el = electrons->begin(); el != electrons->end(); el++){
-      
-      const unsigned int i = distance (electrons->begin(), el);
-      const auto eleTag = electrons->ptrAt(i);
+    for( edm::View<pat::Electron>::const_iterator el = electrons->begin(); el != electrons->end(); el++)
+    {
 
-      for( edm::View<pat::Electron>::const_iterator el2 = electrons->begin(); el2 != electrons->end(); el2++){
+        const unsigned int i = distance (electrons->begin(), el);
+        const auto eleTag = electrons->ptrAt(i);
 
-	const unsigned int j = distance (electrons->begin(), el2);
-	if(i==j) continue;
+        for( edm::View<pat::Electron>::const_iterator el2 = electrons->begin(); el2 != electrons->end(); el2++)
+        {
 
-	const auto eleProbe = electrons->ptrAt(j);
-	int isProbeLoose = (*loose_id_decisions)[eleProbe];
-	float eleProbeEta = eleProbe->p4().Eta();
-	if(!isProbeLoose || (abs(eleProbeEta)>1.4442 && abs(eleProbeEta)<1.566)) continue;
+            const unsigned int j = distance (electrons->begin(), el2);
+            if(i==j) continue;
 
-	bool isOS = (eleTag->charge() / eleProbe->charge() < 0) ? true : false;
-	float Mee = (eleTag->p4() + eleProbe->p4()).M();
+            const auto eleProbe = electrons->ptrAt(j);
+            int isProbeLoose = (*loose_id_decisions)[eleProbe];
+            float eleProbeEta = eleProbe->p4().Eta();
+            if(!isProbeLoose || (abs(eleProbeEta)>1.4442 && abs(eleProbeEta)<1.566)) continue;
 
-
-	this -> _isOS = isOS;
-	this -> _Mee = Mee;
-
-	//! TagAndProbe on HLT eles
-
-	this -> _eleProbeTriggerBitSet.reset();
-	this -> _eleTagTriggerBitSet.reset();
+            bool isOS = (eleTag->charge() / eleProbe->charge() < 0) ? true : false;
+            float Mee = (eleTag->p4() + eleProbe->p4()).M();
 
 
-	for (pat::TriggerObjectStandAlone  obj : *triggerObjects)
-	  {
-	    if(!obj.hasTriggerObjectType(trigger::TriggerElectron)) continue;
-      
-	    const float dR_tag = deltaR (*eleTag, obj);
-	    if ( dR_tag < 0.3)
-	      {
-		this -> _isTagHLTmatched = true;
-            
-		obj.unpackPathNames(names);
-		const edm::TriggerNames::Strings& triggerNames = names.triggerNames();
-		//Looking for the path
-		unsigned int x = 0;
-		bool foundTrigger = false;
-		for (const tParameterSet& parameter : this -> _parametersTag)
-		  {
-		    if ((parameter.hltPathIndex >= 0)&&(obj.hasPathName(triggerNames[parameter.hltPathIndex], true, false)))
-		      {
-			foundTrigger = true;
-			//Path found, now looking for the label 1, if present in the parameter set
-			//std::cout << "==== FOUND PATH " << triggerNames[parameter.hltPathIndex] << " ====" << std::endl;
-			//Retrieving filter list for the event
-			const std::vector<std::string>& filters = (parameter.hltFilters1);
-			if (this -> hasFilters(obj, filters))
-			  {
-			    //std::cout << "#### FOUND ELE WITH HLT PATH " << x << " ####" << std::endl;
-			    this -> _hltPt = obj.pt();
-			    this -> _hltEta = obj.eta();
-			    this -> _hltPhi = obj.phi();			    this -> _eleTagTriggerBitSet[x] = true;			    
-			    //std::cout << this -> _eleTagTriggerBitSet.to_string() << std::endl;
-			  }
-		      }
-		    x++;
-		  }
-		if (foundTrigger){
-		  this -> _foundTag++;
-		  this -> _isTagHLTmatched = true;
-		}
-	      }
+            this -> _isOS = isOS;
+            this -> _Mee = Mee;
+
+            //! TagAndProbe on HLT eles
+
+            this -> _eleProbeTriggerBitSet.reset();
+            this -> _eleTagTriggerBitSet.reset();
 
 
-	    const float dR_probe = deltaR (*eleProbe, obj);
-	    if ( dR_probe < 0.3)
-	      {
-		this -> _isProbeHLTmatched = true;
-            
-		obj.unpackPathNames(names);
-		const edm::TriggerNames::Strings& triggerNames = names.triggerNames();
-		//Looking for the path
-		unsigned int x = 0;
-		bool foundTrigger = false;
-		for (const tParameterSet& parameter : this -> _parametersProbe)
-		  {
-		    if ((parameter.hltPathIndex >= 0)&&(obj.hasPathName(triggerNames[parameter.hltPathIndex], true, false)))
-		      {
-			foundTrigger = true;
-			//Path found, now looking for the label 1, if present in the parameter set
-			//std::cout << "==== FOUND PATH " << triggerNames[parameter.hltPathIndex] << " ====" << std::endl;
-			//Retrieving filter list for the event
-			const std::vector<std::string>& filters = (parameter.hltFilters1);
-			if (this -> hasFilters(obj, filters))
-			  {
-			    //std::cout << "#### FOUND ELE WITH HLT PATH " << x << " ####" << std::endl;
-			    this -> _hltPt = obj.pt();
-			    this -> _hltEta = obj.eta();
-			    this -> _hltPhi = obj.phi();
-			    this -> _eleProbeTriggerBitSet[x] = true;
-			    //std::cout << this -> _eleTagTriggerBitSet.to_string() << std::endl;
-			  }
-		      }
-		    x++;
-		  }
-		if (foundTrigger) this -> _isProbeHLTmatched = true;
-	      }
+            for (pat::TriggerObjectStandAlone  obj : *triggerObjects)
+            {
+                if(!obj.hasTriggerObjectType(trigger::TriggerElectron)) continue;
+
+                const float dR_tag = deltaR (*eleTag, obj);
+                if ( dR_tag < 0.3)
+                {
+                    this -> _isTagHLTmatched = true;
+
+                    obj.unpackPathNames(names);
+                    const edm::TriggerNames::Strings& triggerNames = names.triggerNames();
+                    //Looking for the path
+                    unsigned int x = 0;
+                    bool foundTrigger = false;
+                    for (const tParameterSet& parameter : this -> _parametersTag)
+                    {
+                        if ((parameter.hltPathIndex >= 0)&&(obj.hasPathName(triggerNames[parameter.hltPathIndex], true, false)))
+                        {
+                            foundTrigger = true;
+                            //Path found, now looking for the label 1, if present in the parameter set
+                            //std::cout << "==== FOUND PATH " << triggerNames[parameter.hltPathIndex] << " ====" << std::endl;
+                            //Retrieving filter list for the event
+                            const std::vector<std::string>& filters = (parameter.hltFilters1);
+                            if (this -> hasFilters(obj, filters))
+                            {
+                                //std::cout << "#### FOUND ELE WITH HLT PATH " << x << " ####" << std::endl;
+                                this -> _hltPt = obj.pt();
+                                this -> _hltEta = obj.eta();
+                                this -> _hltPhi = obj.phi();
+                                this -> _eleTagTriggerBitSet[x] = true;
+                                //std::cout << this -> _eleTagTriggerBitSet.to_string() << std::endl;
+                            }
+                        }
+                        x++;
+                    }
+                    if (foundTrigger)
+                    {
+                        this -> _foundTag++;
+                        this -> _isTagHLTmatched = true;
+                    }
+                }
+
+
+                const float dR_probe = deltaR (*eleProbe, obj);
+                if ( dR_probe < 0.3)
+                {
+                    this -> _isProbeHLTmatched = true;
+
+                    obj.unpackPathNames(names);
+                    const edm::TriggerNames::Strings& triggerNames = names.triggerNames();
+                    //Looking for the path
+                    unsigned int x = 0;
+                    bool foundTrigger = false;
+                    for (const tParameterSet& parameter : this -> _parametersProbe)
+                    {
+                        if ((parameter.hltPathIndex >= 0)&&(obj.hasPathName(triggerNames[parameter.hltPathIndex], true, false)))
+                        {
+                            foundTrigger = true;
+                            //Path found, now looking for the label 1, if present in the parameter set
+                            //std::cout << "==== FOUND PATH " << triggerNames[parameter.hltPathIndex] << " ====" << std::endl;
+                            //Retrieving filter list for the event
+                            const std::vector<std::string>& filters = (parameter.hltFilters1);
+                            if (this -> hasFilters(obj, filters))
+                            {
+                                //std::cout << "#### FOUND ELE WITH HLT PATH " << x << " ####" << std::endl;
+                                this -> _hltPt = obj.pt();
+                                this -> _hltEta = obj.eta();
+                                this -> _hltPhi = obj.phi();
+                                this -> _eleProbeTriggerBitSet[x] = true;
+                                //std::cout << this -> _eleTagTriggerBitSet.to_string() << std::endl;
+                            }
+                        }
+                        x++;
+                    }
+                    if (foundTrigger) this -> _isProbeHLTmatched = true;
+                }
 
 
 
-	  }
-
-      
-
-	//! TagAndProbe on L1T EG
-
-	edm::Handle< BXVector<l1t::EGamma> >  L1EGHandle;
-	iEvent.getByToken(_L1EGTag, L1EGHandle);
-
-	float minDR = 0.3; //Uncomment for new match algo
-
-	//cout<<"ill try this: "<<endl;
-
-	for (l1t::EGammaBxCollection::const_iterator bx0EGIt = L1EGHandle->begin(0); bx0EGIt != L1EGHandle->end(0) ; bx0EGIt++)
-	  {
-	    const float dR = deltaR(*eleProbe, *bx0EGIt);
-	    const l1t::EGamma& l1tEG = *bx0EGIt;
-
-	    cout<<"FW EG, pT = "<<l1tEG.pt()<<", eta = "<<l1tEG.eta()<<", phi = "<<l1tEG.phi()<<endl;
-
-	    if (dR < minDR) //Uncomment for new match algo
-	      {
-		minDR = dR; //Uncomment for new match algo
-		this -> _l1tPt = l1tEG.pt();
-		this -> _l1tEta = l1tEG.eta();
-		this -> _l1tPhi = l1tEG.phi();
-		this -> _l1tIso = l1tEG.hwIso();
-		this -> _l1tQual = l1tEG.hwQual();
-	      }
-	  }
-
-	edm::Handle< BXVector<l1t::EGamma> >  L1EmuEGHandle;
-	try {iEvent.getByToken(_L1EmuEGTag, L1EmuEGHandle);} catch (...) {;}
-
-	if (L1EmuEGHandle.isValid())
-	  {
-	    minDR = 0.3;
-	
-	    for (l1t::EGammaBxCollection::const_iterator bx0EmuEGIt = L1EmuEGHandle->begin(0); bx0EmuEGIt != L1EmuEGHandle->end(0) ; bx0EmuEGIt++)
-	      {
-		const float dR = deltaR(*eleProbe, *bx0EmuEGIt);
-		const l1t::EGamma& l1tEmuEG = *bx0EmuEGIt;
-		
-		cout<<"Emul EG, pT = "<<l1tEmuEG.pt()<<", eta = "<<l1tEmuEG.eta()<<", phi = "<<l1tEmuEG.phi()<<endl;
-		
-		if (dR < minDR) //Uncomment for new match algo
-		  {
-		    minDR = dR; //Uncomment for new match algo
-		    this -> _l1tEmuPt        = l1tEmuEG.pt();
-		    this -> _l1tEmuEta       = l1tEmuEG.eta();
-		    this -> _l1tEmuPhi       = l1tEmuEG.phi();
-		    this -> _l1tEmuIso       = l1tEmuEG.hwIso();
-		    this -> _l1tEmuNTT       = l1tEmuEG.nTT();
-		    this -> _l1tEmuQual      = l1tEmuEG.hwQual();
-		    this -> _l1tEmuTowerIEta = l1tEmuEG.towerIEta();
-		    this -> _l1tEmuTowerIPhi = l1tEmuEG.towerIPhi();
-		    this -> _l1tEmuRawEt     = l1tEmuEG.rawEt();
-		    this -> _l1tEmuIsoEt     = l1tEmuEG.isoEt();
-		    
-		  }
-	      }
-	  }
-	
-	this -> _eleProbePt = eleProbe -> pt();
-	this -> _eleProbeEta = eleProbe -> eta();
-	this -> _eleProbePhi = eleProbe -> phi();
-	this -> _eleProbeSclEt = (eleProbe->superCluster()->energy()) / cosh(eleProbe->superCluster()->eta()) ;
-	this -> _eleProbeCharge = eleProbe -> charge();
+            }
 
 
-	this -> _eleTagPt = eleTag -> pt();
-	this -> _eleTagEta = eleTag -> eta();
-	this -> _eleTagPhi = eleTag -> phi();
-	this -> _eleTagCharge = eleTag -> charge();
 
-	this -> _Nvtx = vertices->size();
+            //! TagAndProbe on L1T EG
 
- 
-	this -> _eleProbeTriggerBits = this -> _eleProbeTriggerBitSet.to_ulong();
-	this -> _eleTagTriggerBits = this -> _eleTagTriggerBitSet.to_ulong();
-	//std::cout << "++++++++++ FILL ++++++++++" << std::endl;
-	this -> _tree -> Fill();
+            edm::Handle< BXVector<l1t::EGamma> >  L1EGHandle;
+            iEvent.getByToken(_L1EGTag, L1EGHandle);
 
-      }
+            float minDR = 0.3; //Uncomment for new match algo
+
+            //cout<<"ill try this: "<<endl;
+
+            for (l1t::EGammaBxCollection::const_iterator bx0EGIt = L1EGHandle->begin(0); bx0EGIt != L1EGHandle->end(0) ; bx0EGIt++)
+            {
+                const float dR = deltaR(*eleProbe, *bx0EGIt);
+                const l1t::EGamma& l1tEG = *bx0EGIt;
+
+                cout<<"FW EG, pT = "<<l1tEG.pt()<<", eta = "<<l1tEG.eta()<<", phi = "<<l1tEG.phi()<<endl;
+
+                if (dR < minDR) //Uncomment for new match algo
+                {
+                    minDR = dR; //Uncomment for new match algo
+                    this -> _l1tPt = l1tEG.pt();
+                    this -> _l1tEta = l1tEG.eta();
+                    this -> _l1tPhi = l1tEG.phi();
+                    this -> _l1tIso = l1tEG.hwIso();
+                    this -> _l1tQual = l1tEG.hwQual();
+                }
+            }
+
+            edm::Handle< BXVector<l1t::EGamma> >  L1EmuEGHandle;
+            try
+            {
+                iEvent.getByToken(_L1EmuEGTag, L1EmuEGHandle);
+            }
+            catch (...) {;}
+
+            if (L1EmuEGHandle.isValid())
+            {
+                minDR = 0.3;
+
+                for (l1t::EGammaBxCollection::const_iterator bx0EmuEGIt = L1EmuEGHandle->begin(0); bx0EmuEGIt != L1EmuEGHandle->end(0) ; bx0EmuEGIt++)
+                {
+                    const float dR = deltaR(*eleProbe, *bx0EmuEGIt);
+                    const l1t::EGamma& l1tEmuEG = *bx0EmuEGIt;
+
+                    cout<<"Emul EG, pT = "<<l1tEmuEG.pt()<<", eta = "<<l1tEmuEG.eta()<<", phi = "<<l1tEmuEG.phi()<<endl;
+
+                    if (dR < minDR) //Uncomment for new match algo
+                    {
+                        minDR = dR; //Uncomment for new match algo
+                        this -> _l1tEmuPt        = l1tEmuEG.pt();
+                        this -> _l1tEmuEta       = l1tEmuEG.eta();
+                        this -> _l1tEmuPhi       = l1tEmuEG.phi();
+                        this -> _l1tEmuIso       = l1tEmuEG.hwIso();
+                        this -> _l1tEmuNTT       = l1tEmuEG.nTT();
+                        this -> _l1tEmuQual      = l1tEmuEG.hwQual();
+                        this -> _l1tEmuTowerIEta = l1tEmuEG.towerIEta();
+                        this -> _l1tEmuTowerIPhi = l1tEmuEG.towerIPhi();
+                        this -> _l1tEmuRawEt     = l1tEmuEG.rawEt();
+                        this -> _l1tEmuIsoEt     = l1tEmuEG.isoEt();
+
+                    }
+                }
+            }
+
+            this -> _eleProbePt = eleProbe -> pt();
+            this -> _eleProbeEta = eleProbe -> eta();
+            this -> _eleProbePhi = eleProbe -> phi();
+            this -> _eleProbeSclEt = (eleProbe->superCluster()->energy()) / cosh(eleProbe->superCluster()->eta()) ;
+            this -> _eleProbeCharge = eleProbe -> charge();
+
+
+            this -> _eleTagPt = eleTag -> pt();
+            this -> _eleTagEta = eleTag -> eta();
+            this -> _eleTagPhi = eleTag -> phi();
+            this -> _eleTagCharge = eleTag -> charge();
+
+            this -> _Nvtx = vertices->size();
+
+
+            this -> _eleProbeTriggerBits = this -> _eleProbeTriggerBitSet.to_ulong();
+            this -> _eleTagTriggerBits = this -> _eleTagTriggerBitSet.to_ulong();
+            //std::cout << "++++++++++ FILL ++++++++++" << std::endl;
+            this -> _tree -> Fill();
+
+        }
 
     }
 
 
 }
 
-bool Ntuplizer_noTagAndProbe::hasFilters(const pat::TriggerObjectStandAlone&  obj , const std::vector<std::string>& filtersToLookFor) {
+bool Ntuplizer_noTagAndProbe::hasFilters(const pat::TriggerObjectStandAlone&  obj, const std::vector<std::string>& filtersToLookFor)
+{
 
     const std::vector<std::string>& eventLabels = obj.filterLabels();
     for (const std::string& filter : filtersToLookFor)
