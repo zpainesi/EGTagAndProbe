@@ -6,7 +6,7 @@ from Configuration.Eras.Era_Run3_cff import Run3
 
 process = cms.Process("TagAndProbe",eras.Run3)
 
-isMC = True
+isMC = False
 isMINIAOD = True
 
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
@@ -43,45 +43,58 @@ from PhysicsTools.SelectorUtils.tools.vid_id_tools import *
 from RecoEgamma.ElectronIdentification.egmGsfElectronIDs_cfi import *
 from PhysicsTools.SelectorUtils.centralIDRegistry import central_id_registry
 
-process.load("RecoEgamma.ElectronIdentification.ElectronMVAValueMapProducer_cfi")
+#process.load("RecoEgamma.ElectronIdentification.ElectronMVAValueMapProducer_cfi")
 
 #**********************
 dataFormat = DataFormat.AOD
 if isMINIAOD:
     dataFormat = DataFormat.MiniAOD
-switchOnVIDElectronIdProducer(process, dataFormat)
+#switchOnVIDElectronIdProducer(process, dataFormat)
 #**********************
 
-process.load("RecoEgamma.ElectronIdentification.egmGsfElectronIDs_cfi")
-# overwrite a default parameter: for miniAOD, the collection name is a slimmed one
-if isMINIAOD:
-    process.egmGsfElectronIDs.physicsObjectSrc = cms.InputTag('slimmedElectrons')
-
-from PhysicsTools.SelectorUtils.centralIDRegistry import central_id_registry
-process.egmGsfElectronIDSequence = cms.Sequence(process.egmGsfElectronIDs)
+#process.load("RecoEgamma.ElectronIdentification.egmGsfElectronIDs_cfi")
+#from RecoEgamma.ElectronIdentification.ElectronMVAValueMapProducer_cfi import *
+## overwrite a default parameter: for miniAOD, the collection name is a slimmed one
+#if isMINIAOD:
+#    process.egmGsfElectronIDs.physicsObjectSrc = cms.InputTag('slimmedElectrons')
+#from PhysicsTools.SelectorUtils.centralIDRegistry import central_id_registry
+#process.egmGsfElectronIDSequence = cms.Sequence(process.egmGsfElectronIDs)
 
 # Define which IDs we want to produce
 # Each of these two example IDs contains all four standard 
-my_id_modules =[
-'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Fall17_iso_V1_cff'
-] 
+#my_id_modules =[
+#'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Fall17_iso_V1_cff',
+#'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Winter22_122X_V1_cff'
+#
+#] 
+#
+##Add them to the VID producer
+#for idmod in my_id_modules:
+#    setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection)
 
-#Add them to the VID producer
-for idmod in my_id_modules:
-    setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection)
+# define which IDs we want to produce
+#my_id_modules = [
+#'RecoEgamma.PhotonIdentification.Identification.cutBasedPhotonID_RunIIIWinter22_122X_V1_cff',
+#'RecoEgamma.PhotonIdentification.Identification.mvaPhotonID_Winter22_122X_V1_cff',
+#'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_RunIIIWinter22_iso_V1_cff',
+#'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_RunIIIWinter22_noIso_V1_cff',
+#'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Winter22_122X_V1_cff'
+#]
 
-from RecoEgamma.ElectronIdentification.ElectronMVAValueMapProducer_cfi import *
+#for idmod in my_id_modules:
+#   setupAllVIDIdsInModule(process, idmod, setupVIDElectronSelection)
+
 
 egmGsfElectronIDTask = cms.Task(
     #electronMVAVariableHelper,
-    electronMVAValueMapProducer,
-    egmGsfElectronIDs
+    #electronMVAValueMapProducer,
+    #egmGsfElectronIDs
 )
 egmGsfElectronIDSequence = cms.Sequence(egmGsfElectronIDTask)
 
 if not isMC: # will use 80X
     from Configuration.AlCa.autoCond import autoCond
-    process.GlobalTag.globaltag = '130X_dataRun3_Prompt_v2'
+    process.GlobalTag.globaltag = '140X_dataRun3_Prompt_v4'
     process.load('EGTagAndProbe.EGTagAndProbe.tagAndProbe_cff')
     process.source = cms.Source("PoolSource",
         fileNames = cms.untracked.vstring(
@@ -117,6 +130,7 @@ if isMINIAOD:
     #process.Ntuplizer.egmGsfElectronIDSequence = cms.InputTag("slimmedElectrons")
     process.Ntuplizer.genParticles = cms.InputTag("prunedGenParticles")
     process.Ntuplizer.Vertices = cms.InputTag("offlineSlimmedPrimaryVertices")
+    print(process.Ntuplizer.electrons)
 
 if options.JSONfile:
     #print "Using JSON: " , options.JSONfile
@@ -138,10 +152,8 @@ process.options = cms.untracked.PSet(
     wantSummary = cms.untracked.bool(True)
 )
 
-
-
 process.p = cms.Path(
-    process.egmGsfElectronIDSequence +
+ #   process.egmGsfElectronIDSequence +
     process.NtupleSeq
 )
 
