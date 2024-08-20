@@ -50,20 +50,22 @@ patTriggerUnpacker = cms.EDProducer("PATTriggerObjectStandAloneUnpacker",
 Ntuplizer = cms.EDAnalyzer("Ntuplizer",
     		treeName       = cms.string("TagAndProbe"),
 			photons = cms.InputTag("slimmedPhotons"),
-            electrons      = cms.InputTag("gedGsfElectrons"),
-			genParticles   = cms.InputTag("genParticles"),                       
+            electrons      = cms.InputTag("slimmedElectrons"),
+			genParticles   = cms.InputTag("prunedGenParticles"),                       
 			eleTightIdMap  = cms.string("mvaEleID-RunIIIWinter22-iso-V1-wp80"),
 			eleMediumIdMap = cms.string("mvaEleID-RunIIIWinter22-iso-V1-wp90"),
 			eleLooseIdMap  = cms.string("cutBasedElectronID-RunIIIWinter22-V1-loose"),
 			triggerSet     = cms.InputTag("patTriggerUnpacker"),
 			triggerResultsLabel = cms.InputTag("TriggerResults", "", "HLT"),   
-    			L1EG = cms.InputTag("caloStage2Digis", "EGamma", "RECO"),
-    			L1EmuEG = cms.InputTag("simCaloStage2Digis"),
-    			Vertices = cms.InputTag("offlinePrimaryVertices"),
-    			triggerListTag = HLTLISTTAG,
-    			triggerListProbe = HLTLISTPROBE,
-    			useGenMatch = cms.bool(False),
-    			useHLTMatch = cms.bool(True)
+    		L1EG = cms.InputTag("caloStage2Digis", "EGamma", "RECO"),
+    		L1EmuEG = cms.InputTag("simCaloStage2Digis"),
+    		Vertices = cms.InputTag("offlinePrimaryVertices"),
+    		triggerListTag = HLTLISTTAG,
+    		triggerListProbe = HLTLISTPROBE,
+    		useGenMatch = cms.bool(False),
+    		useHLTMatch = cms.bool(True),
+            Vertices = cms.InputTag("offlineSlimmedPrimaryVertices")
+           
 )
 
 NtupleSeq = cms.Sequence(

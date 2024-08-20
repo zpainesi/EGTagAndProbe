@@ -5,7 +5,8 @@ class Event;            //charis
 class EventSetup;       //charis
 class EcalSeverityLevelAlgo;    //charis
 
-struct tParameterSet {
+struct tParameterSet
+{
     //!Contains the HLT paths
     std::string hltPath;
     //!Contains the index in trigger names where hltPath is kept
