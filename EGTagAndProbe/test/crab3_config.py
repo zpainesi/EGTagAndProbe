@@ -11,6 +11,7 @@ config.section_("JobType")
 config.JobType.pluginName = 'Analysis'
 config.JobType.psetName = 'TandPRobeNtuplizer.py'
 config.JobType.allowUndistributedCMSSW = True
+#config.JobType.inputFiles = ["HcalL1TriggerObjects_2024_v4.0.db","HcalL1TriggerObjects_2024_v4.1.db"]
 
 config.section_("Data")
 config.Data.inputDataset = '/EGamma0/Run2024G-PromptReco-v1/MINIAOD'
@@ -22,8 +23,8 @@ config.Data.inputDBS = 'global'
 config.Data.splitting = 'FileBased'
 config.Data.unitsPerJob = 1  #number of events per jobs
 config.Data.totalUnits  = -1  #number of event
-config.Data.outLFNDirBase = '/store/group/dpg_trigger/comm_trigger/L1Trigger/athachay/crabOutputStorage/2024/Data/'
-config.Data.lumiMask    ='Collisions24_13p6TeV_378981_384383_DCSOnly_TkPx.json'
+config.Data.outLFNDirBase = '/store/group/dpg_trigger/comm_trigger/L1Trigger/zpainesi/CrabOutputStorage/2024'
+config.Data.lumiMask    ='/afs/cern.ch/work/z/zpainesi/public/Certification/Collisions24/Cert_2024_DCSonly_from1August__300824.txt'
 #config.Data.runRange    ='362616-362616'
 config.Data.publication = False
 config.Data.allowNonValidInputDataset = True
