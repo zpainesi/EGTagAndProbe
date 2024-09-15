@@ -151,7 +151,7 @@ void produceTurnOns(string infile,string ofileName,TString treeName,string prefi
    
     if( doEmulationBranches )
     {
-        std::cout<<"Doing Emulation Branches !\n";
+        std::cout<<"\nDoing Emulation Branches !\n";
         emulationSelection="Emu";
         emulationSelection2="";
         t1->SetBranchAddress("l1tEmuPt", &l1tPt);
