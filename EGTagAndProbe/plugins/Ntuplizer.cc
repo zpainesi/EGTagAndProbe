@@ -186,7 +186,7 @@ private:
     int _hasL1Emu_tightiso[100];
 
     edm::EDGetTokenT< vector<pat::Photon>  >  _photonsTag;
-    edm::EDGetTokenT<edm::View<pat::Electron> >  _electronsTag;
+    edm::EDGetTokenT<edm::View<reco::GsfElectron> >  _electronsTag;
     edm::EDGetTokenT<edm::View<reco::GenParticle> > _genParticlesTag;
     std::string eleLooseIdMapTag;
     std::string eleTightIdMapTag;
@@ -219,7 +219,7 @@ private:
 // ----Constructor and Destructor -----
 Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig) :
     _photonsTag       (consumes<vector<pat::Photon> >                     (iConfig.getParameter<edm::InputTag>("photons"))),
-    _electronsTag       (consumes<edm::View<pat::Electron> >                     (iConfig.getParameter<edm::InputTag>("electrons"))),
+    _electronsTag       (consumes<edm::View<reco::GsfElectron> >                     (iConfig.getParameter<edm::InputTag>("electrons"))),
     _genParticlesTag  (consumes<edm::View<reco::GenParticle> > (iConfig.getParameter<edm::InputTag>("genParticles"))),
     eleLooseIdMapTag  (iConfig.getParameter<std::string>("eleLooseIdMap")),
     eleTightIdMapTag  (iConfig.getParameter<std::string>("eleTightIdMap")),
@@ -594,15 +594,14 @@ void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& eSetup)
 {
 
     // search for the tag in the event
-    edm::Handle< vector<pat::Photon> > photons;
-    //edm::Handle<edm::View<reco::GsfElectron> > electrons;
-    edm::Handle<edm::View<pat::Electron> > electrons;
+    // edm::Handle< vector<pat::Photon> > photons;
+    edm::Handle<edm::View<reco::GsfElectron> > electrons;
+    //edm::Handle<edm::View<pat::Electron> > electrons;
     edm::Handle<edm::View<reco::GenParticle> > genParticles;
     edm::Handle<pat::TriggerObjectStandAloneCollection> triggerObjects;
     edm::Handle<edm::TriggerResults> triggerBits;
     edm::Handle<std::vector<reco::Vertex> >  vertices;
-
-    iEvent.getByToken(this -> _photonsTag, photons);
+   // iEvent.getByToken(this -> _photonsTag, photons);
     iEvent.getByToken(this -> _electronsTag, electrons);
     if(this->_useHLTMatch)
         iEvent.getByToken(this -> _triggerObjects, triggerObjects);
@@ -634,22 +633,23 @@ void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& eSetup)
         this->_allEl_SclEt.push_back((ele->superCluster()->energy()) / cosh(ele->superCluster()->eta()));
         this->_allEl_Charge.push_back(ele->charge());
     }
-    nPhotons=photons->size();
-    for(unsigned int k=0; k<photons->size(); ++k)
-    {
-        const auto ele = photons->at(k);
-        allPhotonPt[k]=ele.pt();
-        allPhotonEta[k]=ele.eta();
-        allPhotonPhi[k]=ele.phi();
-        allPhotonScEt[k]=ele.superCluster()->energy() / cosh(ele.superCluster()->eta());
-    }
+    // nPhotons=photons->size();
+    // for(unsigned int k=0; k<photons->size(); ++k)
+    // {
+    //     const auto ele = photons->at(k);
+    //     allPhotonPt[k]=ele.pt();
+    //     allPhotonEta[k]=ele.eta();
+    //     allPhotonPhi[k]=ele.phi();
+    //     allPhotonScEt[k]=ele.superCluster()->energy() / cosh(ele.superCluster()->eta());
+    // }
     //////////////////////////////////////////////////////////////////////////////////////
     for (unsigned int i = 0; i< electrons->size(); ++i)
     {
 
 
         const auto eleTag = electrons->ptrAt(i);
-        int isTagIDMedium = eleTag->electronID(eleMediumIdMapTag) ;
+        int isTagIDMedium =  1;
+        //int isTagIDMedium = eleTag->electronID(eleMediumIdMapTag) ;
         if(!isTagIDMedium || eleTag->p4().Pt()<30) continue;
 
 
@@ -667,9 +667,12 @@ void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& eSetup)
             const auto eleProbe = electrons->ptrAt(j);
 
 
-            int isProbeLoose2 =eleProbe->electronID(eleLooseIdMapTag) ;
-            int isProbeTight  =eleProbe->electronID(eleMediumIdMapTag);
-            int isProbeMedium =eleProbe->electronID(eleTightIdMapTag) ;
+            int isProbeLoose2 =1;
+            int isProbeTight  =1;
+            int isProbeMedium =1;
+            //int isProbeLoose2 =eleProbe->electronID(eleLooseIdMapTag) ;
+            //int isProbeTight  =eleProbe->electronID(eleMediumIdMapTag);
+            //int isProbeMedium =eleProbe->electronID(eleTightIdMapTag) ;
             this -> _isProbeLoose = isProbeLoose2;
             this -> _isProbeTight = isProbeTight;
             this -> _isProbeMedium = isProbeMedium;
@@ -913,7 +916,6 @@ void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& eSetup)
         }
 
     }
-
 
 
 }

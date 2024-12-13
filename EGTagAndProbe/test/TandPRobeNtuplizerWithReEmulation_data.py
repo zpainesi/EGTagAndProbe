@@ -51,23 +51,25 @@ from PhysicsTools.SelectorUtils.tools.vid_id_tools import *
 from RecoEgamma.ElectronIdentification.egmGsfElectronIDs_cfi import *
 from PhysicsTools.SelectorUtils.centralIDRegistry import central_id_registry
 
-process.load("RecoEgamma.ElectronIdentification.ElectronMVAValueMapProducer_cfi")
+#process.load("RecoEgamma.ElectronIdentification.ElectronMVAValueMapProducer_cfi")
 
 #**********************
 dataFormat = DataFormat.AOD
-if isMINIAOD:
-    dataFormat = DataFormat.MiniAOD
+process.load("RecoEgamma.ElectronIdentification.egmGsfElectronIDs_cfi")
+process.egmGsfElectronIDSequence = cms.Sequence(process.egmGsfElectronIDs)
+#if isMINIAOD:
+#    dataFormat = DataFormat.MiniAOD
 switchOnVIDElectronIdProducer(process, dataFormat)
 #**********************
 
-process.load("RecoEgamma.ElectronIdentification.egmGsfElectronIDs_cfi")
 # overwrite a default parameter: for miniAOD, the collection name is a slimmed one
 if isMINIAOD:
-    process.egmGsfElectronIDs.physicsObjectSrc = cms.InputTag('slimmedElectrons')
+    pass
+    #process.egmGsfElectronIDs.physicsObjectSrc = cms.InputTag('slimmedElectrons')
 
 
-from PhysicsTools.SelectorUtils.centralIDRegistry import central_id_registry
-process.egmGsfElectronIDSequence = cms.Sequence(process.egmGsfElectronIDs)
+#from PhysicsTools.SelectorUtils.centralIDRegistry import central_id_registry
+#process.egmGsfElectronIDSequence = cms.Sequence(process.egmGsfElectronIDs)
 
 # Define which IDs we want to produce
 # Each of these two example IDs contains all four standard 
@@ -84,24 +86,19 @@ from RecoEgamma.ElectronIdentification.ElectronMVAValueMapProducer_cfi import *
 
 egmGsfElectronIDTask = cms.Task(
     #electronMVAVariableHelper,
-    electronMVAValueMapProducer,
-    egmGsfElectronIDs
+#    electronMVAValueMapProducer,
+#    egmGsfElectronIDs
 )
 egmGsfElectronIDSequence = cms.Sequence(egmGsfElectronIDTask)
 
 if not isMC: # will use 80X
     from Configuration.AlCa.autoCond import autoCond
-    process.GlobalTag.globaltag = '130X_dataRun3_Prompt_v4'
+    process.GlobalTag.globaltag = '140X_dataRun3_Prompt_v4'
     process.load('EGTagAndProbe.EGTagAndProbe.tagAndProbe_cff')
     process.source = cms.Source("PoolSource",
         fileNames = cms.untracked.vstring(
-        '/store/data/Run2023D/EGamma0/MINIAOD/PromptReco-v1/000/369/873/00000/880638d7-2704-464e-8c3e-462595cc7f66.root'
-        ),
-        secondaryFileNames = cms.untracked.vstring(
-        "/store/data/Run2023D/EGamma0/RAW/v1/000/369/873/00000/24f1d929-7f1d-4672-99df-2225214ae1ff.root",
-        "/store/data/Run2023D/EGamma0/RAW/v1/000/369/873/00000/3d6a9121-29e9-48d6-829c-1c14f976890d.root",
-        "/store/data/Run2023D/EGamma0/RAW/v1/000/369/873/00000/4e782ed6-7d8f-4d93-8911-01372ddb97f2.root"
-      )
+        'file:/eos/home-a/athachay/workarea/120e6d8c-ec45-40ed-9f5c-986a02b2492b.root'
+        )
     )
 else:
     process.GlobalTag.globaltag = '123X_mcRun3_2021_realistic_v13'
@@ -115,9 +112,10 @@ else:
     process.Ntuplizer.useHLTMatch = cms.bool(False) #In case no HLT object in MC sample considered or you're fed up with trying to find the right HLT collections
 
 if isMINIAOD:
-    process.Ntuplizer.electrons = cms.InputTag("slimmedElectrons")
-    process.Ntuplizer.genParticles = cms.InputTag("prunedGenParticles")
-    process.Ntuplizer.Vertices = cms.InputTag("offlineSlimmedPrimaryVertices")
+    pass
+    #process.Ntuplizer.electrons = cms.InputTag("slimmedElectrons")
+    #process.Ntuplizer.genParticles = cms.InputTag("prunedGenParticles")
+    #process.Ntuplizer.Vertices = cms.InputTag("offlineSlimmedPrimaryVertices")
 
 process.schedule = cms.Schedule()
 
@@ -133,7 +131,7 @@ else:
     process = L1TTurnOffUnpackStage2GtGmtAndCalo(process)
 
 
-process.load("L1Trigger.L1TCalorimeter.caloParams_2023_v0_4_eTRecalib_cfi")
+#process.load("L1Trigger.L1TCalorimeter.caloParams_2023_v0_4_eTRecalib_cfi")
 
 #### handling of cms line options for tier3 submission
 #### the following are dummy defaults, so that one can normally use the config changing file list by hand etc.
