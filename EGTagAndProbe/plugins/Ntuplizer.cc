@@ -188,6 +188,11 @@ private:
     edm::EDGetTokenT< vector<pat::Photon>  >  _photonsTag;
     edm::EDGetTokenT<edm::View<reco::GsfElectron> >  _electronsTag;
     edm::EDGetTokenT<edm::View<reco::GenParticle> > _genParticlesTag;
+    
+    edm::EDGetTokenT<edm::ValueMap<bool> > _eleLooseIdMapTag;
+    edm::EDGetTokenT<edm::ValueMap<bool> > _eleMediumIdMapTag;
+    edm::EDGetTokenT<edm::ValueMap<bool> > _eleTightIdMapTag;
+
     std::string eleLooseIdMapTag;
     std::string eleTightIdMapTag;
     std::string eleMediumIdMapTag;
@@ -221,9 +226,9 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig) :
     _photonsTag       (consumes<vector<pat::Photon> >                     (iConfig.getParameter<edm::InputTag>("photons"))),
     _electronsTag       (consumes<edm::View<reco::GsfElectron> >                     (iConfig.getParameter<edm::InputTag>("electrons"))),
     _genParticlesTag  (consumes<edm::View<reco::GenParticle> > (iConfig.getParameter<edm::InputTag>("genParticles"))),
-    eleLooseIdMapTag  (iConfig.getParameter<std::string>("eleLooseIdMap")),
-    eleTightIdMapTag  (iConfig.getParameter<std::string>("eleTightIdMap")),
-    eleMediumIdMapTag (iConfig.getParameter<std::string>("eleMediumIdMap")),
+    _eleLooseIdMapTag (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleLooseIdMap"))),
+    _eleMediumIdMapTag(consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleMediumIdMap"))),
+    _eleTightIdMapTag (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleTightIdMap"))),
     _triggerObjects (consumes<pat::TriggerObjectStandAloneCollection> (iConfig.getParameter<edm::InputTag>("triggerSet"))),
     _triggerBits    (consumes<edm::TriggerResults>                    (iConfig.getParameter<edm::InputTag>("triggerResultsLabel"))),
     _L1EGTag       (consumes<l1t::EGammaBxCollection>                   (iConfig.getParameter<edm::InputTag>("L1EG"))),
@@ -594,17 +599,29 @@ void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& eSetup)
 {
 
     // search for the tag in the event
-    // edm::Handle< vector<pat::Photon> > photons;
+    ///edm::Handle< vector<pat::Photon> > photons;
     edm::Handle<edm::View<reco::GsfElectron> > electrons;
-    //edm::Handle<edm::View<pat::Electron> > electrons;
-    edm::Handle<edm::View<reco::GenParticle> > genParticles;
     edm::Handle<pat::TriggerObjectStandAloneCollection> triggerObjects;
     edm::Handle<edm::TriggerResults> triggerBits;
     edm::Handle<std::vector<reco::Vertex> >  vertices;
+    edm::Handle<edm::ValueMap<bool> > loose_id_decisions;
+    edm::Handle<edm::ValueMap<bool> > medium_id_decisions;
+    edm::Handle<edm::ValueMap<bool> > tight_id_decisions;
+    
+    edm::Handle<edm::View<reco::GenParticle> > genParticles;
    // iEvent.getByToken(this -> _photonsTag, photons);
+   
     iEvent.getByToken(this -> _electronsTag, electrons);
-    if(this->_useHLTMatch)
+	iEvent.getByToken(this -> _eleLooseIdMapTag , loose_id_decisions);
+	iEvent.getByToken(this -> _eleMediumIdMapTag, medium_id_decisions);
+	iEvent.getByToken(this -> _eleTightIdMapTag , tight_id_decisions);
+
+
+
+    if(this->_useHLTMatch) {
         iEvent.getByToken(this -> _triggerObjects, triggerObjects);
+     }
+
     iEvent.getByToken(this -> _triggerBits, triggerBits);
     iEvent.getByToken(this -> _VtxTag,vertices);
 
@@ -648,7 +665,7 @@ void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& eSetup)
 
 
         const auto eleTag = electrons->ptrAt(i);
-        int isTagIDMedium =  1;
+        int isTagIDMedium = (*medium_id_decisions)[eleTag];
         //int isTagIDMedium = eleTag->electronID(eleMediumIdMapTag) ;
         if(!isTagIDMedium || eleTag->p4().Pt()<30) continue;
 
@@ -667,16 +684,17 @@ void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& eSetup)
             const auto eleProbe = electrons->ptrAt(j);
 
 
-            int isProbeLoose2 =1;
-            int isProbeTight  =1;
-            int isProbeMedium =1;
-            //int isProbeLoose2 =eleProbe->electronID(eleLooseIdMapTag) ;
-            //int isProbeTight  =eleProbe->electronID(eleMediumIdMapTag);
-            //int isProbeMedium =eleProbe->electronID(eleTightIdMapTag) ;
+            //int isProbeLoose2 =1;
+            //int isProbeTight  =1;
+            //int isProbeMedium =1;
+
+            int isProbeLoose2 = (*loose_id_decisions) [eleProbe];
+            int isProbeTight  = (*tight_id_decisions) [eleProbe];
+            int isProbeMedium = (*medium_id_decisions)[eleProbe];
+
             this -> _isProbeLoose = isProbeLoose2;
             this -> _isProbeTight = isProbeTight;
             this -> _isProbeMedium = isProbeMedium;
-
 
             float eleProbeEta = eleProbe->p4().Eta();
             if((abs(eleProbeEta)>1.4442 && abs(eleProbeEta)<1.566)) continue;
