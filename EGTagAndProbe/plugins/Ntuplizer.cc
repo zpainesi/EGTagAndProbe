@@ -223,7 +223,7 @@ private:
 
 // ----Constructor and Destructor -----
 Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig) :
-    _photonsTag       (consumes<vector<pat::Photon> >                     (iConfig.getParameter<edm::InputTag>("photons"))),
+  #  _photonsTag       (consumes<vector<pat::Photon> >                     (iConfig.getParameter<edm::InputTag>("photons"))),
     _electronsTag       (consumes<edm::View<reco::GsfElectron> >                     (iConfig.getParameter<edm::InputTag>("electrons"))),
     _genParticlesTag  (consumes<edm::View<reco::GenParticle> > (iConfig.getParameter<edm::InputTag>("genParticles"))),
     _eleLooseIdMapTag (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleLooseIdMap"))),
