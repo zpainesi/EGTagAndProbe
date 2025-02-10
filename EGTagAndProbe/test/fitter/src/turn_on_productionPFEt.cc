@@ -268,8 +268,8 @@ void produceTurnOns(string infile,string ofileName,TString treeName,string prefi
     int nEventsProcessed=0;
     for (Long64_t jentry=0; jentry<nentries; jentry++){
        
-       eleProbeSclEt=eleProbePt;
        t1->GetEntry(jentry); 
+       eleProbeSclEt=eleProbePt;
 
        //if(l1tEmuRawEt < 0.0 ){   k++;   continue ;  }
        if(jentry%reportEvery ==0 )
