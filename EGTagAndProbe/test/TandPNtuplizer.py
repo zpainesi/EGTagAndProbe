@@ -10,6 +10,8 @@ doReRmu = True
 CALOPARAMS = "L1Trigger.L1TCalorimeter.caloParams_2024_v0_3_cfi"
 CALOPARAMS = "L1Trigger.L1TCalorimeter.caloParams_2024_v0_3_cfi_recaliberated"
 
+isMC = False
+
 process = cms.Process("TagAndProbe",eras.Run3)
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 process.load('Configuration.StandardSequences.RawToDigi_Data_cff')
@@ -22,7 +24,7 @@ process.load('Configuration.EventContent.EventContent_cff')
 process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
 process.load('Configuration.StandardSequences.MagneticField_AutoFromDBCurrent_cff')
 
-isMC = False
+
 if isMINIAOD:
     doReRmu=False
     print("Sorry MiniAOD workflow not supported anymore , please use the Z-Elecron sim in RAW-RECO format \n( you can find the miniAOD supported workflows in other branches of the repo )")
@@ -86,9 +88,9 @@ else :
     process.electronMVAValueMapProducer.src=cms.InputTag("gedGsfElectrons")
     for idmod in my_id_modules:
         setupAllVIDIdsInModule(process, idmod, setupVIDElectronSelection)
-    process.Ntuplizer.eleLooseIdMap   = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-RunIIIWinter22-V1-loose")
-    process.Ntuplizer.eleTightIdMap   = cms.InputTag("egmGsfElectronIDs:mvaEleID-RunIIIWinter22-iso-V1-wp80")
-    process.Ntuplizer.eleMediumIdMap  = cms.InputTag("egmGsfElectronIDs:mvaEleID-RunIIIWinter22-iso-V1-wp90")
+    process.Ntuplizer.eleLooseIdMap   = cms.string("egmGsfElectronIDs:cutBasedElectronID-RunIIIWinter22-V1-loose")
+    process.Ntuplizer.eleTightIdMap   = cms.string("egmGsfElectronIDs:mvaEleID-RunIIIWinter22-iso-V1-wp80")
+    process.Ntuplizer.eleMediumIdMap  = cms.string("egmGsfElectronIDs:mvaEleID-RunIIIWinter22-iso-V1-wp90")
 
 process.schedule = cms.Schedule()
 
@@ -102,8 +104,8 @@ else:
     from L1Trigger.Configuration.customiseUtils import L1TTurnOffUnpackStage2GtGmtAndCalo 
     process = L1TTurnOffUnpackStage2GtGmtAndCalo(process)
 
-
-process.load( CALOPARAMS )
+if doReRmu:
+    process.load( CALOPARAMS )
 
 #### handling of cms line options for tier3 submission
 #### the following are dummy defaults, so that one can normally use the config changing file list by hand etc.
