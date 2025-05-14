@@ -6,9 +6,9 @@ from Configuration.StandardSequences.Eras import eras
 from Configuration.Eras.Era_Run3_cff import Run3
 
 isMINIAOD = False
-doReRmu = True
+doReRmu = False
 CALOPARAMS = "L1Trigger.L1TCalorimeter.caloParams_2024_v0_3_cfi"
-CALOPARAMS = "L1Trigger.L1TCalorimeter.caloParams_2024_v0_3_cfi_recaliberated"
+CALOPARAMS = "L1Trigger.L1TCalorimeter.caloParams_2025_v0_2_cfi"
 
 isMC = False
 
@@ -51,11 +51,11 @@ options.parseArguments()
 
 if not isMC: # will use 80X
     from Configuration.AlCa.autoCond import autoCond
-    process.GlobalTag.globaltag = '140X_dataRun3_Prompt_v4'
+    process.GlobalTag.globaltag = '150X_dataRun3_Prompt_v1'
     process.load('EGTagAndProbe.EGTagAndProbe.tagAndProbe_cff')
     process.source = cms.Source("PoolSource",
         fileNames = cms.untracked.vstring(
-        'file:/eos/home-a/athachay/workarea/120e6d8c-ec45-40ed-9f5c-986a02b2492b.root'
+        '/store/data/Run2025B/EGamma0/RAW-RECO/ZElectron-PromptReco-v1/000/391/910/00000/34e840b4-9da9-4f14-9905-8887731c5ee5.root'
         )
     )
 else:
@@ -88,9 +88,9 @@ else :
     process.electronMVAValueMapProducer.src=cms.InputTag("gedGsfElectrons")
     for idmod in my_id_modules:
         setupAllVIDIdsInModule(process, idmod, setupVIDElectronSelection)
-    process.Ntuplizer.eleLooseIdMap   = cms.string("egmGsfElectronIDs:cutBasedElectronID-RunIIIWinter22-V1-loose")
-    process.Ntuplizer.eleTightIdMap   = cms.string("egmGsfElectronIDs:mvaEleID-RunIIIWinter22-iso-V1-wp80")
-    process.Ntuplizer.eleMediumIdMap  = cms.string("egmGsfElectronIDs:mvaEleID-RunIIIWinter22-iso-V1-wp90")
+    process.Ntuplizer.eleLooseIdMap   = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-RunIIIWinter22-V1-loose")
+    process.Ntuplizer.eleTightIdMap   = cms.InputTag("egmGsfElectronIDs:mvaEleID-RunIIIWinter22-iso-V1-wp80")
+    process.Ntuplizer.eleMediumIdMap  = cms.InputTag("egmGsfElectronIDs:mvaEleID-RunIIIWinter22-iso-V1-wp90")
 
 process.schedule = cms.Schedule()
 
