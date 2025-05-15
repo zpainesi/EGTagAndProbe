@@ -413,6 +413,15 @@ void produceResolution(string infile,string ofileName, TString treeName,string p
     
     for (int jentry=0; jentry<nentries; jentry++){
         t1->GetEntry(jentry);
+       
+	//////////////////////////////////////////////////////
+//////////                                              //////////
+/////////               RunNumbers Cut                  //////////
+//////////                                              //////////
+       //////////////////////////////////////////////////////
+//       if(RunNumber<391884 || RunNumber>391874)continue;
+//      std::cout<<"RunNumber: "<<RunNumber<<std::endl;
+
        if(l1tEmuRawEt < 0 ){   k++;   continue ;  }
        if(l1tPt < 0.0 ){   continue ;  }
        // if(Nvtx >52) continue;   
