@@ -269,6 +269,16 @@ void produceTurnOns(string infile,string ofileName,TString treeName,string prefi
     for (Long64_t jentry=0; jentry<nentries; jentry++){
        
        t1->GetEntry(jentry); 
+
+	//////////////////////////////////////////////////////
+//////////                                              //////////
+/////////               RunNumbers Cut                  //////////
+//////////                                              //////////
+       //////////////////////////////////////////////////////
+//       if(RunNumber<391884 || RunNumber>391874)continue;
+//      std::cout<<"RunNumber: "<<RunNumber<<std::endl;
+
+	    
        eleProbeSclEt=eleProbePt;
 
        //if(l1tEmuRawEt < 0.0 ){   k++;   continue ;  }
