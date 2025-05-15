@@ -612,7 +612,7 @@ void produceResolution(string infile,string ofileName, TString treeName,string p
 
 
     }
-    std::cout<<"Averate PU : " <<avgPU/total<<"\n";;
+    std::cout<<"Average PU : " <<avgPU/total<<"\n";;
     
 
 
