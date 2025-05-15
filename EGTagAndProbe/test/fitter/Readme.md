@@ -14,8 +14,8 @@ make resolution_productionPFEt
 ```
 How to run :
 ```
-./turn_on_productionPFEt.exe cfgs/customize_2023DNewLayer1_reemulated.cfg
-./resolution_productionPFEt.exe cfgs/customize_2023DNewLayer1_reemulated.cfg
+./turn_on_productionPFEt.exe cfgs/turnon/customize_turnon_Unp.cfg
+./resolution_productionPFEt.exe cfgs/reso/customize_reso_Unp.cfg
 ```
 * Turnons/Resolutions wrt. Gen Et // Only for MC
 ```
@@ -26,8 +26,8 @@ make resolution_productionGenEt
 Running the executable
 
 ```
-./turn_on_productionXXXEt.exe cfgs/customize_MC_hybridMC_newIso_scet.cfg
-./resolution_productionXXXEt.exe cfgs/customize_MC_hybridMC_newIso_scet.cfg
+./turn_on_productionXXXEt.exe cfgs/turnon/customize_turnon_Unp.cfg
+./resolution_productionXXXEt.exe cfgs/reso/customize_reso_Unp.cfg
 ```
 
 #### Rates 
