@@ -27,7 +27,7 @@ process.load('Configuration.StandardSequences.MagneticField_AutoFromDBCurrent_cf
 
 if isMINIAOD:
     doReRmu=False
-    print("Sorry MiniAOD workflow not supported anymore , please use the Z-Elecron sim in RAW-RECO format \n( you can find the miniAOD supported workflows in other branches of the repo )")
+    print("Sorry MiniAOD workflow not supported anymore.\nPlease use the Z-Elecron sim in RAW-RECO format.\n( you can find the miniAOD supported workflows in the branch 'MiniAOD_files' of the repo )")
     exit(0)
 
 options = VarParsing.VarParsing ('analysis')
