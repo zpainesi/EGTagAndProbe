@@ -20,6 +20,7 @@
 #include "TDirectory.h"
 #include "TGraphAsymmErrors.h"
 #include <chrono>
+#include <random>
 
 #define BARREL_BEG -0.01
 #define BARREL_END  1.305
@@ -266,10 +267,21 @@ void produceTurnOns(string infile,string ofileName,TString treeName,string prefi
     auto t_end = std::chrono::high_resolution_clock::now();
 	int k=0;
     int nEventsProcessed=0;
-    for (Long64_t jentry=0; jentry<nentries; jentry++){
-       
-       t1->GetEntry(jentry); 
 
+	std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<> dis(0.0, 1.0);
+	
+    //std::cout<<std::endl"@@@@@@@  There is a specific RunNumbers range defined  @@@@@@@"<<std::endl<<std::endl;
+    //std::cout<<std::endl<<"@@@@@@@   Processed 1/4 of events (random<0.25)  @@@@@@@"<<std::endl<<std::endl;
+	
+    for (Long64_t jentry=0; jentry<nentries; jentry++){
+
+       //double r = dis(gen);
+       //if (r >= 0.25) continue; //skip 75% of events --> 2M from 8M  //// if use it ->uncomment out  l.276
+		
+       t1->GetEntry(jentry); 
+		
 	//////////////////////////////////////////////////////
 //////////                                              //////////
 /////////               RunNumbers Cut                  //////////
