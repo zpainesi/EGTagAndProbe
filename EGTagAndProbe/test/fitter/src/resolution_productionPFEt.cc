@@ -311,6 +311,11 @@ void produceResolution(string infile,string ofileName, TString treeName,string p
         resolutionMap[idx]["PtGThan20EtVsdEt_highReso"  ] = new resolutionMeasurement("PtGThan20EtVsdEt_highReso",PtBINS,PtEdges,dPtHighResBINS,dPtHighResEdges);
         resolutionMap[idx]["PtGThan20EtaVsdEt_highReso"  ] = new resolutionMeasurement("PtGThan20EtaVsdEt_highReso",EtaBINS,EtaEdges,dPtHighResBINS,dPtHighResEdges);
 
+		resolutionMap[idx]["PtGThan32EtVsdEt"  ] = new resolutionMeasurement("PtGThan32EtVsdEt",PtBINS,PtEdges,dPtBINS,dPtEdges);
+        resolutionMap[idx]["PtGThan32EtaVsdEt"  ] = new resolutionMeasurement("PtGThan32EtaVsdEt",EtaBINS,EtaEdges,dPtBINS,dPtEdges);
+        resolutionMap[idx]["PtGThan32EtVsdEt_highReso"  ] = new resolutionMeasurement("PtGThan32EtVsdEt_highReso",PtBINS,PtEdges,dPtHighResBINS,dPtHighResEdges);
+        resolutionMap[idx]["PtGThan32EtaVsdEt_highReso"  ] = new resolutionMeasurement("PtGThan32EtaVsdEt_highReso",EtaBINS,EtaEdges,dPtHighResBINS,dPtHighResEdges);
+
         resolutionMap[idx]["Pt0To20EtVsdEt"  ] = new resolutionMeasurement("Pt0To20EtVsdEt",PtBINS,PtEdges,dPtBINS,dPtEdges);
         resolutionMap[idx]["Pt0To20EtaVsdEt"  ] = new resolutionMeasurement("Pt0To20EtaVsdEt",EtaBINS,EtaEdges,dPtBINS,dPtEdges);
         resolutionMap[idx]["Pt0To20EtVsdEt_highReso"  ] = new resolutionMeasurement("Pt0To20EtVsdEt_highReso",PtBINS,PtEdges,dPtHighResBINS,dPtHighResEdges);
@@ -486,6 +491,13 @@ void produceResolution(string infile,string ofileName, TString treeName,string p
             resolutionMap[RunNumber]["PtGThan20EtVsdEt"]   ->Fill(eleProbeEta,eleProbeSclEt,l1tPt/eleProbeSclEt);
             resolutionMap[RunNumber]["PtGThan20EtaVsdEt_highReso"]  ->Fill(eleProbeEta,abs(eleProbeEta),l1tPt/eleProbeSclEt);
             resolutionMap[RunNumber]["PtGThan20EtVsdEt_highReso"]   ->Fill(eleProbeEta,eleProbeSclEt,l1tPt/eleProbeSclEt);
+          }
+		if( eleProbeSclEt > 32.0 )
+          {
+            resolutionMap[RunNumber]["PtGThan32EtaVsdEt"]  ->Fill(eleProbeEta,abs(eleProbeEta),l1tPt/eleProbeSclEt);
+            resolutionMap[RunNumber]["PtGThan32EtVsdEt"]   ->Fill(eleProbeEta,eleProbeSclEt,l1tPt/eleProbeSclEt);
+            resolutionMap[RunNumber]["PtGThan32EtaVsdEt_highReso"]  ->Fill(eleProbeEta,abs(eleProbeEta),l1tPt/eleProbeSclEt);
+            resolutionMap[RunNumber]["PtGThan32EtVsdEt_highReso"]   ->Fill(eleProbeEta,eleProbeSclEt,l1tPt/eleProbeSclEt);
           }
           if( eleProbeSclEt < 20.0 )
           {
