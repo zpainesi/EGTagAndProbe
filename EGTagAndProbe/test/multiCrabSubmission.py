@@ -52,7 +52,7 @@ def main():
         config.Data.unitsPerJob = options.unitsPerJob
         config.Data.totalUnits = None
         config.Data.outputDatasetTag = None
-        config.Data.outLFNDirBase = '/store/group/dpg_trigger/comm_trigger/L1Trigger/athachay/crabOutputStorage/L1RawRecoPerformance2023'
+        config.Data.outLFNDirBase = '/store/group/dpg_trigger/comm_trigger/L1Trigger/zpainesi/crabOutputStorage/2025/Data/DPnote'
         config.Data.lumiMask = options.lumiMask
         config.Site.storageSite = "T2_CH_CERN" # Choose your site. 
         
@@ -60,10 +60,35 @@ def main():
 
         # Will submit one task for each of these input datasets.
         inputDatasets = [
-                            "/EGamma0/Run2023B-ZElectron-PromptReco-v1/RAW-RECO",
-                            "/EGamma1/Run2023B-ZElectron-PromptReco-v1/RAW-RECO",
-                            "/EGamma0/Run2023C-ZElectron-PromptReco-v1/RAW-RECO",
-                            "/EGamma1/Run2023C-ZElectron-PromptReco-v1/RAW-RECO",
+                            "/EGamma0/Run2025B-ZElectron-PromptReco-v1/RAW-RECO",
+                            "/EGamma1/Run2025B-ZElectron-PromptReco-v1/RAW-RECO",
+                            "/EGamma2/Run2025B-ZElectron-PromptReco-v1/RAW-RECO",
+                            "/EGamma3/Run2025B-ZElectron-PromptReco-v1/RAW-RECO",
+                            "/EGamma0/Run2025C-ZElectron-PromptReco-v1/RAW-RECO",
+                            "/EGamma1/Run2025C-ZElectron-PromptReco-v1/RAW-RECO",
+                            "/EGamma2/Run2025C-ZElectron-PromptReco-v1/RAW-RECO",
+                            "/EGamma3/Run2025C-ZElectron-PromptReco-v1/RAW-RECO",
+                            "/EGamma0/Run2025C-ZElectron-PromptReco-v2/RAW-RECO",
+                            "/EGamma1/Run2025C-ZElectron-PromptReco-v2/RAW-RECO",
+                            "/EGamma2/Run2025C-ZElectron-PromptReco-v2/RAW-RECO",
+                            "/EGamma3/Run2025C-ZElectron-PromptReco-v2/RAW-RECO",
+                            "/EGamma0/Run2025D-ZElectron-PromptReco-v1/RAW-RECO",
+                            "/EGamma1/Run2025D-ZElectron-PromptReco-v1/RAW-RECO",
+                            "/EGamma2/Run2025D-ZElectron-PromptReco-v1/RAW-RECO",
+                            "/EGamma3/Run2025D-ZElectron-PromptReco-v1/RAW-RECO",
+                            "/EGamma0/Run2025E-ZElectron-PromptReco-v1/RAW-RECO",
+                            "/EGamma1/Run2025E-ZElectron-PromptReco-v1/RAW-RECO",
+                            "/EGamma2/Run2025E-ZElectron-PromptReco-v1/RAW-RECO",
+                            "/EGamma3/Run2025E-ZElectron-PromptReco-v1/RAW-RECO",
+                            "/EGamma0/Run2025F-ZElectron-PromptReco-v1/RAW-RECO",
+                            "/EGamma1/Run2025F-ZElectron-PromptReco-v1/RAW-RECO",
+                            "/EGamma2/Run2025F-ZElectron-PromptReco-v1/RAW-RECO",
+                            "/EGamma3/Run2025F-ZElectron-PromptReco-v1/RAW-RECO",
+                            "/EGamma0/Run2025F-ZElectron-PromptReco-v2/RAW-RECO",
+                            "/EGamma1/Run2025F-ZElectron-PromptReco-v2/RAW-RECO",
+                            "/EGamma2/Run2025F-ZElectron-PromptReco-v2/RAW-RECO",
+                            "/EGamma3/Run2025F-ZElectron-PromptReco-v2/RAW-RECO",
+                                       
                         ]
 
         for inDS in inputDatasets:
