@@ -13,8 +13,8 @@ Based on TauTagAndProbe package developed by L. Cadamuro & O. Davignon
 cmsrel CMSSW_X_Y_Z
 cd CMSSW_X_Y_Z/src
 cmsenv
-git clone git@github.com:ats2008/EGTagAndProbe.git
-scram b -j 4
+git clone git@github.com:zpainesi/EGTagAndProbe.git
+scram b -j 8
 ```
 
 ### Producing TagAndProbe ntuples with unpacked L1EG (no re-emulation)
@@ -43,7 +43,7 @@ https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideL1TStage2Instructions#Envi
 1. Compile and cd to relevant directory:
 ```
 cd CMSSW_X_Y_Z/src
-scram b -j4
+scram b -j 8
 ${CMSSW_BASE}/src/EGTagAndProbe/EGTagAndProbe
 ```
 
