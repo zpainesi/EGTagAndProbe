@@ -367,6 +367,8 @@ void produceTurnOns(string infile,string ofileName,TString treeName,string prefi
           {
                triggers["L1_28TightvsPUoffline32GeV"]->fill(hasL1LooseIso[triggerPrefix[32]+"_looseiso"],Nvtx);
                triggers["L1_28LoosevsPUoffline32GeV"]->fill(hasL1LooseIso[triggerPrefix[32]+"_looseiso"],Nvtx);
+			   triggers["L1_30vsPUoffline32GeV"]->fill(hasL1["L1Et30"],Nvtx);
+			   triggers["L1_30TightvsPUoffline32GeV"]->fill(hasL1TightIso[triggerPrefix[30]+"_tightiso"],Nvtx);
           }
           if( isProbeLoose==1 && fabs(eleProbeEta) < 2.5 && eleProbeSclEt > 18.0  && sqrt(pow(eleProbeEta-eleTagEta,2)+pow(eleProbePhi-eleTagPhi,2))>0.6 ) 
           {
