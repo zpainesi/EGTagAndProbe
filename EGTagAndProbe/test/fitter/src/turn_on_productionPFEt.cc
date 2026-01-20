@@ -243,6 +243,7 @@ void produceTurnOns(string infile,string ofileName,TString treeName,string prefi
 
    
     triggers["L1_tightiso_28_OR_L1_34"] = new efficiencyMeasurement("L1_tightiso_28_OR_L1_34",XBINS,xEdges);
+	triggers["L1_tightiso_30_OR_L1_36"] = new efficiencyMeasurement("L1_tightiso_30_OR_L1_36",XBINS,xEdges);
  
     const int XBINS_forPU=100;
     Double_t xEdges_forPU[XBINS_forPU];
