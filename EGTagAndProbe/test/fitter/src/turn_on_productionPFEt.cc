@@ -95,7 +95,7 @@ void produceTurnOns(string infile,string ofileName,TString treeName,string prefi
 {
 
 	const Int_t XBINS = 38; 
-	Double_t xEdges[XBINS + 1] = {1., 3., 5., 7., 9.,  10., 12., 15., 18., 20., 22., 24., 26., 28., 29., 30., 31., 32., 33., 34., 35., 36., 37., 38., 39., 40., 41., 42., 43., 45., 50., 60., 70., 100., 200., 300., 400., 600., 1000.};
+	Double_t xEdges[XBINS + 1] = {1., 3., 5., 7., 9., 10., 12., 15., 18., 20., 22., 24., 26., 28., 29., 30., 31., 32., 33., 34., 35., 36., 37., 38., 39., 40., 41., 42., 43., 45., 50., 60., 70., 100., 200., 300., 400., 600., 1000.};
 	
     const Int_t XBINSfine = 100; 
 	Double_t xEdges_fine[XBINSfine + 1];
@@ -244,17 +244,18 @@ void produceTurnOns(string infile,string ofileName,TString treeName,string prefi
    
     triggers["L1_tightiso_28_OR_L1_34"] = new efficiencyMeasurement("L1_tightiso_28_OR_L1_34",XBINS,xEdges);
 	triggers["L1_tightiso_30_OR_L1_36"] = new efficiencyMeasurement("L1_tightiso_30_OR_L1_36",XBINS,xEdges);
+	triggers["L1_30vsPUoffline32GeV"] = new efficiencyMeasurement("L1_30vsPUoffline32GeV", XBINS_forPU, xEdges_forPU);
+	triggers["L1_30TightvsPUoffline32GeV"] = new efficiencyMeasurement("L1_30TightvsPUoffline32GeV", XBINS_forPU, xEdges_forPU);
  
-    const int XBINS_forPU=100;
-    Double_t xEdges_forPU[XBINS_forPU];
-    for(int i=0;i<XBINS_forPU;i++) xEdges_forPU[i]= -0.5 + i*1.0;
-    triggers["L1_32vsPUoffline40GeV"] = new efficiencyMeasurement("L1_32vsPUoffline40GeV",XBINS,xEdges);
-    triggers["L1_32vsPUoffline50GeV"] = new efficiencyMeasurement("L1_32vsPUoffline50GeV",XBINS,xEdges);
-    triggers["L1_32vsPUoffline35GeV"] = new efficiencyMeasurement("L1_32vsPUoffline25GeV",XBINS,xEdges);
-    triggers["L1_28TightvsPUoffline32GeV"] = new efficiencyMeasurement("L1_28TightvsPUoffline32GeV",XBINS,xEdges);
-    triggers["L1_28LoosevsPUoffline32GeV"] = new efficiencyMeasurement("L1_28LoosevsPUoffline32GeV",XBINS,xEdges);
-    triggers["L1_15LoosevsPUoffline18GeV"] = new efficiencyMeasurement("L1_15LoosevsPUoffline18GeV",XBINS,xEdges);
-    triggers["L1_10LoosevsPUoffline12GeV"] = new efficiencyMeasurement("L1_10LoosevsPUoffline12GeV",XBINS,xEdges);
+    const int XBINS_forPU = 25;
+	Double_t xEdges_forPU[XBINS_forPU + 1] = {0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 150};
+    triggers["L1_32vsPUoffline40GeV"] = new efficiencyMeasurement("L1_32vsPUoffline40GeV",XBINS_forPU,xEdges_forPU);
+    triggers["L1_32vsPUoffline50GeV"] = new efficiencyMeasurement("L1_32vsPUoffline50GeV",XBINS_forPU,xEdges_forPU);
+    triggers["L1_32vsPUoffline35GeV"] = new efficiencyMeasurement("L1_32vsPUoffline35GeV",XBINS_forPU,xEdges_forPU);
+    triggers["L1_28TightvsPUoffline32GeV"] = new efficiencyMeasurement("L1_28TightvsPUoffline32GeV",XBINS_forPU,xEdges_forPU);
+    triggers["L1_28LoosevsPUoffline32GeV"] = new efficiencyMeasurement("L1_28LoosevsPUoffline32GeV",XBINS_forPU,xEdges_forPU);
+    triggers["L1_15LoosevsPUoffline18GeV"] = new efficiencyMeasurement("L1_15LoosevsPUoffline18GeV",XBINS_forPU,xEdges_forPU);
+    triggers["L1_10LoosevsPUoffline12GeV"] = new efficiencyMeasurement("L1_10LoosevsPUoffline12GeV",XBINS_forPU,xEdges_forPU);
     
 
 	Long64_t nentries = t1->GetEntries();
