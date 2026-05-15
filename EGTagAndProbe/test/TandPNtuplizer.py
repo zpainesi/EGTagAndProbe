@@ -7,8 +7,7 @@ from Configuration.Eras.Era_Run3_cff import Run3
 
 isMINIAOD = False
 doReRmu = False
-CALOPARAMS = "L1Trigger.L1TCalorimeter.caloParams_2024_v0_3_cfi"
-CALOPARAMS = "L1Trigger.L1TCalorimeter.caloParams_2025_v0_2_cfi"
+CALOPARAMS = "L1Trigger.L1TCalorimeter.caloParams_2025_v0_3_cfi"
 
 isMC = False
 
@@ -51,11 +50,11 @@ options.parseArguments()
 
 if not isMC: # will use 80X
     from Configuration.AlCa.autoCond import autoCond
-    process.GlobalTag.globaltag = '150X_dataRun3_Prompt_v1'
+    process.GlobalTag.globaltag = '160X_dataRun3_Prompt_v1'
     process.load('EGTagAndProbe.EGTagAndProbe.tagAndProbe_cff')
     process.source = cms.Source("PoolSource",
         fileNames = cms.untracked.vstring(
-        '/store/data/Run2025B/EGamma0/RAW-RECO/ZElectron-PromptReco-v1/000/391/910/00000/34e840b4-9da9-4f14-9905-8887731c5ee5.root'
+        '/store/data/Run2026D/EGamma0/RAW-RECO/ZElectron-PromptReco-v1/000/403/449/00000/361d7781-3adc-4617-808c-5dbb737faee4.root'
         )
     )
 else:
